@@ -33,4 +33,5 @@ public class Cobros
 
     [Required(ErrorMessage = "La fecha de cobro es obligatorio.")]
     public DateTime? FechaCobro { get; set; }
+    public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }

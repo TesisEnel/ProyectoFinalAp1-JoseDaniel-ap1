@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ProyectoFinalAp1.Components;
 using ProyectoFinalAp1.Components.Account;
 using ProyectoFinalAp1.Data;
@@ -23,8 +24,10 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
+
+// Usa la cadena de conexión del archivo de configuración
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseSqlServer("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -33,8 +36,9 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+
 
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();

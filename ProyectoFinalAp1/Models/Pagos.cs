@@ -24,4 +24,5 @@ public class Pagos
     [Required(ErrorMessage = "La fecha de pago es obligatoria.")]
     [DataType(DataType.Date)]
     public DateTime? FechaPago { get; set; }
+    public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }

@@ -33,10 +33,12 @@ public class Deudores
     [Required(ErrorMessage = "Favor colocar la ciudad.")]
     [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$", ErrorMessage = "La ciudad solo puede contener letras.")]
     public string? Ciudad { get; set; }
-    //Para que no sea un dato real directamente a la base de datos
-    [NotMapped]  
+
+    // Para que no sea un dato real directamente a la base de datos
+    [NotMapped]
     public decimal Saldo { get; set; }
 
     public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
-    public ICollection<Prestamos> Prestamos { get; set; } = new List<Prestamos>();
+    public virtual ICollection<Prestamos> Prestamos { get; set; } = new List<Prestamos>();
+    public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }
