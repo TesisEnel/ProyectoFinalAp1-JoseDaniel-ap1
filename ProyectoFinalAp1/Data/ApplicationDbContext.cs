@@ -17,5 +17,3 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Deudores> deudores { get; set; }
     public DbSet<Prestamos> prestamos { get; set; }
 }
-
-
