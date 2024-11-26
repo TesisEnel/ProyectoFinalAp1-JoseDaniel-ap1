@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241126183528_Proyectos1")]
-    partial class Proyectos1
+    [Migration("20241126202839_ProyectoFinal")]
+    partial class ProyectoFinal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -341,6 +341,9 @@ namespace ProyectoFinalAp1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacturaId"));
 
+                    b.Property<int?>("CobrosCobroId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
@@ -359,16 +362,28 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("PagoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PagosPagoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PrestamosId")
+                        .HasColumnType("int");
+
                     b.HasKey("FacturaId");
+
+                    b.HasIndex("CobrosCobroId");
 
                     b.HasIndex("DeudorId");
 
                     b.HasIndex("PagoId");
 
+                    b.HasIndex("PagosPagoId");
+
                     b.HasIndex("PrestamoId");
+
+                    b.HasIndex("PrestamosId");
 
                     b.ToTable("facturas");
                 });
@@ -523,9 +538,9 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
-                        .WithMany("Cobros")
+                        .WithMany()
                         .HasForeignKey("DeudorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
@@ -545,10 +560,14 @@ namespace ProyectoFinalAp1.Migrations
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Facturas", b =>
                 {
+                    b.HasOne("ProyectoFinalAp1.Models.Cobros", null)
+                        .WithMany("Facturas")
+                        .HasForeignKey("CobrosCobroId");
+
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
                         .WithMany()
                         .HasForeignKey("DeudorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProyectoFinalAp1.Models.Pagos", "pagos")
@@ -557,11 +576,19 @@ namespace ProyectoFinalAp1.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ProyectoFinalAp1.Models.Pagos", null)
+                        .WithMany("Facturas")
+                        .HasForeignKey("PagosPagoId");
+
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "prestamos")
                         .WithMany()
                         .HasForeignKey("PrestamoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
+                        .WithMany("Facturas")
+                        .HasForeignKey("PrestamosId");
 
                     b.Navigation("deudores");
 
@@ -584,7 +611,7 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
-                        .WithMany("Prestamos")
+                        .WithMany()
                         .HasForeignKey("DeudorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -592,16 +619,21 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("deudores");
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Deudores", b =>
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
-                    b.Navigation("Cobros");
+                    b.Navigation("Facturas");
+                });
 
-                    b.Navigation("Prestamos");
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
+                {
+                    b.Navigation("Facturas");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Navigation("Cobros");
+
+                    b.Navigation("Facturas");
                 });
 #pragma warning restore 612, 618
         }

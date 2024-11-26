@@ -16,5 +16,44 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Facturas> facturas{ get; set; }
     public DbSet<Deudores> deudores { get; set; }
     public DbSet<Prestamos> prestamos { get; set; }
- 
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Configurar relación entre Cobros y Deudores
+        modelBuilder.Entity<Cobros>()
+            .HasOne(c => c.deudores)
+            .WithMany()
+            .HasForeignKey(c => c.DeudorId)
+            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+
+        // Configurar relación entre Cobros y Prestamos
+        modelBuilder.Entity<Cobros>()
+            .HasOne(c => c.Prestamo)
+            .WithMany()
+            .HasForeignKey(c => c.PrestamoId)
+            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+
+        // Configurar relación entre Facturas y Deudores
+        modelBuilder.Entity<Facturas>()
+            .HasOne(f => f.deudores)
+            .WithMany()
+            .HasForeignKey(f => f.DeudorId)
+            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+
+        // Configurar relación entre Facturas y Prestamos
+        modelBuilder.Entity<Facturas>()
+            .HasOne(f => f.prestamos)
+            .WithMany()
+            .HasForeignKey(f => f.PrestamoId)
+            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+
+        // Configurar relación entre Facturas y Pagos
+        modelBuilder.Entity<Facturas>()
+            .HasOne(f => f.pagos)
+            .WithMany()
+            .HasForeignKey(f => f.PagoId)
+            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+    }
 }
