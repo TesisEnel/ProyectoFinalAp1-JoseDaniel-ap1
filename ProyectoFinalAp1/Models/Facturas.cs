@@ -8,12 +8,12 @@ public class Facturas
     [Key]
     public int FacturaId { get; set; }
 
-    [Required(ErrorMessage = "Favor seleccionar un cliente.")]
-    [Range(1, int.MaxValue, ErrorMessage = "Favor seleccionar un cliente válido.")]
-    public int ClienteId { get; set; }
+    [Required(ErrorMessage = "Favor seleccionar un deudor.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Favor seleccionar un deudor válido.")]
+    public int DeudorId { get; set; }
 
-    [ForeignKey("ClienteId")]
-    public Clientes? clientes { get; set; }
+    [ForeignKey("DeudorId")]
+    public Deudores? deudores { get; set; }
     [ForeignKey("PagoId")]
     public Pagos? pagos{ get; set; }
 
