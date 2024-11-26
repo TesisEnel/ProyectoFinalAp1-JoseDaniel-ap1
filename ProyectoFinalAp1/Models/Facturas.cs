@@ -14,9 +14,11 @@ public class Facturas
 
     [ForeignKey("DeudorId")]
     public Deudores? deudores { get; set; }
-    [ForeignKey("PagoId")]
+    public int PagoId { get; set; } 
+    [ForeignKey("PagoId ")]
     public Pagos? pagos{ get; set; }
 
+    public int PrestamoId {get;set;}
     [ForeignKey("PrestamoId")]
     public Prestamos? prestamos { get; set; }
 
