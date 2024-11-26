@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ProyectoFinalAp1.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
-    {
-    }
+    {}
+
+    
 }
