@@ -1,6 +1,9 @@
-﻿namespace ProyectoFinalAp1.Services
+﻿using Microsoft.EntityFrameworkCore;
+using ProyectoFinalAp1.Data;
+
+namespace ProyectoFinalAp1.Services
 {
-    public class PagoService
+    public class PagoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
     }
 }
