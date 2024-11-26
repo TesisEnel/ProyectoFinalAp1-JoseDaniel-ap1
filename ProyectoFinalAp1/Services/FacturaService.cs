@@ -50,14 +50,14 @@ public class FacturaService(IDbContextFactory<ApplicationDbContext> DbFactory)
                 .Include(f => f.PrestamoId)
             .FirstOrDefaultAsync(f => f.FacturaId== facturaId);
     }
-    public async Task<List<Facturas>> Listar(Expression<Func<Facturas, bool>> Criterio)
+    public async Task<List<Facturas>> Listar(Expression<Func<Facturas, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.facturas
            .Include(f => f.DeudorId)
               .Include(f => f.PagoId)
                 .Include(f => f.PrestamoId)
-            .Where(Criterio)
+            .Where(criterio)
             .ToListAsync();
     }
     public async Task<List<Facturas>> ListarFacturas()

@@ -49,12 +49,12 @@ public class AbonoService(IDbContextFactory<ApplicationDbContext> DbFactory)
           .Include(a => a.FacturaId)
             .FirstOrDefaultAsync(a => a.AbonoId == abonoId);
     }
-    public async Task<List<Abonos>> Listar(Expression<Func<Abonos, bool>> Criterio)
+    public async Task<List<Abonos>> Listar(Expression<Func<Abonos, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.abonos
             .Include(a => a.FacturaId)
-            .Where(Criterio)
+            .Where(criterio)
             .ToListAsync();
     }
     public async Task<List<Abonos>> ListarAbonos()
