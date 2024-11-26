@@ -23,11 +23,9 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+    options.UseSqlServer("DefaultConnection"));
 
-
-var connectionString = builder.Configuration.GetConnectionString("SqlConstr") ?? throw new InvalidOperationException("Connection string 'SqlConstr' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -35,7 +33,9 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
+
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 //La inyeccion de deudor service

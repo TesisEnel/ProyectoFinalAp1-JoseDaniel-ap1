@@ -16,4 +16,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Facturas> facturas{ get; set; }
     public DbSet<Deudores> deudores { get; set; }
     public DbSet<Prestamos> prestamos { get; set; }
+  
 }

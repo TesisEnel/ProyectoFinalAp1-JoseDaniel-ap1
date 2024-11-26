@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoFinalAp1.Data;
 using ProyectoFinalAp1.Models;
-using static Azure.Core.HttpHeader;
 using System.Linq.Expressions;
 
 namespace ProyectoFinalAp1.Services;
