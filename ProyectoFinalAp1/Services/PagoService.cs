@@ -7,10 +7,10 @@ namespace ProyectoFinalAp1.Services;
 
 public class PagoService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
-    public async Task<bool> Existe(int PagoId)
+    public async Task<bool> Existe(int pagoId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.pagos.AnyAsync(p =>p.PagoId==PagoId);
+        return await contexto.pagos.AnyAsync(p =>p.PagoId==pagoId);
     }
     private async Task<bool> Insertar(Pagos pago)
     {

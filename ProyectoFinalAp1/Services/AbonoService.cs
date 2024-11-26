@@ -8,10 +8,10 @@ namespace ProyectoFinalAp1.Services;
 
 public class AbonoService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
-   public async Task <bool>Existe(int AbonoId)
+   public async Task <bool>Existe(int abonoId)
    {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.abonos.AnyAsync(a => a.AbonoId == AbonoId);
+        return await contexto.abonos.AnyAsync(a => a.AbonoId == abonoId);
    }
     private async Task<bool> Insertar(Abonos abono)
     {

@@ -7,10 +7,10 @@ namespace ProyectoFinalAp1.Services;
 
 public class FacturaService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
-    public async Task<bool> Existe(int FacturaId)
+    public async Task<bool> Existe(int facturaId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.abonos.AnyAsync(f => f.FacturaId == FacturaId);
+        return await contexto.abonos.AnyAsync(f => f.FacturaId == facturaId);
     }
     private async Task<bool> Insertar(Facturas factura)
     {
