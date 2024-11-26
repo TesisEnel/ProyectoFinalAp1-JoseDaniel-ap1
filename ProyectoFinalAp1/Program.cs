@@ -23,14 +23,7 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
-//La inyeccion del Bootstrap
-builder.Services.AddBlazorBootstrap();
-//La inyeccion de abono service
-builder.Services.AddScoped<AbonoService>();
-//La inyeccion de factura service
-builder.Services.AddScoped<FacturaService>();
-//La inyeccion de pago service
-builder.Services.AddScoped<PagoService>();
+
 
 var connectionString = builder.Configuration.GetConnectionString("SqlConstr") ?? throw new InvalidOperationException("Connection string 'SqlConstr' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -43,7 +36,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
+//La inyeccion del Bootstrap
+builder.Services.AddBlazorBootstrap();
+//La inyeccion de abono service
+builder.Services.AddScoped<AbonoService>();
+//La inyeccion de factura service
+builder.Services.AddScoped<FacturaService>();
+//La inyeccion de pago service
+builder.Services.AddScoped<PagoService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
