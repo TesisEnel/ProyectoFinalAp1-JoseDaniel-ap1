@@ -1,6 +1,6 @@
 ﻿namespace ProyectoFinalAp1.Services
 {
-    public class AbonoServices
+    public class FacturaService
     {
     }
 }
