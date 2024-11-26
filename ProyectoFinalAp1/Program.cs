@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoFinalAp1.Components;
 using ProyectoFinalAp1.Components.Account;
 using ProyectoFinalAp1.Data;
+using ProyectoFinalAp1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,11 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
+
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddScoped<AbonoService>();
+builder.Services.AddScoped<FacturaService>();
+builder.Services.AddScoped<PagoService>();
 
 var connectionString = builder.Configuration.GetConnectionString("SqlConstr") ?? throw new InvalidOperationException("Connection string 'SqlConstr' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
