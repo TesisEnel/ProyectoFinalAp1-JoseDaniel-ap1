@@ -1,23 +1,44 @@
 ﻿@inherits LayoutComponentBase
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 <div class="page">
-@*     <div class="sidebar">
-        <NavMenu />
-    </div> *@
-
-    <main>
+    <!-- Card principal -->
+    <div class="card">
+        <!-- Barra superior dentro del card, con menú flotante integrado -->
         <div class="top-row px-4">
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+
+            <!-- Menú flotante dentro de la misma barra superior -->
+            <div class="menu-floating">
+                <a href="#soporte" class="menu-floating-item soporte">
+                    <i class="fas fa-life-ring"></i> Soporte
+                </a>
+                <a href="#contacto" class="menu-floating-item contacto">
+                    <i class="fas fa-envelope"></i> Contacto
+                </a>
+            </div>
         </div>
 
+        <!-- Contenido principal -->
         <article class="content px-4">
             @Body
         </article>
-    </main>
+    </div>
+
+    <!-- Nuevo card idéntico en la parte inferior -->
+    <div class="card mt-4">
+        <!-- Barra superior dentro del card, con menú flotante integrado -->
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+
+            
+        </div>
+
+        @* <!-- Contenido principal del nuevo card -->
+        <article class="content px-4">
+            <!-- Contenido adicional aquí -->
+            <p>Este es un contenido adicional en el segundo card.</p>
+        </article> *@
+    </div>
 </div>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+
