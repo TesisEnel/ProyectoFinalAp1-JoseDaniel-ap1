@@ -4,7 +4,7 @@ namespace ProyectoFinalAp1.Models;
 public class Prestamos
 {
     [Key]
-    public int PrestamosId { get; set; }
+    public int PrestamoId { get; set; }
 
     [Required(ErrorMessage = "Favor seleccionar un deudor.")]
     [Range(1, int.MaxValue, ErrorMessage = "Favor seleccionar un deudor válido.")]
