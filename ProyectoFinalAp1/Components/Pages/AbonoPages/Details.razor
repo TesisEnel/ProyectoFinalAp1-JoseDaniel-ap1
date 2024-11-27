@@ -1,0 +1,66 @@
+﻿@page "/Abono/Details"
+@page "/Abono/Details/{AbonoId:int}"
+@inject AbonoService abonoService
+@inject FacturaService FacturaService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject ToastService toastService
+
+
+<PageTitle>Detalle abono</PageTitle>
+@if (abono!= null)
+{
+    <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+        <div class="card shadow-lg w-100 h-100">
+            <div class="card-header d-flex justify-content-between align-items-center " style="background-color: #008DD9; color: #fff;">
+                <h3 class="card-title text-center w-100">Detalle abono</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>AbonoId:</strong>@abono.AbonoId</li>
+                                <li><strong>MontoAbono:</strong>@abono.MontoAbono</li>
+                                <li><strong>FechaAbono:</strong>@abono.FechaAbono</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-footer justify-content-center ">
+                        <button type="button" @onclick="Volver" class="btn btn-outline-danger">
+                            <span class="bi bi-arrow-left-circle-fill mt-3"></span>
+                            Volver
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int AbonoId { get; set; }
+    public Abonos? abono = new Abonos();
+    public Facturas? facturas { get; set; } = new Facturas();
+    public List<Facturas> listafactura = new List<Facturas>();
+    public List<Abonos> listaabono = new List<Abonos>();
+    private bool existe = false;
+    protected override async Task OnInitializedAsync()
+    {
+        if (AbonoId != 0)
+        {
+            abono = await abonoService.Buscar(AbonoId);
+
+        }
+    }
+    
+    public async Task Volver()
+    {
+
+        toastService.Notify(new(ToastType.Primary, "Existo", "Ya volvio correctamente"));
+        navigationManager.NavigateTo("/Abono/Index");
+    }
+}
