@@ -45,14 +45,14 @@ public class PagoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.pagos
-          .Include(p => p.DeudorId)
+          .Include(p => p.deudores)
             .FirstOrDefaultAsync(p => p.PagoId == pagoId);
     }
     public async Task<List<Pagos>> Listar(Expression<Func<Pagos, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.pagos
-           .Include(p => p.DeudorId)
+           .Include(p => p.deudores)
             .Where(criterio)
             .ToListAsync();
     }
