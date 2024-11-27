@@ -1,0 +1,137 @@
+﻿@page "/Deudore/Index"
+@inject DeudorService deudorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de deudores</PageTitle>
+
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+    <div class="card shadow-lg w-100 h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title text-center w-100">Consulta de Deudores</h3>
+        </div>
+
+        <div class="card-body overflow-auto">
+            @* Contenido del filtro *@
+            <div class="row mb-4 align-items-end">
+                <div class="col-md-4">
+                    <label for="Filtro" class="form-label">Filtrar por:</label>
+                    <select @bind="filtro" class="form-select">
+                        <option value="0">Seleccione una opción</option>
+                        <option value="Cedula">Cédula</option>
+                        <option value="Nombres">Nombres</option>
+                        <option value="Apellidos">Apellidos</option>
+                        <option value="Ciudad">Ciudad</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                    <div class="input-group">
+                        <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                            <span class="bi bi-search"></span> Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-1 ms-auto">
+                    <a href="/Cliente/Create" class="btn btn-primary text-end">
+                        <span class="bi bi-plus-square"></span>Crear
+                    </a>
+                </div>
+            </div>
+
+            <table class="table table-hover table-striped text-center">
+                <thead class="table-white">
+                    <tr>
+                        <th>DeudorId</th>
+                        <th>Numero Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Ciudad</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deudor in listadeudore)
+                    {
+                        <tr>
+                            <td>@deudor.DeudorId</td>
+                            <td>@deudor.NumeroCedula</td>
+                            <td>@deudor.Nombres</td>
+                            <td>@deudor.Apellidos</td>
+                            <td>@deudor.Direccion</td>
+                            <td>@deudor.Telefono</td>
+                            <td>@deudor.Ciudad</td>
+                            <td>
+                                <a href="/Cliente/Details/@deudor.DeudorId" class="btn btn-sm btn-outline-info">
+                                    <span class="bi bi-eye"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/Cliente/Edit/@deudor.DeudorId" class="btn btn-sm btn-outline-warning">
+                                    <span class="bi bi-pencil-square"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/Cliente/Delete/@deudor.DeudorId" class="btn btn-sm btn-outline-danger">
+                                    <span class="bi bi-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <p class="mb-0">Total de deudores: @listadeudore.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Deudores deudor = new Deudores();
+    public List<Deudores> listadeudore = new List<Deudores>();
+    public string filtro = "0";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        listadeudore = await deudorService.Listar(a => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            listadeudore = await deudorService.Listar(p => true);
+        }
+        else if (filtro == "Cedula")
+        {
+            listadeudore = await deudorService.Listar(c => c.NumeroCedula.Contains(valorFiltro));
+        }
+        else if (filtro == "Nombres")
+        {
+            listadeudore = await deudorService.Listar(c => c.Nombres.Contains(valorFiltro));
+        }
+        else if (filtro == "Apellidos")
+        {
+            listadeudore = await deudorService.Listar(c => c.Apellidos.Contains(valorFiltro));
+        }
+        else if (filtro == "Ciudad")
+        {
+            listadeudore = await deudorService.Listar(c => c.Ciudad.Contains(valorFiltro));
+        }
+    }
+
+    private async Task Volver()
+    {
+        navigationManager.NavigateTo("/menu");
+    }
+}
