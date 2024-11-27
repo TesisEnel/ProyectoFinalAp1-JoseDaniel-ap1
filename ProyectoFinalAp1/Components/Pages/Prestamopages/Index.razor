@@ -68,7 +68,7 @@
                     @foreach (var prestamo in listaprestamo)
                     {
                         <tr>
-                            <td>@prestamo.PrestamosId</td>
+                            <td>@prestamo.PrestamoId</td>
                             <td>@prestamo.deudores.Nombres @prestamo.deudores.Apellidos</td>
                             <td>@prestamo.MontoPrestado</td>
                             <td>@prestamo.Interes %</td>
@@ -81,17 +81,17 @@
                             <td>@prestamo.TotalInteres</td>
                             <td>@prestamo.MontoTotalPagar</td>
                             <td>
-                                <a href="/Pago/Details/@prestamo.PrestamosId" class="btn btn-outline-primary">
+                                <a href="/Pago/Details/@prestamo.PrestamoId" class="btn btn-outline-primary">
                                     <span class="bi bi-eye mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/Pago/Edit/@prestamo.PrestamosId" class="btn btn-outline-success">
+                                <a href="/Pago/Edit/@prestamo.PrestamoId" class="btn btn-outline-success">
                                     <span class="bi bi-pencil-square mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/Pago/Delete/@prestamo.PrestamosId" class="btn  btn-outline-danger">
+                                <a href="/Pago/Delete/@prestamo.PrestamoId" class="btn  btn-outline-danger">
                                     <span class="bi bi-trash mt-3"></span>
                                 </a>
                             </td>
