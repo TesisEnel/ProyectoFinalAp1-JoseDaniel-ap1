@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <ul class="list-unstyled">
                                 <li><strong>PagoId:</strong>@pago.PagoId</li>
-                                <li><strong>Deudor:</strong>@deudore.Nombres</li>
+                                <li><strong>Deudor:</strong>@pago.deudores?.Nombres</li>
                                 <li><strong>Capital:</strong>@pago.Capital</li>
                                 <li><strong>PagoPendiente:</strong>@pago.PagoPendiente</li>
                                 <li><strong>FechaPago:</strong>@pago.FechaPago</li>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <div class="card-footer justify-content-center text-center">
+                    <div class="card-footer justify-content-center ">
                         <button type="button" @onclick="Volver" class="btn btn-outline-danger">
                             <span class="bi bi-arrow-left-circle-fill mt-3"></span>
                             Volver
@@ -61,6 +61,6 @@
     {
 
         toastService.Notify(new(ToastType.Primary, "Existo", "Ya volvio correctamente"));
-        navigationManager.NavigateTo("/menu");
+        navigationManager.NavigateTo("/Pago/Index");
     }
 }
