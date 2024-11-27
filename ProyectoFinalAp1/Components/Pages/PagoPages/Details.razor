@@ -53,7 +53,7 @@
     {
         if (PagoId != 0)
         {
-            pago = await pagoService.Buscar(PagoId) ?? new Pagos();
+            pago = await pagoService.Buscar(PagoId);
             listadeudore = await deudorService.ListarDeudores();
         }
     }
