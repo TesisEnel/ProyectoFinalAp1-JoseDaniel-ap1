@@ -33,33 +33,34 @@ body {
     padding: 0.5rem 1rem;
 }
 
-.btn-outline-danger {
-    color: #4A667F;
-    border-color: #4A667F;
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
 }
 
-    .btn-outline-danger:hover {
-        background-color: #4A667F;
+    .btn-outline-success:hover {
+        background-color: #28a745;
         color: #fff;
     }
 
-.btn-outline-primary {
-    color: #4A667F;
-    border-color: #4A667F;
+.btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
 }
 
-    .btn-outline-primary:hover {
-        background-color: #4A667F;
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
         color: #fff;
     }
 
-.btn-primary {
-    background-color: #008DD9;
-    border-color: #008DD9;
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
 }
 
-    .btn-primary:hover {
-        background-color: #006BA3;
+    .btn-danger:hover {
+        background-color: #b02a37;
     }
 
 /* Tabla */
