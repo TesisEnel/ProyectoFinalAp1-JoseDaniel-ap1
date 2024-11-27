@@ -18,7 +18,8 @@ public class Pagos
     [Required(ErrorMessage = "El monto del pago es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El Capital del pago debe ser mayor a cero.")]
     public decimal? Capital { get; set; }
-    [Range(0.01, double.MaxValue, ErrorMessage = "El PagoPendiente del pago debe ser mayor a cero.")]
+
+    [Required(ErrorMessage = "El Pago Pendiente es obligatorio.")]
     public decimal? PagoPendiente { get; set; }
 
     [Required(ErrorMessage = "La fecha de pago es obligatoria.")]
