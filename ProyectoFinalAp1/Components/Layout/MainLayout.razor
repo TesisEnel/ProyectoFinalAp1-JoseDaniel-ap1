@@ -1,14 +1,12 @@
 ﻿@inherits LayoutComponentBase
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 <div class="page">
-    <!-- Card principal -->
-    <div class="card">
-        <!-- Barra superior dentro del card, con menú flotante integrado -->
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
 
-            <!-- Menú flotante dentro de la misma barra superior -->
-            <div class="menu-floating">
+    <div class="card">
+        @* Barra superior dentro del card, con menú flotante integrado *@
+        <div class="top-row px-7">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
+            <div class="menu-floating custom-align">
                 <a href="#soporte" class="menu-floating-item soporte">
                     <i class="fas fa-life-ring"></i> Soporte
                 </a>
@@ -18,27 +16,17 @@
             </div>
         </div>
 
-        <!-- Contenido principal -->
-        <article class="content px-4">
+        <div class="content" style="margin-top: 0rem; margin-bottom: 1rem;">
             @Body
-        </article>
-    </div>
-
-    <!-- Nuevo card idéntico en la parte inferior -->
-    <div class="card mt-4">
-        <!-- Barra superior dentro del card, con menú flotante integrado -->
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-
-            
         </div>
-
-        @* <!-- Contenido principal del nuevo card -->
-        <article class="content px-4">
-            <!-- Contenido adicional aquí -->
-            <p>Este es un contenido adicional en el segundo card.</p>
-        </article> *@
+    </div>
+    @* Nuevo card idéntico en la parte inferior *@
+    <div class="card mt-0">
+        <div class="top-row px-4">
+            <footer>
+                <p>© 2024 Prestamos SRL</p>
+            </footer>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
+        </div>
     </div>
 </div>
-
-
