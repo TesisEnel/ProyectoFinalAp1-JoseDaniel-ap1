@@ -10,7 +10,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     public async Task<bool> Existe(int prestamoid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.prestamos.AnyAsync(a => a.PrestamosId == prestamoid);
+        return await contexto.prestamos.AnyAsync(a => a.PrestamoId == prestamoid);
     }
     private async Task<bool> Insertar(Prestamos prestamo)
     {
@@ -26,7 +26,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     }
     public async Task<bool> Guardar(Prestamos prestamo)
     {
-        if (!await Existe(prestamo.PrestamosId))
+        if (!await Existe(prestamo.PrestamoId))
             return await Insertar(prestamo);
         else
             return await Modificar(prestamo);
@@ -36,7 +36,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         var eliminado = await contexto.prestamos
-            .Where(a => a.PrestamosId == id)
+            .Where(a => a.PrestamoId == id)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
@@ -45,7 +45,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
-            .FirstOrDefaultAsync(a => a.PrestamosId == deudorid);
+            .FirstOrDefaultAsync(a => a.PrestamoId == deudorid);
     }
     public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> criterio)
     {
