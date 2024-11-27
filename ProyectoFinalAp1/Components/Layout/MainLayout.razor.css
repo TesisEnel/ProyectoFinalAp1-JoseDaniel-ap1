@@ -1,20 +1,27 @@
-/* Cambiar el color de la barra superior (top-row) */
+body {
+    margin: 0; /* Elimina el margen por defecto del body */
+    padding: 0; /* Elimina el padding por defecto */
+    box-sizing: border-box; /* Para que el ancho y alto incluyan bordes y relleno */
+}
+/* Barra superior extendida al ancho completo */
 .top-row {
-    background-color: #4A667F; /* Color personalizado */
-    border-top: 1px solid #4A667F; /* Borde superior con color personalizado */
-    border-bottom: 1px solid #4A667F; /* Borde inferior con el mismo color y tamaño */
-    justify-content: space-between; /* Distribuir los elementos (About a la izquierda y Menú a la derecha) */
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-    padding: 0 1rem;
+    background-color: #4A667F; /* Color de fondo */
+    border: 1px solid #4A667F; /* Borde alrededor */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 100vw; /* Asegura que no sobrepase el ancho de la ventana */
+    height: 3.5rem; /* Altura fija */
+    display: flex; /* Flexbox para alinear elementos */
+    justify-content: space-between; /* Separación entre los elementos */
+    align-items: center; /* Alineación vertical */
+    padding: 0 1rem; /* Espaciado interno */
+    box-sizing: border-box; /* Incluye bordes y padding en el ancho total */
 }
 
-    /* Enlace dentro de la top-row */
+    /* Enlace dentro de la barra superior */
     .top-row a {
-        color: #fff; /* Color blanco en el enlace */
-        text-decoration: none;
-        margin-right: 1.5rem; /* Espaciado entre los enlaces */
+        color: #fff; /* Color blanco para los enlaces */
+        text-decoration: none; /* Sin subrayado */
+        margin-right: 1.5rem; /* Espaciado entre enlaces */
     }
 
         .top-row a:hover {
@@ -23,23 +30,34 @@
 
 /* Menú flotante (Soporte y Contacto) */
 .menu-floating {
-    display: flex;
-    gap: 0.5rem; /* Reducido para acercar Soporte y Contacto */
-    align-items: center; /* Alineación vertical de los elementos */
+    display: flex; /* Elementos en fila */
+    gap: 1rem; /* Espaciado entre Soporte y Contacto */
+    align-items: center; /* Centrado vertical */
+    margin-left: auto; /* Alineación a la derecha */
 }
 
+/* Estilo de los elementos del menú flotante */
 .menu-floating-item {
-    background-color: #4A667F; /* Fondo del menú flotante */
-    color: #fff; /* Color blanco en los íconos */
-    padding: 0.75rem 1rem; /* Relleno ajustado */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 4px; /* Borde cuadrado con bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    color: #fff; /* Texto blanco */
+    padding: 0.5rem 1rem; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    background-color: #3b566f; /* Fondo */
+    transition: background-color 0.3s; /* Efecto suave al pasar el cursor */
+    font-size: 1rem; /* Tamaño de fuente */
 }
 
     .menu-floating-item:hover {
-        background-color: #3b566f; /* Color al pasar el ratón */
+        background-color: #007bff; /* Color al pasar el cursor */
     }
+
+/* Pie de página extendido */
+footer {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 100vw; /* Asegura que no se salga del viewport */
+    background-color: #4A667F; /* Fondo igual que la barra superior */
+    color: white; /* Texto blanco */
+    text-align: center; /* Centrado del texto */
+    padding: 0.5rem 0; /* Espaciado interno vertical */
+    border: 1px solid #4A667F; /* Borde alrededor */
+}
