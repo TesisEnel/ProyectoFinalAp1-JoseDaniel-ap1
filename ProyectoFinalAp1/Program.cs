@@ -40,8 +40,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 
 
-//La inyeccion del Bootstrap
-builder.Services.AddBlazorBootstrap();
+
 //La inyeccion de deudor service
 builder.Services.AddScoped<DeudorService>();
 //La inyeccion de prestamo service
@@ -54,7 +53,8 @@ builder.Services.AddScoped<AbonoService>();
 builder.Services.AddScoped<FacturaService>();
 //La inyeccion de pago service
 builder.Services.AddScoped<PagoService>();
-
+//La inyeccion del Bootstrap
+builder.Services.AddBlazorBootstrap();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
