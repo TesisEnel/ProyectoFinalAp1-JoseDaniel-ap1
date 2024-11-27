@@ -77,11 +77,7 @@
         abono = new Abonos();
         existe = false;
     }
-    protected override async Task OnInitializedAsync()
-    {
-        listaabono = await abonoService.ListarAbonos();
-    }
-
+  
 
     public async Task Buscar()
     {
@@ -107,14 +103,18 @@
     {
         if (!await Validar())
         {
+            toastService.Notify(new(ToastType.Warning, "Advertencia", "El abono ya existe."));
             return;
         }
-        var guadado = await abonoService.Guardar(abono);
-        if (guadado)
+
+        var guardado = await abonoService.Guardar(abono);
+        if (guardado)
         {
-            toastService.Notify(new(ToastType.Success, "Existo", "Se guardo correctamente"));
+            toastService.Notify(new(ToastType.Success, "Éxito", "El abono se guardó correctamente."));
+
         }
     }
+
 
     public async Task Volver()
     {
