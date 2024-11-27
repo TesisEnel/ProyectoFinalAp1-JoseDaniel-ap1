@@ -103,7 +103,7 @@
     {
         if (!await Validar())
         {
-            toastService.Notify(new(ToastType.Warning, "Advertencia", "El abono ya existe."));
+            
             return;
         }
 
@@ -111,9 +111,11 @@
         if (guardado)
         {
             toastService.Notify(new(ToastType.Success, "Éxito", "El abono se guardó correctamente."));
-
+           
         }
+      
     }
+
 
 
     public async Task Volver()
