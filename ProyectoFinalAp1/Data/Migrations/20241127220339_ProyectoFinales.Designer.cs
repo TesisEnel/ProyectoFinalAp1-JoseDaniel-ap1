@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241126202839_ProyectoFinal")]
-    partial class ProyectoFinal
+    [Migration("20241127220339_ProyectoFinales")]
+    partial class ProyectoFinales
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -278,7 +278,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrestamosId")
+                    b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 
                     b.HasKey("CobroId");
@@ -287,7 +287,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasIndex("PrestamoId");
 
-                    b.HasIndex("PrestamosId");
+                    b.HasIndex("PrestamosPrestamoId");
 
                     b.ToTable("cobros");
                 });
@@ -368,7 +368,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrestamosId")
+                    b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 
                     b.HasKey("FacturaId");
@@ -383,7 +383,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasIndex("PrestamoId");
 
-                    b.HasIndex("PrestamosId");
+                    b.HasIndex("PrestamosPrestamoId");
 
                     b.ToTable("facturas");
                 });
@@ -408,6 +408,7 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("PagoPendiente")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("PagoId");
@@ -419,11 +420,11 @@ namespace ProyectoFinalAp1.Migrations
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
-                    b.Property<int>("PrestamosId")
+                    b.Property<int>("PrestamoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamosId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamoId"));
 
                     b.Property<int?>("Cuotas")
                         .HasColumnType("int");
@@ -466,7 +467,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<decimal?>("TotalInteres")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("PrestamosId");
+                    b.HasKey("PrestamoId");
 
                     b.HasIndex("DeudorId");
 
@@ -551,7 +552,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
                         .WithMany("Cobros")
-                        .HasForeignKey("PrestamosId");
+                        .HasForeignKey("PrestamosPrestamoId");
 
                     b.Navigation("Prestamo");
 
@@ -588,7 +589,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
                         .WithMany("Facturas")
-                        .HasForeignKey("PrestamosId");
+                        .HasForeignKey("PrestamosPrestamoId");
 
                     b.Navigation("deudores");
 
