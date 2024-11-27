@@ -1,0 +1,298 @@
+﻿@page "/Prestamo/Create"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject NavigationManager navigationManager
+@inject ToastService toastService
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de pagos</PageTitle>
+<EditForm Model="prestamo" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+        <div class="card shadow-lg w-100 h-100">
+            <div class="card-header d-flex justify-content-between align-items-center " style="background-color: #008DD9; color: #fff;">
+                <h3 class="card-title text-center w-100">Registrar Prestamo</h3>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-primary" style="border-radius: 5px;" @onclick="RedirigirABusquedaCliente">
+                    <span class="bi bi-person-fill-check"></span> Buscar Cliente
+                </button>
+            </div>
+
+            <div class="card-body" style="background-color: #f9f9f9;">
+                @*Información del Cliente Seleccionado*@
+                <div class="mb-4">
+                    <h5 class="text-primary">Información del Cliente Seleccionado</h5>
+                    @if (deudor != null)
+                    {
+                        <div class="card mb-3" style="border-radius: 10px; background-color: #e7f0ff;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><strong>Nombre:</strong></label>
+                                        <span>@deudor.Nombres @deudor.Apellidos</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><strong>Cédula:</strong></label>
+                                        <span>@deudor.NumeroCedula</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><strong>Dirección:</strong></label>
+                                        <span>@deudor.Direccion</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><strong>Teléfono:</strong></label>
+                                        <span>@deudor.Telefono</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label><strong>Ciudad:</strong></label>
+                                        <span>@deudor.Ciudad</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <strong>Nota:</strong> Selecciona un cliente para asociarlo al préstamo.
+                        </div>
+                    }
+                </div>
+
+                @*    Detalles del Préstamo  *@
+                <h5 class="text-primary">Detalles del Préstamo</h5>
+
+                <div class="mb-3">
+                    <label for="fecha" class="form-label"><strong>Fecha Pr&eacute;stamo:</strong></label>
+                    <InputDate id="fecha" class="form-control" @bind-Value="prestamo.FechaPrestamo" />
+                    <ValidationMessage For="@(() => prestamo.FechaPrestamo)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="montoPrestado" class="form-label"<strong>Monto Pr&eacute;stamo:</strong></label>
+                    <InputNumber id="montoPrestado" class="form-control" @bind-Value="prestamo.MontoPrestado" />
+                    <ValidationMessage For="@(() => prestamo.MontoPrestado)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="interes" class="form-label"<strong>Interés (%):</strong></label>
+                    <InputNumber id="interes" class="form-control" @bind-Value="prestamo.Interes" />
+                    <ValidationMessage For="@(() => prestamo.Interes)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="cuotas" class="form-label"<strong>Cuotas:</strong></label>
+                    <InputNumber id="cuotas" class="form-control" @bind-Value="prestamo.Cuotas" />
+                    <ValidationMessage For="@(() => prestamo.Cuotas)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="formaPago" class="form-label"<strong>Forma de Pago:</strong></label>
+                    <select id="formaPago" class="form-control" @bind="prestamo.FormaPago">
+                        <option value="">Selecciona una opción</option>
+                        <option value="Semanal">Semanal</option>
+                        <option value="Quincenal">Quincenal</option>
+                    </select>
+                    <ValidationMessage For="@(() => prestamo.FormaPago)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha" class="form-label"<strong>Fecha Pago:</strong></label>
+                    <InputDate id="fecha" class="form-control" @bind-Value="prestamo.FechaCobro" readonly />
+                    <ValidationMessage For="@(() => prestamo.FechaCobro)" />
+                </div>
+
+                @* Campos calculados *@
+                <div class="mb-3">
+                    <label for="montoCuota" class="form-label"<strong>Monto por Cuota:</strong></label>
+                    <InputNumber id="montoCuota" class="form-control" @bind-Value="prestamo.MontoCuota" disabled />
+                </div>
+                <div class="mb-3">
+                    <label for="totalInteres" class="form-label"<strong>Total Inter&eacute;s:</strong></label>
+                    <InputNumber id="totalInteres" class="form-control" @bind-Value="prestamo.TotalInteres" disabled />
+                </div>
+                <div class="mb-3">
+                    <label for="montoTotalPagar" class="form-label"<strong>Monto Total a Pagar:</strong></label>
+                    <InputNumber id="montoTotalPagar" class="form-control" @bind-Value="prestamo.MontoTotalPagar" disabled />
+                </div>
+
+                <button type="button" class="btn btn-outline-success" @onclick="CalcularMontos">
+                    <span class="bi bi-calculator"></span> Generar Pr&eacute;stamo
+                </button>
+            </div>
+
+            <div class="card-footer justify-content-center text-center">
+                <div class="btn-group">
+                    <button type="button" @onclick="Nuevo" class="btn btn-outline-primary">
+                        <span class="bi bi-plus-circle-fill mt-3"></span>
+                        Nuevo
+                    </button>
+                    <button type="submit" class="btn btn-outline-success">
+                        <span class="bi bi-floppy mt-3"></span>
+                        Guardar
+                    </button>
+                    <button type="button" @onclick="Volver" class="btn btn-outline-danger">
+                        <span class="bi bi-arrow-left-circle-fill mt-3"></span>
+                        Volver
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int PrestamoId { get; set; }
+    private Deudores deudor = new Deudores();
+    public Prestamos prestamo = new Prestamos();
+    private EditContext editContext;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("deudorId", out var deudorid))
+        {
+            deudor = await deudorService.Buscar(int.Parse(deudorid));
+            prestamo.DeudorId = deudor.DeudorId;
+        }
+    }
+
+    private async Task RedirigirABusquedaCliente()
+    {
+        navigationManager.NavigateTo("/Clientes/SeleccionarCliente");
+    }
+
+    public async Task Nuevo()
+    {
+        prestamo = new Prestamos();
+        deudor = null;
+    }
+
+    private async Task Retroceder()
+    {
+        navigationManager.NavigateTo("/Prestamo/Index");
+    }
+
+    private async Task Guardar()
+    {
+        if (prestamo == null)
+        {
+            toastService.Notify(new(ToastType.Success,
+            iconName: IconName.None,
+            title: "Error",
+            helpText: "",
+            message: "Por favor, selecciona un cliente antes de guardar el préstamo."));
+            return;
+        }
+
+        // Verificar si el modelo es válido
+        if (!editContext.Validate())
+        {
+            toastService.Notify(new(ToastType.Success,
+            iconName: IconName.None,
+            title: "Error de Validación",
+            helpText: "",
+            message: "Por favor, completa todos los campos requeridos correctamente."));
+            return;
+        }
+
+        CalcularMontos(); // Calculamos los montos antes de guardar
+        await prestamoService.Guardar(prestamo);
+
+        toastService.Notify(new(ToastType.Success,
+        iconName: IconName.None,
+        title: "Guardado Exitoso",
+        helpText: "",
+        message: "El préstamo se ha guardado correctamente."));
+        await Task.Delay(3000);
+        await Retroceder();
+    }
+
+    private async Task CalcularMontos()
+    {
+        // Calcular el total de interés y monto total a pagar
+        prestamo.TotalInteres = prestamo.MontoPrestado * prestamo.Interes / 100;
+        prestamo.MontoTotalPagar = prestamo.MontoPrestado + prestamo.TotalInteres;
+
+        // Asignar el saldo inicial igual a MontoTotalPagar
+        prestamo.Saldo = prestamo.MontoTotalPagar ?? 0;
+
+        // Calcular el monto de cuota solo si las cuotas están definidas
+        if (prestamo.Cuotas > 0)
+        {
+            prestamo.MontoCuota = prestamo.MontoTotalPagar / prestamo.Cuotas;
+
+            // Calcular la fecha de inicio en función de la forma de pago y cuotas
+            if (prestamo.FechaPrestamo.HasValue) // Verifica si la fecha tiene un valor
+            {
+                DateTime fechaCreacion = prestamo.FechaPrestamo.Value; // Obtener el valor de DateTime
+
+                // Calcular la fecha de inicio según la forma de pago
+                if (prestamo.FormaPago == "Semanal")
+                    prestamo.FechaCobro = fechaCreacion.AddDays(7); // Primer pago una semana después
+                else if (prestamo.FormaPago == "Quincenal")
+                    prestamo.FechaCobro = fechaCreacion.AddDays(15); // Primer pago 15 días después
+                                                                     // Puedes agregar más condiciones para otras formas de pago si es necesario
+            }
+        }
+        else
+        {
+            // Cuando Cuotas es 0 o indefinidas, calcular la fecha de inicio según la forma de pago
+            if (prestamo.FechaPrestamo.HasValue) // Verifica si la fecha tiene un valor
+            {
+                DateTime fechaCreacion = prestamo.FechaPrestamo.Value; // Obtener el valor de DateTime
+
+                // Calcular la fecha de inicio según la forma de pago
+                if (prestamo.FormaPago == "Semanal")
+                    prestamo.FechaPrestamo = fechaCreacion.AddDays(7); // Primer pago una semana después
+                else if (prestamo.FormaPago == "Quincenal")
+                    prestamo.FechaPrestamo = fechaCreacion.AddDays(15); // Primer pago 15 días después
+            }
+            else
+            {
+                // Manejo en caso de que Fecha no tenga valor (podrías lanzar una excepción o asignar un valor por defecto)
+                throw new InvalidOperationException("La fecha de creación no puede ser nula.");
+            }
+
+            prestamo.MontoCuota = 0; // O usa null si el tipo lo permite
+        }
+    }
+
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Warning => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Prestamo se guardó correctamente.",
+            ToastType.Warning => "Complete todos los campos antes de guardar.",
+            ToastType.Danger => "Hubo un error al guardar el Prestamo.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
+    }
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("");
+    }
+}
