@@ -51,7 +51,6 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.deudores
-            .Include(a => a.DeudorId)
             .Where(criterio)
             .ToListAsync();
     }
