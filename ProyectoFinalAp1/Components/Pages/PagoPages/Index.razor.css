@@ -1,0 +1,87 @@
+﻿<style >
+/* Fondo principal */
+body {
+    background-color: #C6C6C0;
+    color: #008DD9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tarjeta */
+.card {
+    background-color: #fff;
+    border: 1px solid #008DD9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado */
+.card-header {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    border-bottom: 2px solid #008DD9;
+}
+
+/* Botones */
+.btn {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-outline-danger {
+    color: #4A667F;
+    border-color: #4A667F;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #4A667F;
+        color: #fff;
+    }
+
+.btn-outline-primary {
+    color: #4A667F;
+    border-color: #4A667F;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #4A667F;
+        color: #fff;
+    }
+
+.btn-primary {
+    background-color: #008DD9;
+    border-color: #008DD9;
+}
+
+    .btn-primary:hover {
+        background-color: #006BA3;
+    }
+
+/* Tabla */
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #C6C6C0;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #fdfdfd;
+}
+
+/* Footer */
+.card-footer {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-top: 2px solid #008DD9;
+}
+
+</style >
