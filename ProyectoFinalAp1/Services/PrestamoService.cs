@@ -52,6 +52,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
             .Where(criterio)
+            .Include(p =>p.deudores)
             .ToListAsync();
     }
     public async Task<List<Prestamos>> ListarPrestamos()
