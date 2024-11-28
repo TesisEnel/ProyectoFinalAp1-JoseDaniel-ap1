@@ -6,20 +6,19 @@
 @rendermode InteractiveServer
 
 <PageTitle>Consulta de prestamos</PageTitle>
-
 <EditForm Model="prestamo" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid vh-100 d-flex flex-column justify-content-center p-3">
         <div class="card shadow-lg border-0 rounded-lg">
-            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
+
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
                 <h3 class="m-0">Registrar Préstamo</h3>
-                <button type="button" class="btn btn-light" @onclick="RedirigirDeudores">
+                <button type="button" class="btn btn-light btn-sm" @onclick="RedirigirDeudores">
                     <i class="bi bi-person-fill-check me-2"></i> Buscar Deudor
                 </button>
             </div>
 
             <div class="card-body bg-light">
-                @* Información del Cliente *@
                 <section class="mb-4">
                     <h5 class="text-secondary border-bottom pb-2">Información del Cliente</h5>
                     @if (deudor != null)
@@ -27,10 +26,10 @@
                         <div class="card bg-white shadow-sm p-3 rounded">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <strong>Nombre:</strong> <span>@deudor.Nombres @deudor.Apellidos</span>
+                                    <strong>Nombre Completo:</strong> <span>@deudor.Nombres @deudor.Apellidos</span>
                                 </div>
                                 <div class="col-md-6">
-                                    <strong>Cédula:</strong> <span>@deudor.NumeroCedula</span>
+                                    <strong>Número Cédula:</strong> <span>@deudor.NumeroCedula</span>
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -56,7 +55,7 @@
                     }
                 </section>
 
-                @* Detalles del Préstamo *@
+              @*Detalles del Préstamo *@
                 <section class="mb-4">
                     <h5 class="text-secondary border-bottom pb-2">Detalles del Préstamo</h5>
                     <div class="row">
@@ -71,7 +70,6 @@
                             <ValidationMessage For="@(() => prestamo.MontoPrestado)" />
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="interes" class="form-label"><strong>Interés (%):</strong></label>
@@ -84,11 +82,10 @@
                             <ValidationMessage For="@(() => prestamo.Cuotas)" />
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <label for="formaPago" class="form-label"><strong>Forma de Pago:</strong></label>
-                        <select id="formaPago" class="form-select" @bind="prestamo.FormaPago">
-                            <option value="">Selecciona una forma de pago deseada para el deudor</option>
+                        <select id="formaPago" class="form-select shadow-sm" @bind="prestamo.FormaPago">
+                            <option value="">Selecciona una forma de pago</option>
                             <option value="Semanal">Semanal</option>
                             <option value="Quincenal">Quincenal</option>
                         </select>
@@ -96,7 +93,7 @@
                     </div>
                 </section>
 
-                @* Montos Calculados *@
+          @*Montos Calculados *@
                 <section>
                     <h5 class="text-secondary border-bottom pb-2">Montos Calculados</h5>
                     <div class="row">
@@ -117,18 +114,18 @@
                             <InputDate class="form-control shadow-sm" @bind-Value="prestamo.FechaCobro" disabled />
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-primary w-100" @onclick="CalcularMontos">
-                        <i class="bi bi-calculator me-2"></i> Generar Prestamo
+                    <button type="button" class="btn btn-primary w-100" @onclick="CalcularMontos">
+                        <i class="bi bi-calculator me-2"></i> Calcular Montos
                     </button>
                 </section>
             </div>
 
             <div class="card-footer bg-light text-center">
-                <button type="button" class="btn btn-outline-primary" @onclick="Nuevo">
+                <button type="button" class="btn btn-outline-primary me-2" @onclick="Nuevo">
                     <i class="bi bi-plus-circle-fill me-2"></i> Nuevo
                 </button>
-                <button type="submit" class="btn btn-outline-success">
-                    <i class="bi bi-arrow-left-circle-fill mt-3"></i> Guardar
+                <button type="submit" class="btn btn-outline-success me-2">
+                    <i class="bi bi-save me-2"></i> Guardar
                 </button>
                 <button type="button" class="btn btn-outline-danger" @onclick="Volver">
                     <i class="bi bi-arrow-left-circle-fill me-2"></i> Volver
@@ -146,7 +143,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Inicializa el EditContext al cargar el componente
         editContext = new EditContext(prestamo);
 
         var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
@@ -179,10 +175,10 @@
         else
         {
             prestamo.DeudorId = deudor.DeudorId;
-            var resultado = await prestamoService.Guardar(prestamo);
-            if (resultado)
+            var guardado = await prestamoService.Guardar(prestamo);
+            if (guardado)
             {
-                navigationManager.NavigateTo("/Prestamo");
+                Volver();
             }
 
         }
@@ -222,7 +218,7 @@
             DateTime fechaCreacion = prestamo.FechaPrestamo.Value;
             // Asignar la fecha de cobro con base en la fecha de préstamo y las cuotas o si esta es indefinida la misma
             if (prestamo.FormaPago == "Semanal")
-                prestamo.FechaCobro = fechaCreacion.AddDays(7); 
+                prestamo.FechaCobro = fechaCreacion.AddDays(7);
             else if (prestamo.FormaPago == "Quincenal")
                 prestamo.FechaCobro = fechaCreacion.AddDays(15);
         }
