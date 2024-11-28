@@ -1,0 +1,114 @@
+﻿@page "/Deudores/Delete/{deudorId:int}"
+@inject DeudorService deudorServices
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar Deudor</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5 header-style">
+            <h2 class="header-title">
+                Eliminar Deudor
+            </h2>
+        </div>
+
+        <div class="card-body body-style">
+            <div class="row">
+                @* Foto de la Cédula *@
+                <div class="col-md-4 text-center mb-4">
+                    <strong class="d-block mb-2 photo-title">Foto de la Cédula</strong>
+                    @if (!string.IsNullOrEmpty(deudor?.FotoCedulaURL))
+                    {
+                        <img src="@deudor.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail shadow-sm photo-style">
+                    }
+                </div>
+
+                @* Datos Personales de un deudor x *@
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Número de Cédula:</strong>
+                                <p class="info-text">@deudor?.NumeroCedula</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Nombres:</strong>
+                                <p class="info-text">@deudor?.Nombres</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Apellidos:</strong>
+                                <p class="info-text">@deudor?.Apellidos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Dirección:</strong>
+                                <p class="info-text">@deudor?.Direccion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Teléfono:</strong>
+                                <p class="info-text">@deudor?.Telefono</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong class="info-label">Ciudad:</strong>
+                                <p class="info-text">@deudor?.Ciudad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg delete-btn" @onclick="EliminarDeudor">
+                <i class="bi bi-trash-fill mt-3"></i> Eliminar Deudor
+            </button>
+            <button class="btn btn-lg back-btn" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int DeudorId { get; set; }
+    private Deudores? deudor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        deudor = await deudorServices.Buscar(DeudorId);
+    }
+
+    public async Task EliminarDeudor()
+    {
+        if (deudor == null)
+        {
+            return;
+        }
+        if (await deudorServices.Eliminar(DeudorId))
+        {
+            Volver();
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigation.NavigateTo("/Deudore/Index");
+    }
+}
