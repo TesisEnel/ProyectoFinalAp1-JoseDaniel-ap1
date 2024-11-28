@@ -6,58 +6,56 @@
 @rendermode InteractiveServer
 @inject ToastService toastService
 
-<PageTitle>Eliminar el abono</PageTitle>
+<PageTitle>Eliminar Abono</PageTitle>
 
-<div class="container-fluid vh-100 d-flex flex-column justify-content-center">
-    <div class="card shadow-lg w-100 h-100">
-        <div class="card-header d-flex justify-content-between align-items-center " style="background-color: #008DD9; color: #fff;">
-            <h3 class="card-title text-center w-100">Eliminar abono</h3>
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5 header-style">
+            <h2 class="header-title">Eliminar Abono</h2>
         </div>
 
         <div class="card-body">
-            <div class="row justify-content-center text-center">
-                <div class="col-md-10">
-                    <div class="card shadow-lg">
-                        <div class="card-header  bg-primary text-white text-center">
-                            <h5 class="text-danger">¡Datos del abono!</h5>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="border-primary border-2 border ">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <ul class="list-unstyled">
-                                                <li><strong>AbonoId:</strong>@abono.AbonoId</li>
-                                                <li><strong>MontoAbono:</strong>@abono.MontoAbono</li>
-                                                <li><strong>FechaAbono:</strong>@abono.FechaAbono</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="row">
+                @* Información del Abono *@
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong class="info-label">ID del Abono:</strong>
+                        <p class="info-text">@abono?.AbonoId</p>
                     </div>
                 </div>
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong class="info-label">Monto del Abono:</strong>
+                        <p class="info-text">@abono?.MontoAbono</p>
+                    </div>
+                </div>
+            </div>
 
-                <div class="card-footer justify-content-center text-center">
-                    <button type="button" @onclick="EliminarAbono" class="btn btn-outline-primary">
-                        <span class="bi bi-trash mt-3"></span>
-                        Eliminar
-                    </button>
-                    <button type="button" @onclick="Volver" class="btn btn-outline-danger">
-                        <span class="bi bi-arrow-left-circle-fill mt-3"></span>
-                        Volver
-                    </button>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong class="info-label">Fecha del Abono:</strong>
+                        <p class="info-text">@abono?.FechaAbono</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong class="info-label">Factura Asociada:</strong>
+                        <p class="info-text">@facturas?.FacturaId</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @if (abono != null)
-    {
-        <p>No encontrado.</p>
-    }
 
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg delete-btn" @onclick="EliminarAbono">
+                <i class="bi bi-trash-fill mt-3"></i> Eliminar Abono
+            </button>
+            <button class="btn btn-lg back-btn" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -73,6 +71,10 @@
         if (AbonoId != 0)
         {
             abono = await abonoService.Buscar(AbonoId);
+            if (abono?.FacturaId != null)
+            {
+                facturas = await FacturaService.Buscar((int)abono.FacturaId);
+            }
 
         }
     }
