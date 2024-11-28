@@ -13,7 +13,6 @@
         </div>
 
         <div class="card-body overflow-auto">
-            @* Contenido del filtro *@
             <div class="row mb-4 align-items-end">
                 <div class="col-md-4">
                     <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
@@ -48,7 +47,7 @@
                 <thead class="table-white">
                     <tr>
                         <th>Préstamo ID</th>
-                        <th>Cliente</th>
+                        <th>Deudores</th>
                         <th>Monto Prestado</th>
                         <th>Interés</th>
                         <th>Cuotas</th>
@@ -81,17 +80,17 @@
                             <td>@prestamo.TotalInteres</td>
                             <td>@prestamo.MontoTotalPagar</td>
                             <td>
-                                <a href="/Pago/Details/@prestamo.PrestamoId" class="btn btn-outline-primary">
+                                <a href="" class="btn btn-outline-primary">
                                     <span class="bi bi-eye mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/Pago/Edit/@prestamo.PrestamoId" class="btn btn-outline-success">
+                                <a href="" class="btn btn-outline-success">
                                     <span class="bi bi-pencil-square mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/Pago/Delete/@prestamo.PrestamoId" class="btn  btn-outline-danger">
+                                <a href="" class="btn  btn-outline-danger">
                                     <span class="bi bi-trash mt-3"></span>
                                 </a>
                             </td>
