@@ -26,7 +26,17 @@
                             </div>
                         </div>
                     </div>
-
+                    @*   Facturas *@
+                    <div class="mb-5">
+                        <label for="Deudor" class="form-label"><strong>Facturas:</strong></label>
+                        <InputSelect class="form-control" @bind-Value="abono.FacturaId">
+                            <option value="0" disabled>Selecionar un facturas</option>
+                            @foreach (var factura in listafactura)
+                            {
+                                <option value="@factura.FacturaId">@factura.FacturaId</option>
+                            }
+                        </InputSelect>
+                    </div>
                     @*   MontoAbono *@
                     <div class="mb-5">
                         <label for=" MontoAbono" class="form-label"><strong> MontoAbono:</strong></label>
@@ -68,7 +78,7 @@
     [Parameter]
     public int AbonoId { get; set; }
     public Abonos? abono = new Abonos();
-    public Facturas? facturas { get; set; } = new Facturas();
+    public Facturas? factura { get; set; } = new Facturas();
     public List<Facturas> listafactura = new List<Facturas>();
     public List<Abonos> listaabono = new List<Abonos>();
     private bool existe = false;
@@ -83,7 +93,7 @@
         if (AbonoId != 0)
         {
             abono = await abonoService.Buscar(AbonoId) ?? new Abonos();
-            
+            listafactura = await FacturaService.ListarFacturas();
         }
     }
 
