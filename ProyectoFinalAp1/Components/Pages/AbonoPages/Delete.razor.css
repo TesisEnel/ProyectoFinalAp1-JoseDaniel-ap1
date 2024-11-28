@@ -1,0 +1,69 @@
+﻿/* css oficial del Delete de abonos */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Section */
+.header-style {
+    background: linear-gradient(45deg, #008DD9, #4A667F);
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.header-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.photo-style {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+/* Info Block Styles */
+.info-block {
+    margin-bottom: 15px;
+}
+
+.info-label {
+    color: #008DD9;
+}
+
+.info-text {
+    font-size: 16px;
+}
+
+/* Footer Button Styles */
+.footer-bar {
+    background-color: #4A667F;
+    color: white;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+.delete-btn {
+    background-color: #FF4D4D;
+    color: white;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+    .delete-btn:hover {
+        background-color: #e63e3e;
+    }
+
+.back-btn {
+    background-color: #008DD9;
+    color: white;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+    .back-btn:hover {
+        background-color: #006fa3;
+    }
