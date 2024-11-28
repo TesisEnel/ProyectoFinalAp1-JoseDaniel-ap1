@@ -4,7 +4,8 @@
 @inject ToastService toastService
 @rendermode InteractiveServer
 
-<PageTitle>Consulta de pagos</PageTitle>
+<PageTitle>Registrar Deudor</PageTitle>
+
 <EditForm Model="deudor" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
@@ -145,12 +146,13 @@
         if (guadado)
         {
             toastService.Notify(new(ToastType.Success, "Exito", "Se guardó correctamente"));
+            Volver();
         }
     }
 
     public async Task Volver()
     {
         toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
-        navigationManager.NavigateTo("/menu");
+        navigationManager.NavigateTo("/Deudore/Index");
     }
 }
