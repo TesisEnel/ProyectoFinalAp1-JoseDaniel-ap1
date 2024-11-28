@@ -146,11 +146,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Inicializa el EditContext al cargar el componente
         editContext = new EditContext(prestamo);
+
         var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        if (query.TryGetValue("deudorId", out var deudorid))
+        if (query.TryGetValue("DeudorId", out var clienteId))
         {
+            deudor = await deudorService.Buscar(int.Parse(clienteId));
+            prestamo.DeudorId = deudor.DeudorId;
 
         }
     }
@@ -186,7 +190,7 @@
 
     private async Task RedirigirDeudores()
     {
-        navigationManager.NavigateTo("/Deudor/Search");
+        navigationManager.NavigateTo("/prestamo/SeleccionarDeudor");
     }
 
     private async Task Nuevo()
@@ -216,9 +220,9 @@
                 prestamo.MontoTotalPagar = prestamo.MontoPrestado;
             }
             DateTime fechaCreacion = prestamo.FechaPrestamo.Value;
-            // Asignar la fecha de cobro con base en la fecha de préstamo y las cuotas
+            // Asignar la fecha de cobro con base en la fecha de préstamo y las cuotas o si esta es indefinida la misma
             if (prestamo.FormaPago == "Semanal")
-                prestamo.FechaCobro = fechaCreacion.AddDays(7); // Primer pago una semana después
+                prestamo.FechaCobro = fechaCreacion.AddDays(7); 
             else if (prestamo.FormaPago == "Quincenal")
                 prestamo.FechaCobro = fechaCreacion.AddDays(15);
         }
