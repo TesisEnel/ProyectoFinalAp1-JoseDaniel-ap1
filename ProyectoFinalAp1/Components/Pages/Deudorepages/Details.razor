@@ -1,0 +1,98 @@
+﻿@page "/Deudores/Details/{deudorId:int}"
+@inject DeudorService deudorServices
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Detalles del Deudor</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        @* Header *@
+        <div class="card-header text-center py-5">
+            <h2>Detalles del Deudor</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                @* Foto de la Cedula *@
+                <div class="col-md-4 text-center mb-4">
+                    <strong class="d-block mb-2">Foto de la Cédula</strong>
+                    @if (!string.IsNullOrEmpty(deudor?.FotoCedulaURL))
+                    {
+                        <img src="@deudor.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
+                    }
+                </div>
+
+                @* Datos Personales *@
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Número de Cédula:</strong>
+                                <p class="d-block">@deudor?.NumeroCedula</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Nombres:</strong>
+                                <p class="d-block">@deudor?.Nombres</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Apellidos:</strong>
+                                <p class="d-block">@deudor?.Apellidos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Dirección:</strong>
+                                <p class="d-block">@deudor?.Direccion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Información de Contacto *@
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Teléfono:</strong>
+                                <p class="d-block">@deudor?.Telefono</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Ciudad:</strong>
+                                <p class="d-block">@deudor?.Ciudad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int deudorId { get; set; }
+    private Deudores? deudor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        deudor = await deudorServices.Buscar(deudorId);
+    }
+
+    public async Task Volver()
+    {
+        navigation.NavigateTo("/Deudore/Index");
+    }
+}
