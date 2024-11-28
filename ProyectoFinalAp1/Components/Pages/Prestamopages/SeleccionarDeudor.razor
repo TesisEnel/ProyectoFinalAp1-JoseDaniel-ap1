@@ -28,7 +28,7 @@
                     <label for="ValorFiltro" class="form-label" style="color: #4A667F;">Búsqueda:</label>
                     <div class="input-group">
                         <input @bind="valorFiltro" class="form-control" placeholder="Buscar" style="border-color: #4A667F;" />
-                        <button @onclick="Buscar" class="btn btn-outline-primary" >
+                        <button @onclick="Buscar" class="btn btn-outline-primary">
                             <span class="bi bi-search"></span> Buscar
                         </button>
                     </div>
@@ -36,7 +36,7 @@
             </div>
 
             <table class="table text-center">
-                <thead style="background-color: #008DD9; color: #FFFFFF;">
+                <thead>
                     <tr>
                         <th>ClienteId</th>
                         <th>Cédula</th>
@@ -45,7 +45,7 @@
                         <th>Dirección</th>
                         <th>Teléfono</th>
                         <th>Ciudad</th>
-                        <th class="text-end">Seleccionar</th>
+                        <th>Seleccionar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +59,7 @@
                             <td>@deudor.Direccion</td>
                             <td>@deudor.Telefono</td>
                             <td>@deudor.Ciudad</td>
-                            <td class="text-end">
+                            <td class="text-center">
                                 <input type="checkbox" @onclick="() => SeleccionarCliente(deudor.DeudorId)" style="width: 1.5em; height: 1.5em; border-color: #4A667F;" />
                             </td>
                         </tr>
