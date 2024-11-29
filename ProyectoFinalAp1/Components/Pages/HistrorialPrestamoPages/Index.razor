@@ -17,7 +17,7 @@
             </a>
         </div>
 
-        <div class="card-body overflow-auto" >
+        <div class="card-body overflow-auto">
             @if (deudore != null)
             {
 
@@ -38,7 +38,7 @@
 
                 <h5 class="mb-3">Préstamos y Cobros</h5>
                 <table class="table  table-bordered text-center text-white">
-                    <thead >
+                    <thead>
                         <tr>
                             <th>PréstamoId</th>
                             <th>Monto Prestado</th>
@@ -66,8 +66,8 @@
                 </table>
 
                 <h5 class="mb-3">Cobros Detallados</h5>
-                <table class="table table-bordered text-center" >
-                    <thead >
+                <table class="table table-bordered text-center">
+                    <thead>
                         <tr>
                             <th>CobroId</th>
                             <th>Monto Cobrado</th>
@@ -127,4 +127,5 @@
         listaCobros = listaCobros.Where(c => c.PrestamoId == filtroPrestamo).ToList();
     }
 }
+
 
