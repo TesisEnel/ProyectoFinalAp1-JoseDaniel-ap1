@@ -1,0 +1,112 @@
+﻿<style >
+/* Fondo principal */
+body {
+    background-color: #C6C6C0;
+    color: #008DD9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tarjeta */
+.card {
+    background-color: #fff;
+    border: 1px solid #008DD9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado */
+.card-header {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    border-bottom: 2px solid #008DD9;
+}
+
+/* Botones */
+.btn {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+.btn-outline-primary {
+    color: #008DD9;
+    border-color: #008DD9;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #008DD9;
+        color: #fff;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+    .btn-danger:hover {
+        background-color: #b02a37;
+    }
+
+/* Tabla */
+.table {
+    background-color: white;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+    .table th {
+        background-color: #4A667F;
+        color: white;
+        border: 1px solid #ccc;
+    }
+
+    .table td {
+        border: 1px solid #ccc;
+    }
+
+
+
+/* Striped Rows */
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #fdfdfd;
+}
+/* Hover normal para las filas, excepto la primera */
+.table-hover tbody tr:not(:first-child):hover {
+    background-color: white;
+}
+
+
+/* Footer */
+.card-footer {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-top: 2px solid #008DD9;
+}
+.table {
+    table-layout: auto;
+    width: 100%; /* Ajustar automáticamente */
+}
+.btn-outline-success {
+    display: inline-block;
+    white-space: nowrap; /* Evitar que se corte */
+}
+
+</style >
