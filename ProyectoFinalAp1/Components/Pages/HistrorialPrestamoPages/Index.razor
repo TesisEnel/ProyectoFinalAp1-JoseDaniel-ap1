@@ -59,7 +59,7 @@
                                 <td>@prestamo.Cuotas</td>
                                 <td>@prestamo.FormaPago</td>
                                 <td>@prestamo.MontoTotalPagar?.ToString("C")</td>
-                                <td><span class="text-success fw-bold">@prestamo.Saldo.ToString("C")</span></td>
+                                <td><span class="text-success fw-bold">@prestamo.Saldo?.ToString("C")</span></td>
                             </tr>
                         }
                     </tbody>
