@@ -1,0 +1,198 @@
+﻿@page "/Cobro/Create"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject CobroService cobroService
+@inject NavigationManager navigationManager
+@inject ToastService toastService
+@rendermode InteractiveServer
+
+<PageTitle>Registrar Cobro</PageTitle>
+
+<EditForm Model="cobro" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="container-fluid vh-95 d-flex justify-content-center align-items-center">
+        <div class="card shadow-lg" style="width: 1400px; min-height: 600px; border-radius: 15px;">
+
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <h3 class="card-title text-center flex-grow-1">Registrar Cobro</h3>
+                <button class="btn btn-primary" @onclick="RedirigirABusquedaCliente">
+                    <span class="bi bi-person-fill-check"></span> Buscar Deudor
+                </button>
+            </div>
+
+            <div class="card-body bg-light">
+                @*  Información del Cliente *@
+                <section>
+                    <h5 class="text-primary">Información del Cliente Seleccionado</h5>
+                    @if (deudore != null)
+                    {
+                        <div class="card mb-3 bg-info-subtle p-3">
+                            <strong>Nombre:</strong> @deudore.Nombres @deudore.Apellidos<br />
+                            <strong>Cédula:</strong> @deudore.NumeroCedula
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">Seleccione un cliente para continuar.</div>
+                    }
+                </section>
+
+                @*    Detalles del Cobro  *@
+                <section>
+                    <h5 class="text-primary">Detalles del Cobro</h5>
+                    <div class="mb-3">
+                        <label>Préstamo:</label>
+                        <InputSelect class="form-control" @bind-Value="cobro.PrestamoId" @onchange="OnPrestamoSeleccionado">
+                            <option value="">Seleccione</option>
+                            @foreach (var prestamo in prestamos)
+                            {
+                                <option value="@prestamo.PrestamoId">ID: @prestamo.PrestamoId - Saldo: @prestamo.Saldo</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => cobro.PrestamoId)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Fecha de Cobro:</label>
+                        <InputDate class="form-control" @bind-Value="cobro.FechaCobro" @onchange="CalcularMora" />
+                        <ValidationMessage For="@(() => cobro.FechaCobro)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Importe a Pagar:</label>
+                        <InputNumber class="form-control" @bind-Value="cobro.ImportePagar" step="0.01" />
+                        <ValidationMessage For="@(() => cobro.ImportePagar)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Mora (opcional):</label>
+                        <InputNumber class="form-control" @bind-Value="cobro.Mora" readonly />
+                    </div>
+                </section>
+            </div>
+
+            <div class="card-footer text-center bg-light">
+                <button class="btn btn-outline-primary" @onclick="Nuevo">
+                    <span class="bi bi-plus-circle"></span> Nuevo
+                </button>
+                <button type="submit" class="btn btn-outline-success">
+                    <span class="bi bi-check-circle-fill"></span> Guardar
+                </button>
+                <button class="btn btn-outline-danger" @onclick="Retroceder">
+                    <span class="bi bi-arrow-bar-left"></span> Retroceder
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
+
+@code {
+    private Deudores deudore;
+    public Cobros cobro = new();
+    private List<Prestamos> prestamos = new();
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(new Uri(navigationManager.Uri).Query);
+        if (query.TryGetValue("clienteId", out var clienteId))
+        {
+            deudore = await deudorService.Buscar(int.Parse(clienteId));
+            cobro.DeudorId = deudore.DeudorId;
+            prestamos = await prestamoService.ObtenerPrestamosPorDeudor(deudore.DeudorId);
+        }
+    }
+
+    private void RedirigirABusquedaCliente() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
+
+    private async Task Nuevo()
+    {
+        cobro = new();
+        deudore = null;
+    }
+
+    private void Retroceder() => navigationManager.NavigateTo("/menu");
+
+    private void OnPrestamoSeleccionado(ChangeEventArgs e)
+    {
+        cobro.PrestamoId = int.Parse(e.Value.ToString());
+        CalcularMora();
+    }
+
+    private void CalcularMora()
+    {
+        if (cobro.PrestamoId == 0)
+        {
+            cobro.Mora = 0;
+            return;
+        }
+
+        var prestamo = prestamos.FirstOrDefault(p => p.PrestamoId == cobro.PrestamoId);
+        if (prestamo != null)
+        {
+            var fechaCobro = cobro.FechaCobro ?? DateTime.Now;
+            var fechaVencimiento = prestamo.FechaPrestamo ?? DateTime.Now;
+
+            var diasRetraso = (fechaCobro - fechaVencimiento).Days;
+
+            cobro.Mora = diasRetraso > 0 ? Math.Max(diasRetraso * 10, 0) : 0;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task Guardar()
+    {
+        if (deudore == null || cobro.PrestamoId == 0)
+        {
+            toastService.Notify(new(ToastType.Warning, title: "Atención", message: "Selecciona un deudor y un préstamo."));
+            return;
+        }
+
+        try
+        {
+            var prestamo = await prestamoService.ObtenerPrestamoPorId(cobro.PrestamoId);
+            if (prestamo != null)
+            {
+                var fechaInicio = prestamo.FechaPrestamo ?? DateTime.Now;
+                var fechaCobro = cobro.FechaCobro ?? DateTime.Now;
+                var diasRetraso = (fechaCobro - fechaInicio).Days;
+
+                // Calcula la mora si hay días de retraso
+                cobro.Mora = diasRetraso > 0 ? Math.Max(diasRetraso * 10, 0) : 0;
+
+                // Suma la mora al importe total a pagar
+                cobro.ImportePagar += cobro.Mora ?? 0;
+
+                // Actualiza el saldo del préstamo
+                prestamo.Saldo = Math.Max((prestamo.Saldo  ) - (decimal)cobro.ImportePagar,0m);
+
+
+                // Lógica para calcular la siguiente fecha de pago
+                if (prestamo.FormaPago == "Quincenal")
+                {
+                    // Agrega 15 días para pagos quincenales
+                    prestamo.FechaPrestamo = fechaCobro.AddDays(15);
+                }
+                else if (prestamo.FormaPago == "Semanal")
+                {
+                    // Agrega 7 días para pagos semanales
+                    prestamo.FechaPrestamo = fechaCobro.AddDays(7);
+                }
+
+                // Actualiza el préstamo en la base de datos
+                await prestamoService.ActualizarPrestamo(prestamo);
+            }
+
+            // Guarda el cobro en la base de datos
+            await cobroService.Guardar(cobro);
+
+            toastService.Notify(new(ToastType.Success, title: "Éxito", message: "Cobro registrado correctamente."));
+            await Task.Delay(3000);
+            Retroceder();
+        }
+        catch (Exception ex)
+        {
+            toastService.Notify(new(ToastType.Danger, title: "Error", message: $"Error: {ex.Message}"));
+        }
+    }
+}
