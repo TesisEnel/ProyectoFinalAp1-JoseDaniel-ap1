@@ -88,6 +88,7 @@ body {
 .table-striped tbody tr:nth-of-type(even) {
     background-color: #fdfdfd; /* Fondo blanco para filas pares */
 }
+
 /* Foto Cedula */
 .img-thumbnail {
     max-width: 200px;
