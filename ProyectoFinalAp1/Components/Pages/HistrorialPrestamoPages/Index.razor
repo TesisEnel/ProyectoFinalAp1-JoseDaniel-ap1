@@ -1,0 +1,130 @@
+﻿@page "/Deudor/Historial/{HistorialId:int}"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject CobroService cobroService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Historial de Préstamos</PageTitle>
+
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+    <div class="card shadow-lg w-100 h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title text-center w-100">Historial de Préstamos de: @deudore?.Nombres @deudore?.Apellidos</h3>
+            <a href="/Deudor/Seleccionar" class="btn btn-secondary">
+                <span class="bi bi-arrow-left-circle"></span>
+                Regresar
+            </a>
+        </div>
+
+        <div class="card-body overflow-auto" >
+            @if (deudore != null)
+            {
+
+                <div class="border-bottom pb-3 mb-3">
+                    <h5>Información del Deudor</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <strong>Foto Cédula:</strong><br />
+                            <img src="@deudore.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail mt-2" />
+                        </li>
+                        <li><strong>NumeroCedula:</strong> @deudore.NumeroCedula</li>
+                        <li><strong>Dirección:</strong> @deudore.Direccion</li>
+                        <li><strong>Teléfono:</strong> @deudore.Telefono</li>
+                        <li><strong>Ciudad:</strong> @deudore.Ciudad</li>
+
+                    </ul>
+                </div>
+
+                <h5 class="mb-3">Préstamos y Cobros</h5>
+                <table class="table  table-bordered text-center text-white">
+                    <thead >
+                        <tr>
+                            <th>PréstamoId</th>
+                            <th>Monto Prestado</th>
+                            <th>Interés</th>
+                            <th>Cuotas</th>
+                            <th>Forma Pago</th>
+                            <th>Monto Total Pagar</th>
+                            <th>Saldo Restante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prestamo in listaPrestamos)
+                        {
+                            <tr>
+                                <td>@prestamo.PrestamoId</td>
+                                <td>@prestamo.MontoPrestado</td>
+                                <td>@prestamo.Interes %</td>
+                                <td>@prestamo.Cuotas</td>
+                                <td>@prestamo.FormaPago</td>
+                                <td>@prestamo.MontoTotalPagar?.ToString("C")</td>
+                                <td><span class="text-success fw-bold">@prestamo.Saldo.ToString("C")</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h5 class="mb-3">Cobros Detallados</h5>
+                <table class="table table-bordered text-center" >
+                    <thead >
+                        <tr>
+                            <th>CobroId</th>
+                            <th>Monto Cobrado</th>
+                            <th>Fecha Cobro</th>
+                            <th>Saldo Restante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal saldoRestante = listaPrestamos.FirstOrDefault(p => p.PrestamoId == filtroPrestamo)?.MontoTotalPagar ?? 0;
+                        }
+                        @foreach (var cobro in listaCobros.Where(c => c.PrestamoId == filtroPrestamo))
+                        {
+                            saldoRestante -= cobro.ImportePagar ?? 0;
+                            <tr>
+                                <td>@cobro.CobroId</td>
+                                <td>@cobro.ImportePagar</td>
+                                <td>@cobro.FechaCobro?.ToString("dd/MM/yyyy")</td>
+                                <td>@saldoRestante.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger text-center" role="alert">
+                    No se encontró información para este deudor.
+                </div>
+            }
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <p class="mb-0">Total de préstamos: @listaPrestamos?.Count</p>
+            <p class="mb-0">Total de cobros: @listaCobros?.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int HistorialId { get; set; }
+    public Deudores? deudore = new Deudores();
+    public List<Prestamos> listaPrestamos = new List<Prestamos>();
+    public List<Cobros> listaCobros = new List<Cobros>();
+    public int filtroPrestamo { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        deudore = await deudorService.ObtenerDeudorePorId(HistorialId);
+        listaPrestamos = await prestamoService.Listar(p => p.DeudorId == HistorialId);
+        listaCobros = await cobroService.Listar(c => c.Prestamo.DeudorId == HistorialId);
+    }
+
+    private void FiltrarCobros()
+    {
+        listaCobros = listaCobros.Where(c => c.PrestamoId == filtroPrestamo).ToList();
+    }
+}
+
