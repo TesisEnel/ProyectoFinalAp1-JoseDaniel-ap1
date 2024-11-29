@@ -257,6 +257,9 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DeudoresDeudorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("FechaCobro")
                         .IsRequired()
                         .HasColumnType("datetime2");
@@ -281,6 +284,8 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasKey("CobroId");
 
                     b.HasIndex("DeudorId");
+
+                    b.HasIndex("DeudoresDeudorId");
 
                     b.HasIndex("PrestamoId");
 
@@ -541,6 +546,10 @@ namespace ProyectoFinalAp1.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ProyectoFinalAp1.Models.Deudores", null)
+                        .WithMany("Cobros")
+                        .HasForeignKey("DeudoresDeudorId");
+
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
                         .WithMany()
                         .HasForeignKey("PrestamoId")
@@ -609,7 +618,7 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
-                        .WithMany()
+                        .WithMany("Prestamos")
                         .HasForeignKey("DeudorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -620,6 +629,13 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
                     b.Navigation("Facturas");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Deudores", b =>
+                {
+                    b.Navigation("Cobros");
+
+                    b.Navigation("Prestamos");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>

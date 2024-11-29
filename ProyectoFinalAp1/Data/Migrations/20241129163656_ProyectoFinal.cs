@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class ProyectoFinales : Migration
+    public partial class ProyectoFinal : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,6 +94,7 @@ namespace ProyectoFinalAp1.Migrations
                     ImportePagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeudoresDeudorId = table.Column<int>(type: "int", nullable: true),
                     PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -105,6 +106,11 @@ namespace ProyectoFinalAp1.Migrations
                         principalTable: "deudores",
                         principalColumn: "DeudorId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_cobros_deudores_DeudoresDeudorId",
+                        column: x => x.DeudoresDeudorId,
+                        principalTable: "deudores",
+                        principalColumn: "DeudorId");
                     table.ForeignKey(
                         name: "FK_cobros_prestamos_PrestamoId",
                         column: x => x.PrestamoId,
@@ -197,6 +203,11 @@ namespace ProyectoFinalAp1.Migrations
                 name: "IX_abonos_FacturaId",
                 table: "abonos",
                 column: "FacturaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cobros_DeudoresDeudorId",
+                table: "cobros",
+                column: "DeudoresDeudorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cobros_DeudorId",
