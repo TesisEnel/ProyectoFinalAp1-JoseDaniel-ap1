@@ -86,16 +86,16 @@
         listardeudore = await deudorService.ObtenerTodos();
         listarprestamo = await prestamoService.ListarPrestamosConDeudores();
 
-        foreach (var cliente in listardeudore)
+        foreach (var deudor in listardeudore)
         {
-            var prestamosDelCliente = listarprestamo.Where(p => p.DeudorId == cliente.DeudorId).ToList();
+            var prestamosDelDeudor = listarprestamo.Where(p => p.DeudorId == deudor.DeudorId).ToList();
 
-            cliente.Saldo = prestamosDelCliente.Sum(p => p.Saldo ??0);
+            deudor.Saldo = prestamosDelDeudor.Sum(p => p.Saldo ?? 0m);
         }
         // Filtrar los clientes que tienen saldo pendiente
-        var clientesConSaldo = listardeudore.Where(cliente => cliente.Saldo > 0).ToList();
+        var DeudorConSaldo = listardeudore.Where(d => d.Saldo > 0m).ToList();
         // Asignar la lista filtrada a la lista de clientes
-        listardeudore = clientesConSaldo;
+        listardeudore = DeudorConSaldo;
     }
 
     private async Task SeleccionarCliente(int deudorId)
