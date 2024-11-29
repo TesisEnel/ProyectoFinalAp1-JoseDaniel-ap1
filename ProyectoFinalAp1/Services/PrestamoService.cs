@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using ProyectoFinalAp1.Data;
 using ProyectoFinalAp1.Models;
 using System.Linq.Expressions;
@@ -52,7 +53,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
             .Where(criterio)
-            .Include(p =>p.deudores)
+            .Include(p => p.deudores)
             .ToListAsync();
     }
     public async Task<List<Prestamos>> ListarPrestamos()
@@ -60,6 +61,36 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
             .AsNoTracking()
+            .Include(p =>p.deudores)
             .ToListAsync();
+    }
+    public async Task<Prestamos> ObtenerPrestamoPorId(int prestamoId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var prestamo = await contexto.prestamos
+            .FirstOrDefaultAsync(p => p.PrestamoId == prestamoId);
+        return prestamo;
+    }
+    public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int deudorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.prestamos
+            .Where(p => p.DeudorId == deudorId)
+            .ToListAsync();
+    }
+
+    public async Task<List<Prestamos>> ListarPrestamosConDeudores()
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.prestamos
+            .Include(p => p.deudores)
+            .ToListAsync();
+    }
+
+    public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        contexto.prestamos.Update(prestamo);
+        return await contexto.SaveChangesAsync() > 0;
     }
 }
