@@ -1,0 +1,141 @@
+﻿@page "/Prestamo/Details/{PrestamoId:int}"
+@inject PrestamoService prestamoService
+@inject DeudorService deudorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalle Préstamo</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5">
+            <h2>Detalle del Préstamo</h2>
+        </div>
+
+        <div class="card-body">
+            @if (prestamo != null && prestamo.deudores != null)
+            {
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <strong>Deudor:</strong>
+                            <p class="d-block">@prestamo.deudores.Nombres @prestamo.deudores.Apellidos</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-block">
+                            <strong>Cédula:</strong>
+                            <p class="d-block">@prestamo.deudores.NumeroCedula</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    No se encontraron datos del deudor asociados a este préstamo.
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>PréstamoId:</strong>
+                        <p class="d-block">@prestamo?.PrestamoId</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Monto Prestado:</strong>
+                        <p class="d-block">@prestamo?.MontoPrestado</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Interés:</strong>
+                        <p class="d-block">@prestamo?.Interes%</p>
+                    </div>
+                    <div class="info-block">
+                        <strong>Monto cuota:</strong>
+                        <p class="d-block">@prestamo?.MontoCuota</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Cuotas:</strong>
+                        <p class="d-block">@prestamo?.Cuotas</p>
+                    </div>
+                    <div class="info-block">
+                        <strong>Forma pago:</strong>
+                        <p class="d-block">@prestamo?.FormaPago</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Fecha Préstamo:</strong>
+                        <p class="d-block">@prestamo?.FechaPrestamo?.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Fecha Pago:</strong>
+                        <p class="d-block">@prestamo?.FechaCobro?.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Saldo Pendiente:</strong>
+                        <p class="d-block">@prestamo?.Saldo</p>
+                    </div>
+                    <div class="info-block">
+                        <strong>Monto total pagar:</strong>
+                        <p class="d-block">@prestamo?.MontoTotalPagar</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-block">
+                        <strong>Total Interés:</strong>
+                        <p class="d-block">@prestamo?.TotalInteres</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg" @onclick="Volver">
+                <span class="bi bi-arrow-left-circle-fill mt-3"></span>
+                Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int PrestamoId { get; set; }
+    public Prestamos? prestamo { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        prestamo = await prestamoService.Buscar(PrestamoId);
+
+        if (prestamo != null && prestamo.DeudorId != 0 && prestamo.deudores == null)
+        {
+            prestamo.deudores = await deudorService.Buscar(prestamo.DeudorId);
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Prestamo/Index");
+    }
+}
