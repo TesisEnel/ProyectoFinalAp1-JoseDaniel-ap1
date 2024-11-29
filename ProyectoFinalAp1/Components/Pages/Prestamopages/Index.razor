@@ -80,17 +80,17 @@
                             <td>@prestamo.TotalInteres</td>
                             <td>@prestamo.MontoTotalPagar</td>
                             <td>
-                                <a href="" class="btn btn-outline-primary">
+                                <a href="/Prestamo/Details/@prestamo.PrestamoId" class="btn btn-outline-primary">
                                     <span class="bi bi-eye mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="" class="btn btn-outline-success">
+                                <a href="/Prestamo/Edit/@prestamo.PrestamoId" class="btn btn-outline-success">
                                     <span class="bi bi-pencil-square mt-3"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="" class="btn  btn-outline-danger">
+                                <a href="/Prestamo/Delete/@prestamo.PrestamoId" class="btn  btn-outline-danger">
                                     <span class="bi bi-trash mt-3"></span>
                                 </a>
                             </td>
@@ -101,7 +101,7 @@
         </div>
 
         <div class="card-footer d-flex justify-content-between">
-            <p class="mb-0">Total de pagos: @listaprestamo.Count</p>
+            <p class="mb-0">Total de prestamos: @listaprestamo.Count</p>
         </div>
     </div>
 </div>
