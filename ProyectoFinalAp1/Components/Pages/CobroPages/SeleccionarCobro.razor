@@ -83,14 +83,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listardeudore = await deudorService.ListarDeudores();
+        listardeudore = await deudorService.ObtenerTodos();
         listarprestamo = await prestamoService.ListarPrestamosConDeudores();
 
         foreach (var cliente in listardeudore)
         {
             var prestamosDelCliente = listarprestamo.Where(p => p.DeudorId == cliente.DeudorId).ToList();
 
-            cliente.Saldo = prestamosDelCliente.Sum(p => p.Saldo);
+            cliente.Saldo = prestamosDelCliente.Sum(p => p.Saldo ??0);
         }
         // Filtrar los clientes que tienen saldo pendiente
         var clientesConSaldo = listardeudore.Where(cliente => cliente.Saldo > 0).ToList();
@@ -98,10 +98,10 @@
         listardeudore = clientesConSaldo;
     }
 
-    private async Task SeleccionarCliente(int clienteId)
+    private async Task SeleccionarCliente(int deudorId)
     {
         // Navegar a la ruta de creación de cobros pasando el clienteId como parámetro
-        navigationManager.NavigateTo($"/Cobro/Create?clienteId={clienteId}");
+        navigationManager.NavigateTo($"/Cobro/Create?deudorId={deudorId}");
     }
 
     public async Task Buscar()
