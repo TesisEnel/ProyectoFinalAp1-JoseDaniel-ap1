@@ -1,0 +1,130 @@
+﻿@page "/Cobros/SeleccionarCliente"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de clientes para cobros</PageTitle>
+
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+    <div class="card shadow-lg w-100 h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title text-center w-100">Consulta de Clientes para Cobros</h3>
+        </div>
+
+        <div class="card-body overflow-auto">
+            <div class="row mb-4 align-items-end">
+                <div class="col-md-4">
+                    <label for="Filtro" class="form-label">Filtrar por:</label>
+                    <select @bind="filtro" class="form-select">
+                        <option value="0">Seleccione una opción</option>
+                        <option value="Cedula">Cédula</option>
+                        <option value="Nombres">Nombres</option>
+                        <option value="Apellidos">Apellidos</option>
+                        <option value="Ciudad">Ciudad</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                    <div class="input-group">
+                        <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                            <span class="bi bi-search"></span> Buscar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-hover table-striped text-center">
+                <thead class="table-white">
+                    <tr>
+                        <th>ClienteId</th>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Ciudad</th>
+                        <th class="text-end">Seleccionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deudor in listardeudore)
+                    {
+                        <tr>
+                            <td>@deudor.DeudorId</td>
+                            <td>@deudor.NumeroCedula</td>
+                            <td>@deudor.Nombres</td>
+                            <td>@deudor.Apellidos</td>
+                            <td>@deudor.Direccion</td>
+                            <td>@deudor.Telefono</td>
+                            <td>@deudor.Ciudad</td>
+                            <td class="text-end">
+                                <input type="checkbox" @onclick="() => SeleccionarCliente(deudor.DeudorId)" style="width: 1.5em; height: 1.5em;" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <p class="mb-0">Total de clientes: @listardeudore.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Deudores> listardeudore = new List<Deudores>();
+    private List<Prestamos> listarprestamo = new List<Prestamos>();
+    public string filtro = "0";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        listardeudore = await deudorService.ListarDeudores();
+        listarprestamo = await prestamoService.ListarPrestamosConDeudores();
+
+        foreach (var cliente in listardeudore)
+        {
+            var prestamosDelCliente = listarprestamo.Where(p => p.DeudorId == cliente.DeudorId).ToList();
+
+            cliente.Saldo = prestamosDelCliente.Sum(p => p.Saldo);
+        }
+        // Filtrar los clientes que tienen saldo pendiente
+        var clientesConSaldo = listardeudore.Where(cliente => cliente.Saldo > 0).ToList();
+        // Asignar la lista filtrada a la lista de clientes
+        listardeudore = clientesConSaldo;
+    }
+
+    private async Task SeleccionarCliente(int clienteId)
+    {
+        // Navegar a la ruta de creación de cobros pasando el clienteId como parámetro
+        navigationManager.NavigateTo($"/Cobro/Create?clienteId={clienteId}");
+    }
+
+    public async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            listardeudore = await deudorService.Listar(p => true);
+        }
+        else if (filtro == "Cedula")
+        {
+            listardeudore = await deudorService.Listar(c => c.NumeroCedula.Contains(valorFiltro));
+        }
+        else if (filtro == "Nombres")
+        {
+            listardeudore = await deudorService.Listar(c => c.Nombres.Contains(valorFiltro));
+        }
+        else if (filtro == "Apellidos")
+        {
+            listardeudore = await deudorService.Listar(c => c.Apellidos.Contains(valorFiltro));
+        }
+        else if (filtro == "Ciudad")
+        {
+            listardeudore = await deudorService.Listar(c => c.Ciudad.Contains(valorFiltro));
+        }
+    }
+}
