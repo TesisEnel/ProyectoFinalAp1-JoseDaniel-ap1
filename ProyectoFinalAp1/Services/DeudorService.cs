@@ -67,6 +67,12 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return await contexto.deudores.FirstOrDefaultAsync(c => c.DeudorId == id);
     }
 
+    public async Task<List<Deudores>> ObtenerTodos()
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.deudores.ToListAsync();
+    }
+
     public async Task<List<Deudores>> ObtenerDeudoreConPrestamos()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
