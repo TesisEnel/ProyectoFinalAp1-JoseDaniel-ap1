@@ -104,6 +104,7 @@ body {
     table-layout: auto;
     width: 100%; /* Ajustar automáticamente */
 }
+
 .btn-outline-success {
     display: inline-block;
     white-space: nowrap; /* Evitar que se corte */
