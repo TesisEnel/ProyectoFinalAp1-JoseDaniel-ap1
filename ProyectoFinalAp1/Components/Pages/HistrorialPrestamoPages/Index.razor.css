@@ -92,7 +92,7 @@ body {
 
 /* Foto Cedula */
 .img-thumbnail {
-    max-width: 100px;
+    max-width: 200px;
     border-radius: 10px;
     margin-top: 10px; /* Espacio entre el texto y la imagen */
 }
