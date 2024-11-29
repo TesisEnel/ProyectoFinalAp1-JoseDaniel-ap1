@@ -61,4 +61,17 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .AsNoTracking()
             .ToListAsync();
     }
+    public async Task<Deudores?> ObtenerDeudorePorId(int id)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.deudores.FirstOrDefaultAsync(c => c.DeudorId == id);
+    }
+
+    public async Task<List<Deudores>> ObtenerDeudoreConPrestamos()
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.deudores
+            .Where(c => c.Prestamos.Any())
+            .ToListAsync();
+    }
 }
