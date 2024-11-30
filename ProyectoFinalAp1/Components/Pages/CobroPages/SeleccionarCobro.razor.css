@@ -1,0 +1,38 @@
+﻿/* Css del seleccionar Deudores para cobros */
+.container-fluid {
+    background-color: #f4f6f9; 
+}
+
+.card {
+    background-color: #ffffff;
+    White background for card box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #008DD9; 
+    color: white;
+    padding: 1rem;
+}
+
+    .card-header .card-title {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+.card-footer {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.checkbox-seleccionar {
+    transform: scale(2);
+    margin: 0 auto;
+    display: block;
+    margin-top: 5px;
+}
+
+
+.card-body {
+    overflow-y: auto;
+}

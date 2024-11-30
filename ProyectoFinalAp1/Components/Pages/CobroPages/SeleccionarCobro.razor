@@ -4,12 +4,12 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Consulta de clientes para cobros</PageTitle>
+<PageTitle>Consulta de deudores para cobros</PageTitle>
 
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title text-center w-100">Consulta de Clientes para Cobros</h3>
+            <h3 class="card-title w-100">Consulta de Deudores para Cobros</h3>
         </div>
 
         <div class="card-body overflow-auto">
@@ -29,41 +29,44 @@
                     <label for="ValorFiltro" class="form-label">Búsqueda:</label>
                     <div class="input-group">
                         <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
-                        <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <button @onclick="Buscar" class="btn btn-outline-primary">
                             <span class="bi bi-search"></span> Buscar
                         </button>
                     </div>
                 </div>
             </div>
 
-            <table class="table table-hover table-striped text-center">
-                <thead class="table-white">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th>ClienteId</th>
+                        <th>DeudorId</th>
                         <th>Cédula</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Dirección</th>
                         <th>Teléfono</th>
                         <th>Ciudad</th>
-                        <th class="text-end">Seleccionar</th>
+                        <th class="text-center">Seleccionar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var deudor in listardeudore)
+                    @if (listardeudore.Any())
                     {
-                        <tr>
-                            <td>@deudor.DeudorId</td>
-                            <td>@deudor.NumeroCedula</td>
-                            <td>@deudor.Nombres</td>
-                            <td>@deudor.Apellidos</td>
-                            <td>@deudor.Direccion</td>
-                            <td>@deudor.Telefono</td>
-                            <td>@deudor.Ciudad</td>
-                            <td class="text-end">
-                                <input type="checkbox" @onclick="() => SeleccionarCliente(deudor.DeudorId)" style="width: 1.5em; height: 1.5em;" />
-                            </td>
-                        </tr>
+                        @foreach (var deudor in listardeudore)
+                        {
+                            <tr>
+                                <td>@deudor.DeudorId</td>
+                                <td>@deudor.NumeroCedula</td>
+                                <td>@deudor.Nombres</td>
+                                <td>@deudor.Apellidos</td>
+                                <td>@deudor.Direccion</td>
+                                <td>@deudor.Telefono</td>
+                                <td>@deudor.Ciudad</td>
+                                <td class="text-center">
+                                    <input type="checkbox" @onclick="() => SeleccionarCliente(deudor.DeudorId)" class="checkbox-seleccionar" />
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
@@ -83,19 +86,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listardeudore = await deudorService.ObtenerTodos();
-        listarprestamo = await prestamoService.ListarPrestamosConDeudores();
+        // Obtener todos los deudores
+        var todosDeudores = await deudorService.ObtenerTodos();
 
-        foreach (var deudor in listardeudore)
-        {
-            var prestamosDelDeudor = listarprestamo.Where(p => p.DeudorId == deudor.DeudorId).ToList();
+        // Obtener todos los préstamos
+        var todosPrestamos = await prestamoService.ListarPrestamosConDeudores();
 
-            deudor.Saldo = prestamosDelDeudor.Sum(p => p.Saldo ?? 0m);
-        }
-        // Filtrar los clientes que tienen saldo pendiente
-        var DeudorConSaldo = listardeudore.Where(d => d.Saldo > 0m).ToList();
-        // Asignar la lista filtrada a la lista de clientes
-        listardeudore = DeudorConSaldo;
+        // Filtrar los deudores que tienen préstamos registrados
+        listardeudore = todosDeudores
+            .Where(d => todosPrestamos.Any(p => p.DeudorId == d.DeudorId))
+            .ToList();
+
+        Console.WriteLine($"Deudores con préstamos registrados: {listardeudore.Count}");
     }
 
     private async Task SeleccionarCliente(int deudorId)
@@ -108,7 +110,7 @@
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))
         {
-            listardeudore = await deudorService.Listar(p => true);
+            await OnInitializedAsync();
         }
         else if (filtro == "Cedula")
         {
