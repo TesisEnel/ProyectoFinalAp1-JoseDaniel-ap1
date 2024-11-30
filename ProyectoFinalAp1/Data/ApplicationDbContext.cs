@@ -21,6 +21,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Cobros>()
+          .HasKey(c => c.CobroId);
+
         // Configurar relación entre Cobros y Deudores
         modelBuilder.Entity<Cobros>()
             .HasOne(c => c.deudores)
@@ -31,7 +34,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Configurar relación entre Cobros y Prestamos
         modelBuilder.Entity<Cobros>()
             .HasOne(c => c.Prestamo)
-            .WithMany()
+             .WithMany(p => p.Cobros)
             .HasForeignKey(c => c.PrestamoId)
             .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
 
