@@ -38,7 +38,7 @@ public class Deudores
     [NotMapped]
     public decimal Saldo { get; set; }
 
-    public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
+    public virtual ICollection<Cobros> Cobros { get; set; }
     public virtual ICollection<Prestamos> Prestamos { get; set; } = new List<Prestamos>();
     //public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }
