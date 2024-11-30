@@ -12,7 +12,7 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241130194429_Proyecto")]
+    [Migration("20241130215239_Proyecto")]
     partial class Proyecto
     {
         /// <inheritdoc />
