@@ -27,7 +27,7 @@ builder.Services.AddAuthentication(options =>
 
 // Usa la cadena de conexión del archivo de configuración
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConStr")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -37,9 +37,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
-
-
 
 //La inyeccion de deudor service
 builder.Services.AddScoped<DeudorService>();
