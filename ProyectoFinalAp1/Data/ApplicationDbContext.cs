@@ -10,8 +10,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
          : base(options)
     {  }
 
-    public DbSet<Abonos> abonos{ get; set; }
-    public DbSet<Pagos> pagos{ get; set; }
+  
     public DbSet<Cobros> cobros{ get; set; }
     public DbSet<Facturas> facturas{ get; set; }
     public DbSet<Deudores> deudores { get; set; }
@@ -52,11 +51,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(f => f.PrestamoId)
             .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
 
-        // Configurar relación entre Facturas y Pagos
-        modelBuilder.Entity<Facturas>()
-            .HasOne(f => f.pagos)
-            .WithMany()
-            .HasForeignKey(f => f.PagoId)
-            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
+        
     }
 }

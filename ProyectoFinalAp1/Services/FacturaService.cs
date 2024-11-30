@@ -10,7 +10,7 @@ public class FacturaService(IDbContextFactory<ApplicationDbContext> DbFactory)
     public async Task<bool> Existe(int facturaId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.abonos.AnyAsync(f => f.FacturaId == facturaId);
+        return await contexto.facturas.AnyAsync(f => f.FacturaId == facturaId);
     }
     private async Task<bool> Insertar(Facturas factura)
     {
@@ -46,7 +46,6 @@ public class FacturaService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.facturas
           .Include(f => f.DeudorId)
-              .Include(f => f.PagoId)
                 .Include(f => f.PrestamoId)
             .FirstOrDefaultAsync(f => f.FacturaId== facturaId);
     }
@@ -55,7 +54,6 @@ public class FacturaService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.facturas
            .Include(f => f.DeudorId)
-              .Include(f => f.PagoId)
                 .Include(f => f.PrestamoId)
             .Where(criterio)
             .ToListAsync();

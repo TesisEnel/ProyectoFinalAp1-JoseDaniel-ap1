@@ -45,11 +45,7 @@ builder.Services.AddScoped<PrestamoService>();
 //La inyeccion de cobro service
 builder.Services.AddScoped<CobroService>();
 //La inyeccion de abono service
-builder.Services.AddScoped<AbonoService>();
-//La inyeccion de factura service
-builder.Services.AddScoped<FacturaService>();
-//La inyeccion de pago service
-builder.Services.AddScoped<PagoService>();
+
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 var app = builder.Build();

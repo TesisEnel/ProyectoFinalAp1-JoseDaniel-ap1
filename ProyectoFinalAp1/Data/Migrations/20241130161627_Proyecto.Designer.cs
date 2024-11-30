@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241130050247_MakeFechaPrestamoNullable")]
-    partial class MakeFechaPrestamoNullable
+    [Migration("20241130161627_Proyecto")]
+    partial class Proyecto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,32 +223,6 @@ namespace ProyectoFinalAp1.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Abonos", b =>
-                {
-                    b.Property<int>("AbonoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonoId"));
-
-                    b.Property<int>("FacturaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("FechaAbono")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("MontoAbono")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("AbonoId");
-
-                    b.HasIndex("FacturaId");
-
-                    b.ToTable("abonos");
-                });
-
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
                     b.Property<int>("CobroId")
@@ -267,8 +241,7 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaPrestamo")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaPrestamo")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("ImportePagar")
@@ -355,12 +328,6 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PagoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PagosPagoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
@@ -368,43 +335,9 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasIndex("DeudorId");
 
-                    b.HasIndex("PagoId");
-
-                    b.HasIndex("PagosPagoId");
-
                     b.HasIndex("PrestamoId");
 
                     b.ToTable("facturas");
-                });
-
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
-                {
-                    b.Property<int>("PagoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PagoId"));
-
-                    b.Property<decimal?>("Capital")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("DeudorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("FechaPago")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("PagoPendiente")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("PagoId");
-
-                    b.HasIndex("DeudorId");
-
-                    b.ToTable("pagos");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
@@ -514,17 +447,6 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Abonos", b =>
-                {
-                    b.HasOne("ProyectoFinalAp1.Models.Facturas", "Facturas")
-                        .WithMany()
-                        .HasForeignKey("FacturaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Facturas");
-                });
-
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
@@ -556,16 +478,6 @@ namespace ProyectoFinalAp1.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ProyectoFinalAp1.Models.Pagos", "pagos")
-                        .WithMany()
-                        .HasForeignKey("PagoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoFinalAp1.Models.Pagos", null)
-                        .WithMany("Facturas")
-                        .HasForeignKey("PagosPagoId");
-
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "prestamos")
                         .WithMany()
                         .HasForeignKey("PrestamoId")
@@ -574,20 +486,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.Navigation("deudores");
 
-                    b.Navigation("pagos");
-
                     b.Navigation("prestamos");
-                });
-
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
-                {
-                    b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
-                        .WithMany()
-                        .HasForeignKey("DeudorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("deudores");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
@@ -606,11 +505,6 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("Cobros");
 
                     b.Navigation("Prestamos");
-                });
-
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
-                {
-                    b.Navigation("Facturas");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
