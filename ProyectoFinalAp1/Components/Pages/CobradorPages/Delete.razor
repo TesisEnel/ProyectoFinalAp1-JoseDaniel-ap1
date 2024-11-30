@@ -1,0 +1,135 @@
+﻿@page "/Cobrador/Delete"
+@page "/Cobrador/Delete/{CobradorId:int}"
+@inject CobradorService CobradorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject ToastService toastService
+
+
+<PageTitle>Eliminar del cobrador</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5">
+            <h2>Eliminar del cobrador</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                @* Foto de la Cedula *@
+                <div class="col-md-4 text-center mb-4">
+                    <strong class="d-block mb-2">Foto de la Cédula</strong>
+                    @if (!string.IsNullOrEmpty(cobrador?.FotoCedulaURL))
+                    {
+                        <img src="@cobrador.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
+                    }
+                </div>
+
+                @* Datos Personales *@
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Número de Cédula:</strong>
+                                <p class="d-block">@cobrador?.NumeroCedula</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Nombres:</strong>
+                                <p class="d-block">@cobrador?.Nombres</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Email:</strong>
+                                <p class="d-block">@cobrador?.Email</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Estado:</strong>
+                                <p class="d-block">@cobrador?.Estado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Apellidos:</strong>
+                                <p class="d-block">@cobrador?.Apellidos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Dirección:</strong>
+                                <p class="d-block">@cobrador?.Direccion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Información de Contacto *@
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Teléfono:</strong>
+                                <p class="d-block">@cobrador?.Telefono</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Ciudad:</strong>
+                                <p class="d-block">@cobrador?.Ciudad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+            <button class="btn btn-lg delete-btn" @onclick="EliminarCobrador">
+                <i class="bi bi-trash-fill mt-3"></i> Eliminar Deudor
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int CobradorId { get; set; }
+    public Cobradores? cobrador = new Cobradores();
+    public List<Cobradores> listacobradores = new List<Cobradores>();
+    private bool existe = false;
+    private bool Estado = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CobradorId > 0)
+        {
+            cobrador = await CobradorService.Buscar(CobradorId) ?? new Cobradores();
+            listacobradores = await CobradorService.ListarCobradores();
+        }
+
+    }
+    public async Task EliminarCobrador()
+    {
+        if (cobrador == null)
+        {
+            return;
+        }
+        if (await CobradorService.Eliminar(CobradorId))
+        {
+            Volver();
+        }
+    }
+    public async Task Volver()
+    {
+        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        navigationManager.NavigateTo("/Cobrador/Index");
+    }
+}
