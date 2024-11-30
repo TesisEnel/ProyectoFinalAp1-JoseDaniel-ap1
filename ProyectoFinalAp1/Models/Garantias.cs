@@ -33,5 +33,5 @@ public class Garantias
     public int PrestamoId { get; set; }
 
     [ForeignKey("PrestamoId")]
-    public Prestamos? Prestamo { get; set; }
+    public Prestamos? Prestamos { get; set; }
 }
