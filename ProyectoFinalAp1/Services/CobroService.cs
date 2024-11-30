@@ -52,6 +52,7 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.cobros
             .Where(criterio)
+            .Include(c =>c.deudores)
             .ToListAsync();
     }
     public async Task<List<Cobros>> ListarCobros()
