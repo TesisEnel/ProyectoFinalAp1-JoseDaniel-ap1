@@ -52,11 +52,35 @@ namespace ProyectoFinalAp1.Migrations
             migrationBuilder.DropColumn(
                 name: "PrestamosPrestamoId",
                 table: "cobros");
+
+            migrationBuilder.CreateTable(
+                name: "cobradores",
+                columns: table => new
+                {
+                    CobradorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombres = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FotoCedulaURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroCedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ciudad = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cobradores", x => x.CobradorId);
+                });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "cobradores");
+
             migrationBuilder.AddColumn<int>(
                 name: "PagoId",
                 table: "facturas",
