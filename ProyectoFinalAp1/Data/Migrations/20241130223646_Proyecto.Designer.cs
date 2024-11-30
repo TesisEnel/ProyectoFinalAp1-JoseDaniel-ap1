@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241130041535_ProyectoFinal")]
-    partial class ProyectoFinal
+    [Migration("20241130223646_Proyecto")]
+    partial class Proyecto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,30 +223,53 @@ namespace ProyectoFinalAp1.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Abonos", b =>
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Cobradores", b =>
                 {
-                    b.Property<int>("AbonoId")
+                    b.Property<int>("CobradorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AbonoId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CobradorId"));
 
-                    b.Property<int>("FacturaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("FechaAbono")
+                    b.Property<string>("Apellidos")
                         .IsRequired()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("MontoAbono")
+                    b.Property<string>("Ciudad")
                         .IsRequired()
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AbonoId");
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("FacturaId");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("abonos");
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FotoCedulaURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NumeroCedula")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CobradorId");
+
+                    b.ToTable("cobradores");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
@@ -267,21 +290,16 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaPrestamo")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaPrestamo")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("ImportePagar")
-                        .IsRequired()
+                    b.Property<decimal>("ImportePagar")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("Mora")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PrestamoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 
                     b.HasKey("CobroId");
@@ -291,8 +309,6 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasIndex("DeudoresDeudorId");
 
                     b.HasIndex("PrestamoId");
-
-                    b.HasIndex("PrestamosPrestamoId");
 
                     b.ToTable("cobros");
                 });
@@ -361,12 +377,6 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PagoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PagosPagoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
@@ -374,43 +384,46 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasIndex("DeudorId");
 
-                    b.HasIndex("PagoId");
-
-                    b.HasIndex("PagosPagoId");
-
                     b.HasIndex("PrestamoId");
 
                     b.ToTable("facturas");
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Garantias", b =>
                 {
-                    b.Property<int>("PagoId")
+                    b.Property<int>("GarantiaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PagoId"));
-
-                    b.Property<decimal?>("Capital")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,2)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GarantiaId"));
 
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("FechaPago")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaGarantia")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("PagoPendiente")
+                    b.Property<string>("FotoGarantiaUrl")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TipoGarantia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ValorGarantia")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("PagoId");
+                    b.HasKey("GarantiaId");
 
                     b.HasIndex("DeudorId");
 
-                    b.ToTable("pagos");
+                    b.HasIndex("PrestamoId");
+
+                    b.ToTable("garantias");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
@@ -520,17 +533,6 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Abonos", b =>
-                {
-                    b.HasOne("ProyectoFinalAp1.Models.Facturas", "Facturas")
-                        .WithMany()
-                        .HasForeignKey("FacturaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Facturas");
-                });
-
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
@@ -544,14 +546,10 @@ namespace ProyectoFinalAp1.Migrations
                         .HasForeignKey("DeudoresDeudorId");
 
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
-                        .WithMany()
+                        .WithMany("Cobros")
                         .HasForeignKey("PrestamoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
-                        .WithMany("Cobros")
-                        .HasForeignKey("PrestamosPrestamoId");
 
                     b.Navigation("Prestamo");
 
@@ -566,16 +564,6 @@ namespace ProyectoFinalAp1.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ProyectoFinalAp1.Models.Pagos", "pagos")
-                        .WithMany()
-                        .HasForeignKey("PagoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoFinalAp1.Models.Pagos", null)
-                        .WithMany("Facturas")
-                        .HasForeignKey("PagosPagoId");
-
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "prestamos")
                         .WithMany()
                         .HasForeignKey("PrestamoId")
@@ -584,20 +572,26 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.Navigation("deudores");
 
-                    b.Navigation("pagos");
-
                     b.Navigation("prestamos");
                 });
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Garantias", b =>
                 {
-                    b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
-                        .WithMany()
+                    b.HasOne("ProyectoFinalAp1.Models.Deudores", "Deudores")
+                        .WithMany("Garantias")
                         .HasForeignKey("DeudorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("deudores");
+                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamos")
+                        .WithMany("Garantias")
+                        .HasForeignKey("PrestamoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Deudores");
+
+                    b.Navigation("Prestamos");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
@@ -615,17 +609,16 @@ namespace ProyectoFinalAp1.Migrations
                 {
                     b.Navigation("Cobros");
 
-                    b.Navigation("Prestamos");
-                });
+                    b.Navigation("Garantias");
 
-            modelBuilder.Entity("ProyectoFinalAp1.Models.Pagos", b =>
-                {
-                    b.Navigation("Facturas");
+                    b.Navigation("Prestamos");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Navigation("Cobros");
+
+                    b.Navigation("Garantias");
                 });
 #pragma warning restore 612, 618
         }

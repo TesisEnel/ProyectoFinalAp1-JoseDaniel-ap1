@@ -386,6 +386,43 @@ namespace ProyectoFinalAp1.Migrations
                     b.ToTable("facturas");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Garantias", b =>
+                {
+                    b.Property<int>("GarantiaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GarantiaId"));
+
+                    b.Property<int>("DeudorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaGarantia")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FotoGarantiaUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TipoGarantia")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ValorGarantia")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("GarantiaId");
+
+                    b.HasIndex("DeudorId");
+
+                    b.HasIndex("PrestamoId");
+
+                    b.ToTable("garantias");
+                });
+
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Property<int>("PrestamoId")
@@ -535,6 +572,25 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("prestamos");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Garantias", b =>
+                {
+                    b.HasOne("ProyectoFinalAp1.Models.Deudores", "Deudores")
+                        .WithMany("Garantias")
+                        .HasForeignKey("DeudorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamos")
+                        .WithMany("Garantias")
+                        .HasForeignKey("PrestamoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Deudores");
+
+                    b.Navigation("Prestamos");
+                });
+
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
@@ -550,12 +606,16 @@ namespace ProyectoFinalAp1.Migrations
                 {
                     b.Navigation("Cobros");
 
+                    b.Navigation("Garantias");
+
                     b.Navigation("Prestamos");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Navigation("Cobros");
+
+                    b.Navigation("Garantias");
                 });
 #pragma warning restore 612, 618
         }
