@@ -42,7 +42,7 @@ body {
 
 /* Footer Button Styles */
 .footer-bar {
-    background-color: #4A667F;
+    background: linear-gradient(45deg, #008DD9, #4A667F);
     color: white;
     padding: 20px;
     border-radius: 0 0 10px 10px;
