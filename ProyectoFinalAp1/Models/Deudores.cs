@@ -40,5 +40,7 @@ public class Deudores
 
     public virtual ICollection<Cobros> Cobros { get; set; }
     public virtual ICollection<Prestamos> Prestamos { get; set; } = new List<Prestamos>();
+    public virtual ICollection<Garantias> Garantias { get; set; } = new List<Garantias>();
+
     //public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }
