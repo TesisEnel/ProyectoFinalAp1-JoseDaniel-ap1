@@ -63,7 +63,7 @@
     /* Estilo para el texto de cada ítem del menú */
     .menu-item span {
         display: block;
-        font-size: 14px; /* Tamaño de letra más pequeño */
+        font-size: 12px; /* Tamaño de letra más pequeño */
         font-weight: 600;
         letter-spacing: 1px;
         margin-top: 5px; /* Ajusta el espacio encima del texto */
