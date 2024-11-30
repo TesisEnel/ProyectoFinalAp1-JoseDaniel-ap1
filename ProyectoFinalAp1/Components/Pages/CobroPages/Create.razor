@@ -169,17 +169,23 @@
         return !existe;
     }
 
+   
+
     public async Task Guardar()
     {
         if (!await Validar())
         {
+          
             return;
         }
-        var guadado = await cobroService.Guardar(cobro);
-        if (guadado)
+
+        var guardado = await cobroService.Guardar(cobro);
+        if (guardado)
         {
-            toastService.Notify(new(ToastType.Success, "Exito", "Se guardó correctamente"));
+            toastService.Notify(new(ToastType.Success, "Éxito", "Se guardó correctamente."));
             Volver();
         }
+       
     }
+
 }
