@@ -46,6 +46,8 @@ builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddScoped<CobroService>();
 //La inyeccion de cobradores service
 builder.Services.AddScoped<CobradorService>();
+//La inyeccion de garantias service
+builder.Services.AddScoped<GarantiaService>();
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 var app = builder.Build();
