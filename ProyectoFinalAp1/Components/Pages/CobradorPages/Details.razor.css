@@ -1,0 +1,71 @@
+﻿/* css oficial del details de cobradores */
+.container {
+    margin-top: 5rem;
+    padding-top: 3rem;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.card-header {
+    background: linear-gradient(45deg, #008DD9, #4A667F);
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    text-align: center;
+}
+
+    .card-header h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+.card-body {
+    background-color: #F5F5F5;
+    border-radius: 0 0 10px 10px;
+    padding: 30px;
+}
+
+.info-block strong {
+    color: #008DD9;
+    font-size: 16px;
+}
+
+.info-block p {
+    font-size: 16px;
+}
+
+/* Foto Cedula */
+.img-thumbnail {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+.text-muted em {
+    font-style: italic;
+}
+
+
+.footer-bar {
+    background: linear-gradient(45deg, #008DD9, #4A667F);
+    color: white;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+.btn {
+    background-color: #008DD9;
+    color: white;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+    .btn i {
+        margin-top: 3px;
+    }
