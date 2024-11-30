@@ -82,10 +82,19 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     public async Task<List<Prestamos>> ListarPrestamosConDeudores()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.prestamos
+        var prestamos = await contexto.prestamos
             .Include(p => p.deudores)
             .ToListAsync();
+
+        Console.WriteLine($"Total de préstamos: {prestamos.Count}");
+        foreach (var prestamo in prestamos)
+        {
+            Console.WriteLine($"Préstamo ID: {prestamo.PrestamoId}, Deudor: {prestamo.deudores?.Nombres}, Saldo: {prestamo.Saldo}");
+        }
+
+        return prestamos;
     }
+
 
     public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
     {
