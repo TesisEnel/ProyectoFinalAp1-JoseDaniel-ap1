@@ -14,7 +14,7 @@
         <div class="card-body overflow-auto">
             <div class="row mb-4 align-items-end">
                 <div class="col-md-4">
-                    <label for="Filtro" class="form-label" style="color: #4A667F;">Filtrar por:</label>
+                    <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
                     <select @bind="filtro" class="form-select" style="border-color: #4A667F;">
                         <option value="0">Seleccione una opción</option>
                         <option value="Cedula">Cédula</option>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="ValorFiltro" class="form-label" style="color: #4A667F;">Búsqueda:</label>
+                    <label for="ValorFiltro" class="form-label"<strong>Búsqueda:</strong></label>
                     <div class="input-group">
                         <input @bind="valorFiltro" class="form-control" placeholder="Buscar" style="border-color: #4A667F;" />
                         <button @onclick="Buscar" class="btn btn-outline-primary">
