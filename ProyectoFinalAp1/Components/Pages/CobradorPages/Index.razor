@@ -1,0 +1,148 @@
+﻿@page "/Cobrador/Index"
+@inject CobradorService CobradorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de Cobradores</PageTitle>
+
+<div class="container-fluid vh-100 d-flex flex-column justify-content-center">
+    <div class="card shadow-lg w-100 h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title text-center w-100">Consulta de Cobradores</h3>
+        </div>
+
+        <div class="card-body overflow-auto">
+            <div class="row mb-4 align-items-end">
+                <div class="col-md-4">
+                    <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <select @bind="filtro" class="form-select">
+                        <option value="0">Seleccione una opción</option>
+                        <option value="Nombres">Nombres</option>
+                        <option value="Apellidos">Apellidos</option>
+                        <option value="Estado">Estado</option>
+                        <option value="NumeroCedula">NumeroCedula</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                    <div class="input-group">
+                        <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                            <span class="bi bi-search"></span>
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-1 ms-auto">
+                    <a href="/Cobrador/Create" class="btn btn-primary text-end">
+                        <span class="bi bi-plus-square"></span>
+                        Crear
+                    </a>
+                </div>
+            </div>
+
+            <table class="table text-center">
+                <thead class="table-white">
+                    <tr>
+                        <th>CobradorId</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Ciudad</th>
+                        <th>Email</th>
+                        <th>Direccion</th>
+                        <th>Estado</th>
+                        <th>NumeroCedula</th>
+                        <th>Telefono</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cobrador in listacobradores)
+                    {
+                        <tr>
+                            <td>@cobrador.CobradorId</td>
+                            <td>@cobrador.Nombres</td>
+                            <td>@cobrador.Apellidos</td>
+                            <td>@cobrador.Ciudad</td>
+                            <td>@cobrador.Email</td>
+                            <td>@cobrador.Direccion</td>
+                            <td>@cobrador.Estado</td>
+                            <td>@cobrador.NumeroCedula</td>
+                            <td>@cobrador.Telefono</td>
+                           
+                            <td>
+                                <a href="/Cobrador/Details/@cobrador.CobradorId" class="btn btn-outline-primary">
+                                    <span class="bi bi-eye mt-3"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/Cobrador/Edit/@cobrador.CobradorId" class="btn btn-outline-success">
+                                    <span class="bi bi-pencil-square mt-3"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/Cobrador/Delete/@cobrador.CobradorId" class="btn  btn-outline-danger">
+                                    <span class="bi bi-trash mt-3"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <p class="mb-0">Total de cobradores: @listacobradores.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Cobradores cobradores = new Cobradores();
+    public List<Cobradores> listacobradores = new List<Cobradores>();
+    public string filtro = "0";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        listacobradores = await CobradorService.Listar(c => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            listacobradores = await CobradorService.Listar(c => true);
+        }
+        else
+        {
+            if (filtro == "Nombres")
+            {
+                listacobradores = await CobradorService.Listar(c => c.Nombres.Contains(valorFiltro));
+            }
+            if (filtro == "Apellidos")
+            {
+                listacobradores = await CobradorService.Listar(c => c.Apellidos.Contains(valorFiltro));
+            }
+
+            else if (filtro == "Estado")
+            {
+                listacobradores = await CobradorService.Listar(c => c.Estado.Contains(valorFiltro));
+            }
+            if (filtro == "NumeroCedula")
+            {
+                listacobradores = await CobradorService.Listar(c => c.NumeroCedula.Contains(valorFiltro));
+            }
+
+            
+        }
+    }
+    private async Task Volver()
+    {
+        navigationManager.NavigateTo("/menu");
+    }
+}
