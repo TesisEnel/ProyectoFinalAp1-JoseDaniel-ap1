@@ -81,7 +81,7 @@
                         }
                         @foreach (var cobro in listaCobros.Where(c => c.PrestamoId == filtroPrestamo))
                         {
-                            saldoRestante -= cobro.ImportePagar ?? 0;
+                            saldoRestante -= cobro.ImportePagar;
                             <tr>
                                 <td>@cobro.CobroId</td>
                                 <td>@cobro.ImportePagar</td>
