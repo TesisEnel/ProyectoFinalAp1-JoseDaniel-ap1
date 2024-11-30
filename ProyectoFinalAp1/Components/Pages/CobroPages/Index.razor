@@ -19,11 +19,10 @@
                     <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
                     <select @bind="filtro" class="form-select">
                         <option value="0">Seleccione una opción</option>
-                        <option value="deudores">deudores</option>
+                        <option value="deudores">Deudores</option>
                         <option value="PrestamoId">PrestamoId</option>
                         <option value="Mora">Mora</option>
                         <option value="ImportePagar">ImportePagar</option>
-                      
                     </select>
                 </div>
 
@@ -54,7 +53,6 @@
                         <th>PrestamoId</th>
                         <th>Mora</th>
                         <th>ImportePagar</th>
-                        <th>FechaPrestamo</th>
                         <th>FechaCobro</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -66,11 +64,10 @@
                     {
                         <tr>
                             <td>@cobro.CobroId</td>
-                            <td>@cobro.deudores?.Nombres @cobro.deudores?.Apellidos</td>
-                            <td>@cobro.Prestamo?.PrestamoId</td>
+                            <td>@($"{cobro.deudores?.Nombres} {cobro.deudores?.Apellidos}")</td>
+                            <td>@cobro.PrestamoId</td>
                             <td>@cobro.Mora</td>
                             <td>@cobro.ImportePagar</td>
-                            <td>@cobro.FechaPrestamo</td>
                             <td>@cobro.FechaCobro</td>
                             <td>
                                 <a href="/Details/@cobro.CobroId" class="btn btn-outline-primary">
@@ -109,14 +106,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        listadeudore = await deudorService.Listar(d => d.Nombres.Contains(valorFiltro) || d.Apellidos.Contains(valorFiltro));
         listacobro = await cobroService.Listar(p => true);
+        await ActualizarListaPrestamos();
+    }
+
+    public async Task ActualizarListaPrestamos()
+    {
+        // Cargar los préstamos relacionados con los deudores
+        listaprestamo = await prestamoService.ListarPrestamosConDeudores();
+        StateHasChanged(); // Refresca la UI y Forza de ser necesario
     }
 
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))
         {
-
             listacobro = await cobroService.Listar(p => true);
         }
         else
@@ -124,23 +129,24 @@
             if (filtro == "deudores")
             {
                 listadeudore = await deudorService.Listar(d => d.Nombres.Contains(valorFiltro));
+                listacobro = listacobro.Where(c => c.deudores?.Nombres?.Contains(valorFiltro) ?? false).ToList();
             }
-
             else if (filtro == "PrestamoId" && int.TryParse(valorFiltro, out int PrestamoId))
             {
-                listaprestamo = await prestamoService.Listar(p => p.PrestamoId==PrestamoId);
+                listaprestamo = await prestamoService.Listar(p => p.PrestamoId == PrestamoId);
+                listacobro = listacobro.Where(c => c.Prestamo?.PrestamoId == PrestamoId).ToList();
             }
             else if (filtro == "Mora" && decimal.TryParse(valorFiltro, out decimal Mora))
             {
-                listacobro = await cobroService.Listar(c => c.Mora==Mora);
+                listacobro = await cobroService.Listar(c => c.Mora == Mora);
             }
             else if (filtro == "ImportePagar" && decimal.TryParse(valorFiltro, out decimal ImportePagar))
             {
-                listacobro = await cobroService.Listar(c => c.ImportePagar==ImportePagar);
+                listacobro = await cobroService.Listar(c => c.ImportePagar == ImportePagar);
             }
-          
         }
     }
+
     private async Task Volver()
     {
         navigationManager.NavigateTo("/menu");
