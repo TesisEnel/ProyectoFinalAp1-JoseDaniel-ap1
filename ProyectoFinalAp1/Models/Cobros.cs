@@ -21,12 +21,18 @@ public class Cobros
     [ForeignKey("PrestamoId")]
     public Prestamos Prestamo { get; set; }
 
-    [Range(0, double.MaxValue, ErrorMessage = "La mora no puede ser un valor negativo.")]
+    //[Required(ErrorMessage = "Favor seleccionar un cobrador.")]
+    ////public int CobradorId { get; set; }
+
+    ////[ForeignKey("CobradorId")]
+    ////public Cobradores Cobrador { get; set; } 
+    
     public decimal? Mora { get; set; }
 
     [Required(ErrorMessage = "El importe a pagar es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El importe a pagar debe ser mayor a cero.")]
     public decimal ImportePagar { get; set; }
+
 
     [Required(ErrorMessage = "La fecha de prestamo es obligatorio.")]
     public DateTime FechaPrestamo { get; set; }
