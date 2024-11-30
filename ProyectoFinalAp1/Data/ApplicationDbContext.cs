@@ -16,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Deudores> deudores { get; set; }
     public DbSet<Prestamos> prestamos { get; set; }
     public DbSet<Cobradores> cobradores{ get; set; }
-
+    public DbSet<Garantias> garantias{ get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -50,15 +50,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(f => f.prestamos)
             .WithMany()
             .HasForeignKey(f => f.PrestamoId)
-            .OnDelete(DeleteBehavior.Restrict); // Evitar cascada
-                                                // Configuración de la entidad Cobradores
-                                                // Relación Cobros -> Cobradores (uno a muchos)
-        //modelBuilder.Entity<Cobradores>()
-        //    .HasMany(c => c.Cobros)
-        //    .WithOne(c => c.Cobrador) // Propiedad de navegación
-        //    .HasForeignKey(c => c.CobradorId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict); 
 
+        // Configurar relación entre Garantias y Prestamos
+        modelBuilder.Entity<Garantias>()
+            .HasOne(g => g.Prestamos)
+            .WithMany(p => p.Garantias) // Agrega una colección en Prestamos si no existe
+            .HasForeignKey(g => g.PrestamoId)
+            .OnDelete(DeleteBehavior.Restrict); // Cambiar a Restrict para evitar cascada
+
+        // Configurar relación entre Garantias y Deudores
+        modelBuilder.Entity<Garantias>()
+            .HasOne(g => g.Deudores)
+            .WithMany(d => d.Garantias) // Agrega una colección en Deudores si no existe
+            .HasForeignKey(g => g.DeudorId)
+            .OnDelete(DeleteBehavior.Restrict); // Cambiar a Restrict para evitar cascada
 
     }
 }
