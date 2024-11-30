@@ -136,18 +136,11 @@ namespace ProyectoFinalAp1.Migrations
                     MontoFactura = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FechaEmision = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaVencimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CobrosCobroId = table.Column<int>(type: "int", nullable: true),
-                    PagosPagoId = table.Column<int>(type: "int", nullable: true),
-                    PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true)
+                    PagosPagoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_facturas", x => x.FacturaId);
-                    table.ForeignKey(
-                        name: "FK_facturas_cobros_CobrosCobroId",
-                        column: x => x.CobrosCobroId,
-                        principalTable: "cobros",
-                        principalColumn: "CobroId");
                     table.ForeignKey(
                         name: "FK_facturas_deudores_DeudorId",
                         column: x => x.DeudorId,
@@ -171,11 +164,6 @@ namespace ProyectoFinalAp1.Migrations
                         principalTable: "prestamos",
                         principalColumn: "PrestamoId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_facturas_prestamos_PrestamosPrestamoId",
-                        column: x => x.PrestamosPrestamoId,
-                        principalTable: "prestamos",
-                        principalColumn: "PrestamoId");
                 });
 
             migrationBuilder.CreateTable(
@@ -225,11 +213,6 @@ namespace ProyectoFinalAp1.Migrations
                 column: "PrestamosPrestamoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_facturas_CobrosCobroId",
-                table: "facturas",
-                column: "CobrosCobroId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_facturas_DeudorId",
                 table: "facturas",
                 column: "DeudorId");
@@ -250,11 +233,6 @@ namespace ProyectoFinalAp1.Migrations
                 column: "PrestamoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_facturas_PrestamosPrestamoId",
-                table: "facturas",
-                column: "PrestamosPrestamoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_pagos_DeudorId",
                 table: "pagos",
                 column: "DeudorId");
@@ -272,10 +250,10 @@ namespace ProyectoFinalAp1.Migrations
                 name: "abonos");
 
             migrationBuilder.DropTable(
-                name: "facturas");
+                name: "cobros");
 
             migrationBuilder.DropTable(
-                name: "cobros");
+                name: "facturas");
 
             migrationBuilder.DropTable(
                 name: "pagos");
