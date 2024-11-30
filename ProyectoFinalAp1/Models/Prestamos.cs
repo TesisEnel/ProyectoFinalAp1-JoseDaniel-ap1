@@ -45,5 +45,5 @@ public class Prestamos
     public string? Estado { get; set; }
     public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
 
-    public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
+    //public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }
