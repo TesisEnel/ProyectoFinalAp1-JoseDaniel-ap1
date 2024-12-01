@@ -8,14 +8,14 @@
 @inject ToastService toastService
 
 
-<PageTitle>Registrar Garantias</PageTitle>
+<PageTitle>Modificar Garantia</PageTitle>
 
 <EditForm Model="garantia" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
         <div class="card shadow-lg w-100">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
-                <h3 class="card-title text-center w-100">Registrar Garantias</h3>
+                <h3 class="card-title text-center w-100">Modificar  Garantia</h3>
             </div>
 
             <div class="card-body">
@@ -119,7 +119,7 @@
     public List<Deudores> listadeudore = new List<Deudores>();
     public Deudores deudor = new Deudores();
     private bool existe = false;
-    private bool Estado = false;
+  
     public async Task Nuevo()
     {
         garantia = new Garantias();
