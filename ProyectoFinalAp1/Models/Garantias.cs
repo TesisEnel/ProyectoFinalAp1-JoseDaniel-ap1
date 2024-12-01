@@ -27,7 +27,7 @@ public class Garantias
     public int DeudorId { get; set; }
 
     [ForeignKey("DeudorId")]
-    public Deudores? Deudores { get; set; }
+    public Deudores Deudores { get; set; }
 
     // Relación con Préstamos
     public int PrestamoId { get; set; }
