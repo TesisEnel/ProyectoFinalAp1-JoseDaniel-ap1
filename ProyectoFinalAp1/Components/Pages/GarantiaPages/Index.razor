@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="col-md-1 ms-auto">
-                    <a href="/garantia/Create" class="btn btn-primary text-end">
+                    <a href="/Garantia/Create" class="btn btn-primary text-end">
                         <span class="bi bi-plus-square"></span>
                         Crear
                     </a>
@@ -48,11 +48,11 @@
                 <thead class="table-white">
                     <tr>
                         <th>GarantiaId</th>
+                        <th>Deudores</th>
+                        <th>Prestamos</th>
                         <th>TipoGarantia</th>
                         <th>ValorGarantia</th>
                         <th>FechaGarantia</th>
-                        <th>Deudores</th>
-                        <th>Prestamos</th>
                         <th>Ver</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -63,12 +63,12 @@
                     {
                         <tr>
                             <td>@garantia.GarantiaId</td>
+                            <td>@garantia.Deudores.Nombres @garantia.Deudores.Apellidos</td>
+                            <td>@garantia.Prestamos.PrestamoId</td>
                             <td>@garantia.TipoGarantia</td>
                             <td>@garantia.ValorGarantia</td>
-                            <td>@garantia.FechaGarantia</td>
-                            <td>@garantia.FotoGarantiaUrl</td>
-                            <td>@garantia.Deudores?.Nombres @garantia.Deudores?Apellidos</td>
-                            <td>@garantia.Prestamos</td>
+                            <td>@garantia.FechaGarantia.ToString("dd/MM/yyyy")</td>
+                           
                            
 
                             <td>
