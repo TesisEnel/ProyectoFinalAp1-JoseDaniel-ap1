@@ -1,0 +1,112 @@
+﻿@page "/Garantia/Details"
+@page "/Garantia/Details/{GarantiaId:int}"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject GarantiaService garantiaService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject ToastService toastService
+
+
+<PageTitle>Detalles de la garantia</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5">
+            <h2>Detalles de la garantia</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                @* Foto de la Garantia *@
+                <div class="col-md-4 text-center mb-4">
+                    <strong class="d-block mb-2">Foto de la Garantia</strong>
+                    @if (!string.IsNullOrEmpty(garantia?.FotoGarantiaUrl))
+                    {
+                        <img src="@garantia.FotoGarantiaUrl" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
+                    }
+                </div>
+
+                @* Datos Personales *@
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>TipoGarantia:</strong>
+                                <p class="d-block">@garantia.TipoGarantia</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Valor garantia:</strong>
+                                <p class="d-block">@garantia.ValorGarantia</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>FechaGarantia:</strong>
+                                <p class="d-block">@garantia.FechaGarantia.ToShortDateString()</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Deudor:</strong>
+                                <p class="d-block">@deudor?.Nombres @deudor?.Apellidos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Préstamo:</strong>
+                                <p class="d-block"> @prestamo?.PrestamoId</p>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int GarantiaId { get; set; }
+    public Garantias? garantia = new Garantias();
+    public Prestamos? prestamo = new Prestamos();
+    public Deudores? deudor = new Deudores();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (GarantiaId > 0)
+        {
+           
+            garantia = await garantiaService.Buscar(GarantiaId);
+
+            if (garantia != null)
+            {
+                
+                deudor = await deudorService.Buscar(garantia.DeudorId);
+
+               
+                prestamo = await prestamoService.Buscar(garantia.PrestamoId);
+            }
+        }
+    }
+
+    public async Task Volver()
+    {
+        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        navigationManager.NavigateTo("/garantia/Index");
+    }
+}
