@@ -1,0 +1,166 @@
+﻿@page "/Garantia/Edit"
+@page "/Garantia/Edit/{GarantiaId:int}"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject GarantiaService garantiaService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject ToastService toastService
+
+
+<PageTitle>Registrar Garantias</PageTitle>
+
+<EditForm Model="garantia" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
+        <div class="card shadow-lg w-100">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
+                <h3 class="card-title text-center w-100">Registrar Garantias</h3>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    @* Campo GarantiaId *@
+                    <div class="col-md-6 mb-4">
+                        <label for=" GarantiaId" class="form-label"><strong> GarantiaId:</strong></label>
+                        <InputNumber id=" GarantiaId" class="form-control" readonly @bind-Value="garantia.GarantiaId" />
+                        <ValidationMessage For="@(() => garantia.GarantiaId)" />
+                    </div>
+
+                    @* Campo TipoGarantia *@
+                    <div class="col-md-6 mb-4">
+                        <label for="TipoGarantia" class="form-label"><strong>TipoGarantia:</strong></label>
+                        <InputText id="TipoGarantia" class="form-control" placeholder="Ingrese los nombres" @bind-Value="garantia.TipoGarantia" />
+                        <ValidationMessage For="@(() => garantia.TipoGarantia)" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    @* Campo ValorGarantia *@
+                    <div class="col-md-6 mb-4">
+                        <label for="ValorGarantia" class="form-label"><strong>ValorGarantia:</strong></label>
+                        <InputNumber id="ValorGarantia" class="form-control" placeholder="Ingrese el apellidos" @bind-Value="garantia.ValorGarantia" />
+                        <ValidationMessage For="@(() =>garantia.ValorGarantia)" />
+                    </div>
+
+                    @* Campo FechaGarantia*@
+                    <div class="col-md-6 mb-4">
+                        <label for="FechaGarantia" class="form-label"><strong>FechaGarantia:</strong></label>
+                        <InputDate id="FechaGarantia" class="form-control" placeholder="Ingrese la fecha garantia" @bind-Value="garantia.FechaGarantia" />
+                        <ValidationMessage For="@(() => garantia.FechaGarantia)" />
+                    </div>
+                    @* Campo Foto Cédula *@
+                    <div class="col-md-6 mb-4">
+                        <label for="foto" class="form-label"><strong>Foto Cédula:</strong></label>
+                        <InputText id="foto" class="form-control" placeholder="Ingrese la URL de la foto de su cédula" @bind-Value="garantia.FotoGarantiaUrl" />
+                        <ValidationMessage For="@(() => garantia.FotoGarantiaUrl)" />
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-4">
+                        <label for="Prestamos" class="form-label"><strong>Prestamos:</strong></label>
+                        <InputSelect id="Prestamos" class="form-control" @bind-Value="garantia.PrestamoId">
+                            <option value="">Seleccionar un prestamo</option>
+                            @foreach (var prestamo in listaprestamo)
+                            {
+                                <option value="@prestamo.PrestamoId">@prestamo.PrestamoId</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => garantia.PrestamoId)" />
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label for="Deudor" class="form-label"><strong>Deudor:</strong></label>
+                        <InputSelect id="Deudor" class="form-control" @bind-Value="garantia.DeudorId">
+                            <option value="">Seleccionar un deudor</option>
+                            @foreach (var deudor in listadeudore)
+                            {
+                                <option value="@deudor.DeudorId">@deudor.Nombres</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => garantia.DeudorId)" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-footer justify-content-center text-center custom-footer mt-5 pt-4">
+                <div class="btn-group">
+                    <button type="button" @onclick="Nuevo" class="btn btn-outline-primary">
+                        <span class="bi bi-plus-circle-fill mt-3"></span>
+                        Nuevo
+                    </button>
+                    <button type="submit" class="btn btn-outline-success">
+                        <span class="bi bi-floppy mt-3"></span>
+                        Guardar
+                    </button>
+                    <button type="button" @onclick="Volver" class="btn btn-outline-danger">
+                        <span class="bi bi-arrow-left-circle-fill mt-3"></span>
+                        Volver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int GarantiaId { get; set; }
+    public Garantias garantia = new Garantias();
+    public List<Garantias> listagarantias = new List<Garantias>();
+    public List<Prestamos> listaprestamo = new List<Prestamos>();
+    public Prestamos prestamo = new Prestamos();
+    public List<Deudores> listadeudore = new List<Deudores>();
+    public Deudores deudor = new Deudores();
+    private bool existe = false;
+    private bool Estado = false;
+    public async Task Nuevo()
+    {
+        garantia = new Garantias();
+        existe = false;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if(GarantiaId > 0)
+        {
+
+            garantia = await garantiaService.Buscar(GarantiaId) ?? new Garantias();
+            listagarantias = await garantiaService.Listargarantias();
+            listadeudore = await deudorService.ListarDeudores();
+            listaprestamo = await prestamoService.ListarPrestamos();
+        }
+      
+    }
+
+    public async Task<bool> Validar()
+    {
+        var Listadeudores = await deudorService.Listar(C => C.Nombres == deudor.Nombres && C.DeudorId != deudor.DeudorId);
+        return Listadeudores.Count == 0;
+    }
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+        var guadado = await garantiaService.Guardar(garantia);
+        if (guadado)
+        {
+            toastService.Notify(new(ToastType.Success, "Exito", "Se guardó correctamente"));
+            Volver();
+        }
+    }
+
+    public async Task Volver()
+    {
+        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        navigationManager.NavigateTo("/garantia/Index");
+    }
+}
