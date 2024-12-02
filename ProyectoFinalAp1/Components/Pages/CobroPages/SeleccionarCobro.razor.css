@@ -1,6 +1,6 @@
 ﻿/* Css del seleccionar Deudores para cobros */
 .container-fluid {
-    background-color: #f4f6f9; 
+    background-color: #f4f6f9;
 }
 
 .card {
@@ -9,7 +9,7 @@
 }
 
 .card-header {
-    background-color: #008DD9; 
+    background-color: #008DD9;
     color: white;
     padding: 1rem;
 }
