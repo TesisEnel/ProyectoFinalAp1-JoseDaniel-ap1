@@ -50,10 +50,10 @@
                         <InputDate id="FechaGarantia" class="form-control" placeholder="Ingrese la fecha garantia" @bind-Value="garantia.FechaGarantia" />
                         <ValidationMessage For="@(() => garantia.FechaGarantia)" />
                     </div>
-                    @* Campo Foto Cédula *@
+                    @* Campo Foto Garantia *@
                     <div class="col-md-6 mb-4">
-                        <label for="foto" class="form-label"><strong>Foto Cédula:</strong></label>
-                        <InputText id="foto" class="form-control" placeholder="Ingrese la URL de la foto de su cédula" @bind-Value="garantia.FotoGarantiaUrl" />
+                        <label for="foto" class="form-label"><strong>Foto Garantia:</strong></label>
+                        <InputText id="foto" class="form-control" placeholder="Ingrese la URL de la Foto Garantia" @bind-Value="garantia.FotoGarantiaUrl" />
                         <ValidationMessage For="@(() => garantia.FotoGarantiaUrl)" />
                     </div>
                 </div>
