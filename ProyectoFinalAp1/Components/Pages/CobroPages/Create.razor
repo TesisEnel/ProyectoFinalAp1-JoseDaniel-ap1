@@ -7,111 +7,153 @@
 @rendermode InteractiveServer
 
 <PageTitle>Registrar Cobro</PageTitle>
-
 <EditForm Model="cobro" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class="container-fluid">
-        <div class="card">
+    <div class="container-fluid pt-7 mt-5 d-flex flex-column justify-content-center">
+        <div class="card shadow-lg w-200">
             <div class="card-header">
                 <h3 class="card-title">Registrar Cobro</h3>
-                <button class="btn btn-light btn-sm d-flex align-items-center" @onclick="RedirigirABusquedaCliente">
-                    <span class="bi bi-person-fill-check me-2"></span>
-                    <span>Buscar Deudor</span>
-                </button>
             </div>
 
             <div class="card-body">
-                <div class="row">
-                    @* Información del Cliente *@
-                    <div class="col-12 mb-4">
-                        <h5><strong>Información del Deudor Seleccionado:</strong></h5>
-                        @if (deudore != null)
-                        {
-                            <div class="card p-3">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div><strong><span class="info-label">Cédula:</span></strong> <span class="info-value">@deudore.NumeroCedula</span></div>
-                                        <div><strong><span class="info-label">Nombre Completo:</span></strong> <span class="info-value">@deudore.Nombres @deudore.Apellidos</span></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div><strong><span class="info-label">Dirección:</span></strong> <span class="info-value">@deudore.Direccion</span></div>
-                                        <div><strong><span class="info-label">Teléfono:</span></strong> <span class="info-value">@deudore.Telefono</span></div>
-                                        <div><strong><span class="info-label">Ciudad:</span></strong> <span class="info-value">@deudore.Ciudad</span></div>
-                                    </div>
+                @* Información del Deudor *@
+                <div class="section mb-4">
+                    <h5 class="section-title">Deudor:</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaCobro"><strong>Fecha Cobro:</strong></label>
+                            <InputDate @bind-Value="cobro.FechaCobro" class="form-control" />
+                            <ValidationMessage For="@(() => cobro.FechaCobro)" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="deudor"><strong>Buscar Deudor:</strong></label>
+                            <button class="form-control search-btn btn-outline-primary" @onclick="RedirijirABuscarDeudor">
+                                <span class="bi bi-person-fill-check"></span> Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                @* Información del Deudor Seleccionado *@
+                <div class="col-12 mb-4">
+                    <h5><strong>Información del Deudor Seleccionado:</strong></h5>
+                    @if (deudore != null)
+                    {
+                        <div class="card p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div><strong><span class="info-label">Cédula:</span></strong> <span class="info-value">@deudore.NumeroCedula</span></div>
+                                    <div><strong><span class="info-label">Nombre Completo:</span></strong> <span class="info-value">@deudore.Nombres @deudore.Apellidos</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div><strong><span class="info-label">Dirección:</span></strong> <span class="info-value">@deudore.Direccion</span></div>
+                                    <div><strong><span class="info-label">Teléfono:</span></strong> <span class="info-value">@deudore.Telefono</span></div>
+                                    <div><strong><span class="info-label">Ciudad:</span></strong> <span class="info-value">@deudore.Ciudad</span></div>
                                 </div>
                             </div>
-                        }
-                        else
-                        {
-                            <div class="alert alert-info">Seleccione un deudor para hacerle un cobro.</div>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">Seleccione un deudor para hacerle un cobro.</div>
+                    }
                 </div>
 
-                <div class="row">
-                    @* Campo Préstamo *@
-                    <div class="col-md-6 mb-4">
-                        <label for="prestamo" class="form-label"><strong>Préstamo:</strong></label>
-                        <InputSelect id="prestamo" class="form-control" @bind-Value="cobro.PrestamoId" @onchange="OnPrestamoSeleccionado">
-                            <option value="">Seleccione el prestamo a cobrar:</option>
-                            @foreach (var prestamo in prestamos)
+                @* Detalle del Cobro *@
+                <div class="border border-success p-3 mt-3">
+                    <h5>Detalles del Cobro</h5>
+
+                    @*Caja para agregar un detalle de cobro *@
+                    <div class="card mb-3 p-3">
+                        <div class="row mb-3">
+                            <div class="col-md-5 mb-3">
+                                <label class="form-label"><strong>Préstamo</strong></label>
+                                <InputSelect class="form-control form-select" @bind-Value="cobrodetalle.PrestamoId">
+                                    <option value="0">-- Seleccione un préstamo --</option>
+                                    @foreach (var prestamo in prestamos)
+                                    {
+                                        <option value="@prestamo.PrestamoId">
+                                            @prestamo.Concepto Total: $@prestamo.MontoTotalPagar
+                                        </option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => cobro.CobrosDetalles)" />
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label"><strong>Valor Cobrado</strong></label>
+                                <InputNumber class="form-control" @bind-Value="cobrodetalle.ValorCobrado" />
+                                <ValidationMessage For="@(() => cobrodetalle.ValorCobrado)" />
+                            </div>
+
+                            <div class="col-md-3 mb-3 d-flex align-items-center position-relative">
+                                <button type="button" class="btn btn-outline-success w-50 btn-bottom" @onclick="AgregarDetalle">
+                                    <span class="bi bi-plus"></span> Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Tabla de Detalles *@
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Préstamo</th>
+                                <th>Concepto</th>
+                                <th>Valor Cobrado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in cobro.CobrosDetalles)
                             {
-                                <option value="@prestamo.PrestamoId">ID: @prestamo.PrestamoId - Saldo: @prestamo.MontoTotalPagar</option>
+                                <tr>
+                                    <td>@detalle.PrestamoId</td>
+                                    <td>@detalle.Prestamo?.Concepto</td>
+                                    <td>@detalle.ValorCobrado</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger custom-btn-remover" @onclick="() => EliminarDetalle(detalle)">
+                                            <span class="bi bi-trash"></span> Remover
+                                        </button>
+                                    </td>
+                                </tr>
                             }
-                        </InputSelect>
-                        <ValidationMessage For="@(() => cobro.PrestamoId)" />
-                    </div>
+                        </tbody>
+                    </table>
 
-                    @* Campo Fecha de Cobro *@
-                    <div class="col-md-6 mb-4">
-                        <label for="fechaCobro" class="form-label"><strong>Fecha de Cobro:</strong></label>
-                        <InputDate id="fechaCobro" class="form-control" @bind-Value="cobro.FechaCobro" @onchange="CalcularMora" />
-                        <ValidationMessage For="@(() => cobro.FechaCobro)" />
+                    <div class="total-section mt-4">
+                        <h5><strong>Total Cobro:</strong> @totalCobro</h5>
                     </div>
                 </div>
 
-                <div class="row">
-                    @* Campo Importe a Pagar *@
-                    <div class="col-md-6 mb-4">
-                        <label for="importePagar" class="form-label"><strong>Importe a Pagar:</strong></label>
-                        <InputNumber id="importePagar" class="form-control" @bind-Value="cobro.ImportePagar" step="0.01" />
-                        <ValidationMessage For="@(() => cobro.ImportePagar)" />
+                <div class="card-footer text-center mt-0">
+                    <div class="btn-group">
+                        <button type="button" @onclick="Nuevo" class="btn btn-outline-primary">
+                            <span class="bi bi-plus-circle-fill"></span> Nuevo
+                        </button>
+                        <button type="submit" class="btn btn-outline-success">
+                            <span class="bi bi-floppy"></span> Guardar
+                        </button>
+                        <button type="button" @onclick="Volver" class="btn btn-outline-danger">
+                            <span class="bi bi-arrow-left-circle-fill"></span> Volver
+                        </button>
                     </div>
-
-                    @* Campo Mora *@
-                    <div class="col-md-6 mb-4">
-                        <label for="mora" class="form-label"><strong>Mora (opcional):</strong></label>
-                        <InputNumber id="mora" class="form-control" @bind-Value="cobro.Mora" readonly />
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-footer">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-primary me-2" @onclick="Nuevo">
-                        <i class="bi bi-plus-circle-fill me-2"></i> Nuevo
-                    </button>
-                    <button type="submit" class="btn btn-outline-success me-2">
-                        <i class="bi bi-save me-2"></i> Guardar
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" @onclick="Volver">
-                        <i class="bi bi-arrow-left-circle-fill me-2"></i> Volver
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 </EditForm>
 
-<Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
-
 @code {
+    [Parameter]
+    public int CobroId { get; set; }
     private Deudores deudore;
-    private Prestamos prestamo;
-    public Cobros cobro = new();
+    public Cobros cobro { get; set; } = new Cobros { CobrosDetalles = new List<CobrosDetalle>() };
+    public CobrosDetalle cobrodetalle { get; set; } = new();
+    public List<CobrosDetalle> listacobrodetalle { get; set; } = new();
     private List<Prestamos> prestamos = new();
     private bool existe = false;
-    List<ToastMessage> Mensaje = new List<ToastMessage>();
+    private decimal totalCobro = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,43 +166,16 @@
         }
     }
 
-    private void RedirigirABusquedaCliente() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
+    public async Task RedirijirABuscarDeudor()
+    {
+        navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
+    }
 
     private async Task Nuevo()
     {
-        cobro = new();
+        cobro = new Cobros();
         deudore = null;
-    }
-
-    private void Volver() => navigationManager.NavigateTo("/menu");
-
-    private void OnPrestamoSeleccionado(ChangeEventArgs e)
-    {
-        cobro.PrestamoId = int.Parse(e.Value.ToString());
-        prestamo = prestamos.FirstOrDefault(p => p.PrestamoId == cobro.PrestamoId);
-        CalcularMora();
-    }
-
-    private void CalcularMora()
-    {
-        if (cobro.PrestamoId == 0)
-        {
-            cobro.Mora = 0;
-            return;
-        }
-
-        var prestamo = prestamos.FirstOrDefault(p => p.PrestamoId == cobro.PrestamoId);
-        if (prestamo != null)
-        {
-            var fechaCobro = cobro.FechaCobro ?? DateTime.Now;
-            var fechaVencimiento = prestamo.FechaCobro ?? DateTime.Now;
-
-            var diasRetraso = (fechaCobro - fechaVencimiento).Days;
-
-            cobro.Mora = diasRetraso > 0 ? Math.Max(diasRetraso * 10, 0) : 0;
-        }
-
-        StateHasChanged();
+        totalCobro = 0;
     }
 
     public async Task<bool> Validar()
@@ -169,23 +184,52 @@
         return !existe;
     }
 
-   
-
     public async Task Guardar()
     {
-        if (!await Validar())
+        if (await Validar())
         {
-          
             return;
         }
-
-        var guardado = await cobroService.Guardar(cobro);
-        if (guardado)
+        cobro.CobrosDetalles = listacobrodetalle;
+        var guardo = await cobroService.Guardar(cobro);
+        if (guardo)
         {
-            toastService.Notify(new(ToastType.Success, "Éxito", "Se guardó correctamente."));
-            Volver();
+            navigationManager.NavigateTo("/Cobro/Index");
         }
-       
     }
 
+
+    public async Task AgregarDetalle()
+    {
+        var prestamoSeleccionado = prestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
+
+        if (prestamoSeleccionado != null && cobrodetalle.ValorCobrado > 0)
+        {
+            var nuevoDetalle = new CobrosDetalle
+                {
+                    PrestamoId = cobrodetalle.PrestamoId,
+                    CobroId = cobro.CobroId,
+                    ValorCobrado = cobrodetalle.ValorCobrado,
+                    Prestamo = prestamoSeleccionado
+                };
+
+            // Agrega el nuevo detalle a la lista de detalles del cobro
+            cobro.CobrosDetalles.Add(nuevoDetalle);
+
+            // Actualiza el total cobrado
+            totalCobro += cobrodetalle.ValorCobrado;
+            cobrodetalle = new CobrosDetalle();
+        }
+    }
+
+    public async Task EliminarDetalle(CobrosDetalle detalle)
+    {
+        cobro.CobrosDetalles.Remove(detalle);
+        totalCobro -= detalle.ValorCobrado;
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Cobro/Index");
+    }
 }
