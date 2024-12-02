@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241130223646_Proyecto")]
-    partial class Proyecto
+    [Migration("20241202144856_Nueva")]
+    partial class Nueva
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -280,6 +280,9 @@ namespace ProyectoFinalAp1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CobroId"));
 
+                    b.Property<int>("CobradorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
@@ -304,6 +307,8 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasKey("CobroId");
 
+                    b.HasIndex("CobradorId");
+
                     b.HasIndex("DeudorId");
 
                     b.HasIndex("DeudoresDeudorId");
@@ -311,6 +316,32 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasIndex("PrestamoId");
 
                     b.ToTable("cobros");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.CobrosDetalle", b =>
+                {
+                    b.Property<int>("DetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
+
+                    b.Property<int>("CobroId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorCobrado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("DetalleId");
+
+                    b.HasIndex("CobroId");
+
+                    b.HasIndex("PrestamoId");
+
+                    b.ToTable("cobrosDetalles");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Deudores", b =>
@@ -434,6 +465,9 @@ namespace ProyectoFinalAp1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamoId"));
 
+                    b.Property<string>("Concepto")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Cuotas")
                         .HasColumnType("int");
 
@@ -535,6 +569,12 @@ namespace ProyectoFinalAp1.Migrations
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
                 {
+                    b.HasOne("ProyectoFinalAp1.Models.Cobradores", "Cobrador")
+                        .WithMany("Cobros")
+                        .HasForeignKey("CobradorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
                         .WithMany()
                         .HasForeignKey("DeudorId")
@@ -551,9 +591,30 @@ namespace ProyectoFinalAp1.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Cobrador");
+
                     b.Navigation("Prestamo");
 
                     b.Navigation("deudores");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.CobrosDetalle", b =>
+                {
+                    b.HasOne("ProyectoFinalAp1.Models.Cobros", "cobros")
+                        .WithMany("CobrosDetalles")
+                        .HasForeignKey("CobroId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
+                        .WithMany("CobrosDetalles")
+                        .HasForeignKey("PrestamoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Prestamo");
+
+                    b.Navigation("cobros");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Facturas", b =>
@@ -605,6 +666,16 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("deudores");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Cobradores", b =>
+                {
+                    b.Navigation("Cobros");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Cobros", b =>
+                {
+                    b.Navigation("CobrosDetalles");
+                });
+
             modelBuilder.Entity("ProyectoFinalAp1.Models.Deudores", b =>
                 {
                     b.Navigation("Cobros");
@@ -617,6 +688,8 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Navigation("Cobros");
+
+                    b.Navigation("CobrosDetalles");
 
                     b.Navigation("Garantias");
                 });
