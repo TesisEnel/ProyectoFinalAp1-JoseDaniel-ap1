@@ -20,7 +20,7 @@ public class Prestamos
     [Required(ErrorMessage = "El interés es obligatorio.")]
     [Range(0.1, 100, ErrorMessage = "El interés debe estar entre 0.1% y 100%.")]
     public decimal? Interes { get; set; }
-
+    public string? Concepto { get; set; }
     public int? Cuotas { get; set; }
 
     [Required(ErrorMessage = "La forma de pago es obligatoria.")]
@@ -46,6 +46,6 @@ public class Prestamos
     public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
     public virtual ICollection<Garantias> Garantias { get; set; } = new List<Garantias>();
 
-
+    public virtual ICollection<CobrosDetalle> CobrosDetalles { get; set; } = new List<CobrosDetalle>();
     //public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
 }
