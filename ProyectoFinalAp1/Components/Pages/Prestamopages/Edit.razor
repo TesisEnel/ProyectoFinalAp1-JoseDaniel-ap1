@@ -78,14 +78,22 @@
                             <ValidationMessage For="@(() => prestamo.Cuotas)" />
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="formaPago" class="form-label"><strong>Forma de Pago:</strong></label>
-                        <select id="formaPago" class="form-select shadow-sm" @bind="prestamo.FormaPago">
-                            <option value="">Selecciona una forma de pago</option>
-                            <option value="Semanal">Semanal</option>
-                            <option value="Quincenal">Quincenal</option>
-                        </select>
-                        <ValidationMessage For="@(() => prestamo.FormaPago)" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="formaPago" class="form-label"><strong>Forma de Pago:</strong></label>
+                            <select id="formaPago" class="form-select shadow-sm" @bind="prestamo.FormaPago">
+                                <option value="">Selecciona una forma de pago</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Quincenal">Quincenal</option>
+                            </select>
+                            <ValidationMessage For="@(() => prestamo.FormaPago)" />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="Concepto" class="form-label text-end"><strong>Concepto:</strong></label>
+                            <InputText id="Concepto" class="form-control shadow-sm" @bind-Value="prestamo.Concepto" />
+                            <ValidationMessage For="@(() => prestamo.Concepto)" />
+                        </div>
                     </div>
                 </section>
 
@@ -143,7 +151,7 @@
     {
         prestamo = await prestamoService.Buscar(PrestamoId);
 
-        if (prestamo != null && prestamo.DeudorId != 0 )
+        if (prestamo != null && prestamo.DeudorId != 0)
         {
             deudor = await deudorService.Buscar(prestamo.DeudorId);
         }
