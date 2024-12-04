@@ -248,56 +248,21 @@
         }
     }
 
-    public async Task AgregarDetalle()
+    public void AgregarDetalle()
     {
-        // Validar que se haya seleccionado un préstamo válido
-        if (cobrodetalle.PrestamoId == 0)
-        {
-            Console.WriteLine("Debe seleccionar un préstamo válido.");
-            return;
-        }
+        cobrodetalle.PrestamoId = cobro.PrestamoId;
+        cobrodetalle.ValorCobrado = cobrodetalle.ValorCobrado;
 
-        // Validar que el valor cobrado sea mayor que 0
-        if (cobrodetalle.ValorCobrado <= 0)
-        {
-            Console.WriteLine("Error: El valor cobrado debe ser mayor a cero.");
-            return;
-        }
+        listacobrodetalle.Add(cobrodetalle);
+        cobro.ImportePagar += cobrodetalle.ValorCobrado;
 
-        // Verificar si el préstamo existe
-        var prestamo = await prestamoService.ObtenerPrestamoPorId(cobrodetalle.PrestamoId);
-        if (prestamo == null)
-        {
-            Console.WriteLine("El PrestamoId no existe o no es válido.");
-            return;
-        }
-
-        // Crear y agregar el nuevo detalle
-        var nuevoDetalle = new CobrosDetalle
-            {
-                PrestamoId = cobro.PrestamoId,
-                CobroId = cobro.CobroId,
-                ValorCobrado = cobrodetalle.ValorCobrado,
-                Prestamo = prestamo
-            };
-
-        listacobrodetalle.Add(nuevoDetalle);
-
-        // Actualizar el total del cobro
-        cobro.ImportePagar = listacobrodetalle.Sum(d => d.ValorCobrado);
-
-        Console.WriteLine($"Detalle agregado correctamente: Préstamo {prestamo.PrestamoId}, Valor Cobrado: {cobrodetalle.ValorCobrado}");
-
-        // Limpiar el formulario del detalle
         cobrodetalle = new CobrosDetalle();
     }
 
-
-
-    public async Task EliminarDetalle(CobrosDetalle detalle)
+    public void EliminarDetalle(CobrosDetalle detalle)
     {
-        cobro.CobrosDetalles.Remove(detalle);
-        cobro.ImportePagar = cobro.CobrosDetalles.Sum(d => d.ValorCobrado);
+        listacobrodetalle.Remove(detalle);
+        cobro.ImportePagar -= detalle.ValorCobrado;
     }
 
     public async Task Volver()
