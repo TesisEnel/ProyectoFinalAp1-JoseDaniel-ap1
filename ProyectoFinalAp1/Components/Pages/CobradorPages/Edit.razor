@@ -1,4 +1,4 @@
-﻿@page "/Cobrador/Edit"
+﻿ @page "/Cobrador/Edit"
 @page "/Cobrador/Edit/{CobradorId:int}"
 @inject CobradorService CobradorService
 @inject NavigationManager navigationManager
@@ -40,7 +40,7 @@
                         <ValidationMessage For="@(() => cobrador.Apellidos)" />
                     </div>
 
-                    @* Campo Email*@
+                    @* Campo Email *@
                     <div class="col-md-6 mb-4">
                         <label for="Email" class="form-label"><strong>Email:</strong></label>
                         <InputText id="Email" class="form-control" placeholder="Ingrese el Email" @bind-Value="cobrador.Email" />
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="row">
-                    @* Campo Dirección  *@
+                    @* Campo Dirección *@
                     <div class="col-md-6 mb-4">
                         <label for="Direccion" class="form-label"><strong>Dirección:</strong></label>
                         <InputText id="Direccion" class="form-control" placeholder="Ingrese la dirección" @bind-Value="cobrador.Direccion" />
@@ -93,7 +93,7 @@
                         <InputText id="telefono" class="form-control" placeholder="Ingrese el teléfono" @bind-Value="cobrador.Telefono" />
                         <ValidationMessage For="@(() => cobrador.Telefono)" />
                     </div>
-                    @* Campo Ciudad*@
+                    @* Campo Ciudad *@
                     <div class="col-md-6 mb-4">
                         <label for="ciudad" class="form-label"><strong>Ciudad:</strong></label>
                         <InputText id="ciudad" class="form-control" placeholder="Ingrese la ciudad" @bind-Value="cobrador.Ciudad" />
@@ -142,9 +142,9 @@
             cobrador = await CobradorService.Buscar(CobradorId) ?? new Cobradores();
             listacobradores = await CobradorService.ListarCobradores();
         }
-        
+
     }
-   
+
     public async Task<bool> Validar()
     {
         var Listacobrador = await CobradorService.Listar(C => C.Nombres == cobrador.Nombres && C.CobradorId != cobrador.CobradorId);

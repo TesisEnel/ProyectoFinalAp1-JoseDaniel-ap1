@@ -43,9 +43,8 @@ public class Prestamos
 
     public decimal? Saldo { get; set; }
     public string? Estado { get; set; }
-    public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
-    public virtual ICollection<Garantias> Garantias { get; set; } = new List<Garantias>();
 
-    public virtual ICollection<CobrosDetalle> CobrosDetalles { get; set; } = new List<CobrosDetalle>();
-    //public virtual ICollection<Facturas> Facturas { get; set; } = new List<Facturas>();
+    public virtual ICollection<Cobros> Cobros { get; set; }
+    public virtual ICollection<Garantias> Garantias { get; set; }
+
 }

@@ -18,6 +18,7 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         contexto.cobros.Add(cobro);
         return await contexto.SaveChangesAsync() > 0;
     }
+
     private async Task<bool> Modificar(Cobros cobro)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -52,7 +53,9 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.cobros
             .Where(criterio)
-            .Include(c =>c.deudores)
+            .Include(c => c.CobrosDetalles)
+            .Include(c => c.Deudor)
+               .Include(c => c.Prestamo)
             .ToListAsync();
     }
     public async Task<List<Cobros>> ListarCobros()

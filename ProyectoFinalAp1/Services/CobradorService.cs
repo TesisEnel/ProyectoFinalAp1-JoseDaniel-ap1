@@ -10,7 +10,7 @@ public class CobradorService(IDbContextFactory<ApplicationDbContext> DbFactory)
     public async Task<bool> Existe(int Cobradorid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.cobradores.AnyAsync(a => a.CobradorId== Cobradorid);
+        return await contexto.cobradores.AnyAsync(a => a.CobradorId == Cobradorid);
     }
     private async Task<bool> Insertar(Cobradores cobrador)
     {

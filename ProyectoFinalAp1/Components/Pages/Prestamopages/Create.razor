@@ -229,6 +229,7 @@
                 prestamo.TotalInteres = 0;
                 prestamo.MontoTotalPagar = prestamo.MontoPrestado;
             }
+            prestamo.Saldo = prestamo.MontoTotalPagar ?? 0;
             DateTime fechaCreacion = prestamo.FechaPrestamo.Value;
             // Asignar la fecha de cobro con base en la fecha de préstamo y las cuotas o si esta es indefinida la misma
             if (prestamo.FormaPago == "Semanal")

@@ -42,16 +42,18 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return eliminado > 0;
     }
 
-    public async Task<Prestamos?> Buscar(int deudorid)
+    public async Task<Prestamos?> Buscar(int prestamoid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
-            .FirstOrDefaultAsync(a => a.PrestamoId == deudorid);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.PrestamoId == prestamoid);
     }
     public async Task<List<Prestamos>> Listar(Expression<Func<Prestamos, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
+              .AsNoTracking()
             .Where(criterio)
             .Include(p => p.deudores)
             .ToListAsync();
@@ -67,15 +69,13 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
     public async Task<Prestamos> ObtenerPrestamoPorId(int prestamoId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        var prestamo = await contexto.prestamos
-            .FirstOrDefaultAsync(p => p.PrestamoId == prestamoId);
-        return prestamo;
+        return await contexto.prestamos.FirstOrDefaultAsync(p => p.PrestamoId == prestamoId);
     }
-    public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int deudorId)
+    public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int prestamoid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos
-            .Where(p => p.DeudorId == deudorId)
+            .Where(p => p.PrestamoId == prestamoid)
             .ToListAsync();
     }
 

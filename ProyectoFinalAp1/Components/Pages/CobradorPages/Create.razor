@@ -38,7 +38,7 @@
                         <InputText id="apellidos" class="form-control" placeholder="Ingrese el apellidos" @bind-Value="cobrador.Apellidos" />
                         <ValidationMessage For="@(() => cobrador.Apellidos)" />
                     </div>
-                  
+
                     @* Campo Email*@
                     <div class="col-md-6 mb-4">
                         <label for="Email" class="form-label"><strong>Email:</strong></label>
@@ -58,7 +58,7 @@
                     <div class="col-md-6 mb-4">
                         <label for="Estado" class="form-label"><strong>Estado:</strong></label>
                         <InputSelect id="Estado" class="form-control" @bind-Value="cobrador.Estado">
-                            <option value="">Seleccionar un estado</option> 
+                            <option value="">Seleccionar un estado</option>
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
                         </InputSelect>
@@ -69,7 +69,7 @@
 
                 </div>
 
-                <div class="row"> 
+                <div class="row">
                     @* Campo Foto Cédula *@
                     <div class="col-md-6 mb-4">
                         <label for="foto" class="form-label"><strong>Foto Cédula:</strong></label>
@@ -99,7 +99,7 @@
                         <ValidationMessage For="@(() => cobrador.Ciudad)" />
                     </div>
                 </div>
-              
+
             </div>
 
             <div class="card-footer justify-content-center text-center custom-footer mt-5 pt-4">
@@ -136,7 +136,7 @@
     }
     protected override async Task OnInitializedAsync()
     {
-       listacobradores = await CobradorService.ListarCobradores();
+        listacobradores = await CobradorService.ListarCobradores();
     }
     public async Task Buscar()
     {
@@ -144,7 +144,7 @@
         var encontrado = await CobradorService.Buscar(cobrador.CobradorId);
         if (encontrado != null)
         {
-           cobrador = encontrado;
+            cobrador = encontrado;
         }
         else
         {
