@@ -95,10 +95,12 @@
                                 <div class="col-md-4">
                                     <label for="valorCobrado"><strong>Valor Cobrado:</strong></label>
                                     <InputNumber class="form-control" @bind-Value="cobrodetalle.ValorCobrado" />
+                                 
                                     <ValidationMessage For="@(() => cobrodetalle.ValorCobrado)" />
+
                                 </div>
                                 <div class="col-md-3 d-flex align-items-center">
-                                    <button class="btn btn-outline-success w-100" @onclick="AgregarDetalle">
+                                    <button type="button" class="btn btn-outline-success w-100" @onclick="AgregarDetalle">
                                         <span class="bi bi-plus-circle"></span> Agregar
                                     </button>
                                 </div>
@@ -139,32 +141,32 @@
 
                 <div class="card-footer text-center">
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary" @onclick="Nuevo">
+                        <button class="btn btn-outline-primary" type="button" @onclick="Nuevo">
                             <span class="bi bi-plus-circle-fill"></span> Nuevo
                         </button>
                         <button class="btn btn-outline-success" type="submit">
                             <span class="bi bi-save"></span> Guardar
                         </button>
-                        <button class="btn btn-outline-danger" @onclick="Volver">
+                        <button class="btn btn-outline-danger" type="button" @onclick="Volver">
                             <span class="bi bi-arrow-left-circle-fill"></span> Volver
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </EditForm>
-
 
 @code {
     [Parameter]
     public int CobroId { get; set; }
     private Deudores deudore;
     public Cobros cobro { get; set; } = new Cobros();
-    public CobrosDetalle cobrodetalle { get; set; } = new();
-    public List<CobrosDetalle> listacobrodetalle { get; set; } = new();
-    public List<Prestamos> ListaPrestamos { get; set; } = new();
-    public List<Cobradores> ListaCobradores { get; set; } = new();
+    public CobrosDetalle cobrodetalle { get; set; } = new CobrosDetalle();
+    public List<CobrosDetalle> listacobrodetalle { get; set; } = new List<CobrosDetalle>();
+    public List<Prestamos> ListaPrestamos { get; set; } = new List<Prestamos>();
+    public List<Cobradores> ListaCobradores { get; set; } = new List<Cobradores>();
     private bool existe = false;
 
     protected override async Task OnInitializedAsync()
@@ -189,6 +191,7 @@
         cobro = new Cobros();
         deudore = null;
         cobro.ImportePagar = 0;
+        listacobrodetalle.Clear(); // Limpiar detalles cuando se crea un nuevo cobro
     }
 
     public async Task<bool> Validar()
@@ -196,39 +199,40 @@
         existe = await cobroService.Existe(cobro.CobroId);
         return existe;
     }
-
     public async Task Guardar()
     {
         try
         {
-            // Validar que la fecha de cobro sea válida
+            // Validar que hay detalles agregados
+            if (listacobrodetalle == null || listacobrodetalle.Count == 0)
+            {
+                Console.WriteLine("Debe agregar al menos un detalle al cobro antes de guardar.");
+                return;
+            }
+
+            // Validar que la fecha de cobro es válida
             if (cobro.FechaCobro == DateTime.MinValue)
             {
                 Console.WriteLine("Debe especificar una fecha de cobro.");
                 return;
             }
 
-            // Validar que el importe a pagar sea mayor que cero
-            if (cobrodetalle.ValorCobrado <= 0)
+            // Validar importe total
+            if (cobro.ImportePagar <= 0)
             {
-                Console.WriteLine("Debe especificar un monto cobrado mayor a cero.");
+                Console.WriteLine("El importe total debe ser mayor que cero.");
                 return;
             }
 
             cobro.CobrosDetalles = listacobrodetalle;
 
-            // Si el CobroId es nulo o no ha sido asignado, lo creamos como nuevo
-            if (cobro.CobroId == 0)
+            if (cobro.CobroId == 0) // Nuevo cobro
             {
-                // Intentamos guardar el cobro nuevo
                 var guardo = await cobroService.Guardar(cobro);
                 if (guardo)
                 {
-                    // Limpiar el formulario tras guardar
-                    listacobrodetalle.Clear(); // Limpiar los detalles del cobro
-                    cobro = new Cobros(); // Limpiar el objeto cobro
                     Console.WriteLine("Cobro guardado exitosamente.");
-                    navigationManager.NavigateTo("/Cobro/Index"); // Redirigir al listado de cobros
+                    navigationManager.NavigateTo("/Cobro/Index");
                 }
                 else
                 {
@@ -237,25 +241,30 @@
             }
             else
             {
-                // Si el CobroId no es 0, se asume que el cobro ya existe
-                Console.WriteLine("Cobro ya existe. No se puede guardar.");
+                Console.WriteLine("El cobro ya existe y no se puede guardar nuevamente.");
             }
         }
         catch (Exception ex)
         {
-            // Manejo de excepciones
-            Console.WriteLine($"Ocurrió un error al guardar el cobro: {ex.Message}");
+            Console.WriteLine($"Error al guardar el cobro: {ex.Message}");
         }
     }
 
     public void AgregarDetalle()
     {
-        cobrodetalle.PrestamoId = cobro.PrestamoId;
-        cobrodetalle.ValorCobrado = cobrodetalle.ValorCobrado;
+        if (cobrodetalle.ValorCobrado <= 0)
+        {
+            Console.WriteLine("El valor cobrado no puede ser menor o igual a cero.");
+            return;
+        }
 
+        cobrodetalle.PrestamoId = cobro.PrestamoId;
         listacobrodetalle.Add(cobrodetalle);
+
+        // Actualizar el importe total
         cobro.ImportePagar += cobrodetalle.ValorCobrado;
 
+        // Limpiar para agregar otro
         cobrodetalle = new CobrosDetalle();
     }
 

@@ -19,6 +19,7 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         contexto.prestamos.Add(prestamo);
         return await contexto.SaveChangesAsync() > 0;
     }
+
     private async Task<bool> Modificar(Prestamos prestamo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
