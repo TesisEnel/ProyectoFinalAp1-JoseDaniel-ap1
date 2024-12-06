@@ -50,7 +50,7 @@
                     <tr>
                         <th>CobroId</th>
                         <th>Deudores</th>
-                        <th>Prestamo "Concepto"</th>
+                        
                         <th>Mora</th>
                         <th>ImportePagar</th>
                         <th>FechaCobro</th>
@@ -65,7 +65,7 @@
                         <tr>
                             <td>@cobro.CobroId</td>
                             <td>@($"{cobro.Deudor?.Nombres} {cobro.Deudor?.Apellidos}")</td>
-                            <td>@cobro.Prestamo?.Concepto</td>
+                         
                             <td>@cobro.Mora</td>
                             <td>@cobro.ImportePagar</td>
                             <td>@cobro.FechaCobro</td>
@@ -131,11 +131,7 @@
                 listadeudore = await deudorService.Listar(d => d.Nombres.Contains(valorFiltro));
                 listacobro = listacobro.Where(c => c.Deudor?.Nombres?.Contains(valorFiltro) ?? false).ToList();
             }
-            else if (filtro == "PrestamoId" && int.TryParse(valorFiltro, out int PrestamoId))
-            {
-                listaprestamo = await prestamoService.Listar(p => p.PrestamoId == PrestamoId);
-                listacobro = listacobro.Where(c => c.Prestamo?.PrestamoId == PrestamoId).ToList();
-            }
+          
             else if (filtro == "Mora" && decimal.TryParse(valorFiltro, out decimal Mora))
             {
                 listacobro = await cobroService.Listar(c => c.Mora == Mora);

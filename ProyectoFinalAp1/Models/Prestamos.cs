@@ -47,5 +47,6 @@ public class Prestamos
 
     public virtual ICollection<Cobros> Cobros { get; set; }
     public virtual ICollection<Garantias> Garantias { get; set; }
+    public List<CobrosDetalle> CobrosDetalles { get; set; } = new List<CobrosDetalle>();
 
 }

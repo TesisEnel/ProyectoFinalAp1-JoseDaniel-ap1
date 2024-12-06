@@ -79,7 +79,7 @@
                         @{
                             decimal saldoRestante = listaPrestamos.FirstOrDefault(p => p.PrestamoId == filtroPrestamo)?.MontoTotalPagar ?? 0;
                         }
-                        @foreach (var cobro in listaCobros.Where(c => c.PrestamoId == filtroPrestamo))
+                        @foreach (var cobro in listaCobros)
                         {
                             saldoRestante -= cobro.ImportePagar;
                             <tr>
@@ -119,13 +119,10 @@
     {
         deudore = await deudorService.ObtenerDeudorePorId(HistorialId);
         listaPrestamos = await prestamoService.Listar(p => p.DeudorId == HistorialId);
-        listaCobros = await cobroService.Listar(c => c.Prestamo.DeudorId == HistorialId);
+     
     }
 
-    private void FiltrarCobros()
-    {
-        listaCobros = listaCobros.Where(c => c.PrestamoId == filtroPrestamo).ToList();
-    }
+   
 }
 
 

@@ -283,9 +283,6 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DeudoresDeudorId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaCobro")
                         .HasColumnType("datetime2");
 
@@ -298,7 +295,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<decimal>("Mora")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PrestamoId")
+                    b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 
                     b.HasKey("CobroId");
@@ -307,9 +304,7 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.HasIndex("DeudorId");
 
-                    b.HasIndex("DeudoresDeudorId");
-
-                    b.HasIndex("PrestamoId");
+                    b.HasIndex("PrestamosPrestamoId");
 
                     b.ToTable("cobros");
                 });
@@ -572,26 +567,18 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired();
 
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "Deudor")
-                        .WithMany()
+                        .WithMany("Cobros")
                         .HasForeignKey("DeudorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ProyectoFinalAp1.Models.Deudores", null)
+                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
                         .WithMany("Cobros")
-                        .HasForeignKey("DeudoresDeudorId");
-
-                    b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
-                        .WithMany("Cobros")
-                        .HasForeignKey("PrestamoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("PrestamosPrestamoId");
 
                     b.Navigation("Cobrador");
 
                     b.Navigation("Deudor");
-
-                    b.Navigation("Prestamo");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.CobrosDetalle", b =>
@@ -603,7 +590,7 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired();
 
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", "Prestamo")
-                        .WithMany()
+                        .WithMany("CobrosDetalles")
                         .HasForeignKey("PrestamoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -684,6 +671,8 @@ namespace ProyectoFinalAp1.Migrations
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.Navigation("Cobros");
+
+                    b.Navigation("CobrosDetalles");
 
                     b.Navigation("Garantias");
                 });

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class ProyectoFinal : Migration
+    public partial class Proyecto : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -234,13 +234,12 @@ namespace ProyectoFinalAp1.Migrations
                     CobroId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeudorId = table.Column<int>(type: "int", nullable: false),
-                    PrestamoId = table.Column<int>(type: "int", nullable: false),
                     CobradorId = table.Column<int>(type: "int", nullable: false),
                     Mora = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImportePagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeudoresDeudorId = table.Column<int>(type: "int", nullable: true)
+                    PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -258,16 +257,10 @@ namespace ProyectoFinalAp1.Migrations
                         principalColumn: "DeudorId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_cobros_deudores_DeudoresDeudorId",
-                        column: x => x.DeudoresDeudorId,
-                        principalTable: "deudores",
-                        principalColumn: "DeudorId");
-                    table.ForeignKey(
-                        name: "FK_cobros_prestamos_PrestamoId",
-                        column: x => x.PrestamoId,
+                        name: "FK_cobros_prestamos_PrestamosPrestamoId",
+                        column: x => x.PrestamosPrestamoId,
                         principalTable: "prestamos",
-                        principalColumn: "PrestamoId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "PrestamoId");
                 });
 
             migrationBuilder.CreateTable(
@@ -401,19 +394,14 @@ namespace ProyectoFinalAp1.Migrations
                 column: "CobradorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cobros_DeudoresDeudorId",
-                table: "cobros",
-                column: "DeudoresDeudorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_cobros_DeudorId",
                 table: "cobros",
                 column: "DeudorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cobros_PrestamoId",
+                name: "IX_cobros_PrestamosPrestamoId",
                 table: "cobros",
-                column: "PrestamoId");
+                column: "PrestamosPrestamoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cobrosDetalles_CobroId",

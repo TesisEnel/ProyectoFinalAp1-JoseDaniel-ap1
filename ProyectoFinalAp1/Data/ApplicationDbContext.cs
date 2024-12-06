@@ -23,12 +23,9 @@ namespace ProyectoFinalAp1.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Cobros>()
-                .HasOne(c => c.Deudor)
-                .WithMany()
-                .HasForeignKey(c => c.DeudorId)
-                .OnDelete(DeleteBehavior.Restrict);
 
+
+            // Relación entre Cobros y CobrosDetalle
             modelBuilder.Entity<Cobros>()
                 .HasMany(c => c.CobrosDetalles)
                 .WithOne(cd => cd.Cobro)
@@ -36,41 +33,52 @@ namespace ProyectoFinalAp1.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Cobros>()
-                .HasOne(c => c.Prestamo)
-                .WithMany(p => p.Cobros)
-                .HasForeignKey(c => c.PrestamoId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            // Relación entre Facturas y Deudores
             modelBuilder.Entity<Facturas>()
                 .HasOne(f => f.deudores)
                 .WithMany()
                 .HasForeignKey(f => f.DeudorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Relación entre Facturas y Prestamos
             modelBuilder.Entity<Facturas>()
                 .HasOne(f => f.prestamos)
                 .WithMany()
                 .HasForeignKey(f => f.PrestamoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Relación entre Garantías y Prestamos
             modelBuilder.Entity<Garantias>()
                 .HasOne(g => g.Prestamos)
                 .WithMany(p => p.Garantias)
                 .HasForeignKey(g => g.PrestamoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Relación entre Garantías y Deudores
             modelBuilder.Entity<Garantias>()
                 .HasOne(g => g.Deudores)
                 .WithMany(d => d.Garantias)
                 .HasForeignKey(g => g.DeudorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<CobrosDetalle>()
-    .HasOne(cd => cd.Prestamo)
-    .WithMany()  // Si es una relación uno a muchos
-    .HasForeignKey(cd => cd.PrestamoId)
+
+
+            modelBuilder.Entity<Cobros>()
+    .HasOne(c => c.Deudor)
+    .WithMany(d => d.Cobros)
+    .HasForeignKey(c => c.DeudorId)
     .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CobrosDetalle>()
+                .HasOne(d => d.Prestamo)
+                .WithMany(p => p.CobrosDetalles)
+                .HasForeignKey(d => d.PrestamoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
+
         }
     }
 }
