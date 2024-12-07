@@ -50,7 +50,6 @@
                         <th>GarantiaId</th>
                         <th>Deudores</th>
                         <th>Prestamos</th>
-                        <th>TipoGarantia</th>
                         <th>ValorGarantia</th>
                         <th>FechaGarantia</th>
                         <th>Ver</th>
@@ -65,11 +64,10 @@
                             <td>@garantia.GarantiaId</td>
                             <td>@garantia.Deudores.Nombres @garantia.Deudores.Apellidos</td>
                             <td>@garantia.Prestamos.PrestamoId</td>
-                            <td>@garantia.TipoGarantia</td>
                             <td>@garantia.ValorGarantia</td>
                             <td>@garantia.FechaGarantia.ToString("dd/MM/yyyy")</td>
-                           
-                           
+
+
 
                             <td>
                                 <a href="/Garantia/Details/@garantia.GarantiaId" class="btn btn-outline-primary">
@@ -131,8 +129,6 @@
             {
                 listadeudore = await deudorService.Listar(c => c.NumeroCedula.Contains(valorFiltro));
             }
-
-
         }
     }
     private async Task Volver()
