@@ -1,10 +1,10 @@
 ﻿@page "/Cobro/Delete"
 @page "/Cobro/Delete/{CobroId:int}"
-@inject DeudorService deudorService
-@inject PrestamoService prestamoService
 @inject CobroService cobroService
-@inject CobradorService CobradorService
 @inject NavigationManager navigationManager
+@inject DeudorService deudorService
+@inject CobradorService cobradorService
+@inject PrestamoService prestamoService
 @rendermode InteractiveServer
 
 <PageTitle>Eliminar Cobro</PageTitle>
@@ -25,7 +25,6 @@
             else if (deudore != null)
             {
                 <div class="row">
-                    @* Foto de la Cedula *@
                     <div class="col-md-4 text-center mb-4">
                         <strong class="d-block mb-2">Foto de la Cédula</strong>
                         @if (!string.IsNullOrEmpty(deudore?.FotoCedulaURL))
@@ -38,7 +37,6 @@
                         }
                     </div>
 
-                    @* Datos Personales *@
                     <div class="col-md-8">
                         <div class="row">
                             <div class="col-md-6 mb-4">
@@ -65,7 +63,6 @@
                                     <p class="d-block">@cobrador?.Nombres @cobrador?.Apellidos</p>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
@@ -84,7 +81,6 @@
                             </div>
                         </div>
 
-                        @* Información de Contacto *@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
@@ -102,7 +98,6 @@
                     </div>
                 </div>
 
-                @* Detalles de los Cobros *@
                 <div class="mt-5">
                     <h4 class="text-primary">Eliminar Detalles de los Cobros</h4>
                     @if (listacobrodetalle.Any())
@@ -145,7 +140,7 @@
             <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
             </button>
-            <button class="btn btn-lg btn-outline-" @onclick="EliminarCobro">
+            <button class="btn btn-lg delete-btn" @onclick="EliminarCobro">
                 <i class="bi bi-trash-fill mt-3"></i> Eliminar Cobro
             </button>
         </div>
@@ -155,15 +150,13 @@
 @code {
     [Parameter] public int CobroId { get; set; }
     private Deudores deudore;
-
-    public Cobradores? cobrador = new Cobradores();
-    private CobrosDetalle cobrodetalle = new();
-    private List<CobrosDetalle> listacobrodetalle = new();
-    private List<Prestamos> ListaPrestamos = new();
-    public List<Cobradores> listacobradores = new List<Cobradores>();
+    private Cobradores? cobrador = new Cobradores();
     private Cobros cobro = new();
+    private List<CobrosDetalle> listacobrodetalle = new();
     private string mensajeError;
-
+    private List<Prestamos> ListaPrestamos = new();
+    private List<Cobradores> ListaCobradores = new();
+ 
     protected override async Task OnInitializedAsync()
     {
         try
@@ -175,17 +168,10 @@
                 {
                     deudore = await deudorService.Buscar(cobro.DeudorId);
                     ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
-                    listacobrodetalle = cobro.CobrosDetalles.ToList();
-                    cobrador = await CobradorService.Buscar(cobro.CobradorId); // Carga del cobrador
+                    ListaCobradores = await cobradorService.ListarCobradores();
 
-                    foreach (var detalle in listacobrodetalle)
-                    {
-                        detalle.Prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == detalle.PrestamoId);
-                    }
-                }
-                else
-                {
-                    mensajeError = "No se encontró el cobro especificado.";
+                    // Cargar detalles existentes
+                    listacobrodetalle = cobro.CobrosDetalles?.ToList() ?? new List<CobrosDetalle>();
                 }
             }
         }
@@ -197,23 +183,21 @@
 
     public async Task EliminarCobro()
     {
-        if (cobro == null || CobroId <= 0)
+        if (CobroId == 0 || cobro == null)
         {
-          
             return;
         }
-
-        bool resultado = await cobroService.Eliminar(CobroId);
-        if (resultado)
-        {
-            Volver();
-        }
-        
+       
+            if (await cobroService.Eliminar(CobroId))
+            {
+                Volver();
+            }
+           
     }
+
 
     private void Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
     }
 }
-
