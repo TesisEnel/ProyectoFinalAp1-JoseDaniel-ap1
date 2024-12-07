@@ -492,10 +492,16 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DuracionMeses")
+                        .HasColumnType("int");
+
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FechaCobro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaPrestamo")
@@ -520,6 +526,12 @@ namespace ProyectoFinalAp1.Migrations
 
                     b.Property<decimal?>("MontoTotalPagar")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PagosRealizados")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Periodicidad")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("Saldo")
                         .HasColumnType("decimal(18,2)");
