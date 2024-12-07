@@ -122,9 +122,12 @@
                                         <td>@detalle.Prestamo?.Concepto</td>
                                         <td>$@detalle.ValorCobrado</td>
                                         <td>
-                                            <button class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                            
+
+                                            <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                                 <span class="bi bi-trash"></span> Remover
                                             </button>
+
                                         </td>
                                     </tr>
                                 }
@@ -167,6 +170,7 @@
     private List<Cobradores> ListaCobradores = new();
     private string mensajeError;
     private Cobros cobro = new();
+    private List<int> detallesAEliminar = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -222,10 +226,22 @@
     }
 
 
-    private void EliminarDetalle(CobrosDetalle detalle)
+
+
+
+  
+    private async Task EliminarDetalle(CobrosDetalle detalle)
     {
-        listacobrodetalle.Remove(detalle);
+        if (detalle.DetalleId != 0)
+        {
+            detallesAEliminar.Add(detalle.DetalleId);
+        }
+        listacobrodetalle.Remove(detalle); // Remover de la lista local
+
+        // Forzar una actualización de la UI
+        StateHasChanged();
     }
+
 
     private async Task Guardar()
     {
@@ -235,9 +251,26 @@
             return;
         }
 
+       
+
+        if (detallesAEliminar.Any())
+        {
+            var eliminados = await cobroService.EliminarDetalles(detallesAEliminar);
+            if (!eliminados)
+            {
+                mensajeError = "Ocurrió un error al eliminar los detalles seleccionados.";
+                return;
+            }
+
+            detallesAEliminar.Clear(); // Limpiar la lista después de eliminar.
+        }
         cobro.CobrosDetalles = listacobrodetalle;
 
+        // Guardar cobro
         var resultado = await cobroService.Guardar(cobro);
+
+
+       
         if (resultado)
         {
             navigationManager.NavigateTo("/Cobro/Index");

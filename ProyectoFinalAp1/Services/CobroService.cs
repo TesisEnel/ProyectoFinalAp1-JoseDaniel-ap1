@@ -49,25 +49,33 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return await contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> EliminarDetalle(int detalleId)
+
+    public async Task<bool> EliminarDetalles(List<int> detalleIds)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         try
         {
-            var detalle = await contexto.cobrosDetalles.FindAsync(detalleId);
-            if (detalle != null)
+            var detalles = await contexto.cobrosDetalles
+                .Where(d => detalleIds.Contains(d.DetalleId))
+                .ToListAsync();
+
+            if (detalles.Any())
             {
-                contexto.cobrosDetalles.Remove(detalle);
+                contexto.cobrosDetalles.RemoveRange(detalles);
                 await contexto.SaveChangesAsync();
-                return true;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al eliminar el detalle: {ex.Message}");
+            Console.WriteLine($"Error al eliminar detalles: {ex.Message}");
+            return false;
         }
-        return false;
     }
+
+
+
 
     public async Task<bool> Guardar(Cobros cobro)
     {
