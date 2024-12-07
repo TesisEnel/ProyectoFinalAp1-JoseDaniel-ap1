@@ -145,6 +145,10 @@
             <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
             </button>
+
+            <button class="btn btn-lg btn-success ms-3" @onclick="GenerarFactura">
+                <i class="bi bi-receipt mt-3"></i> Generar Factura
+            </button>
         </div>
     </div>
 </div>
@@ -192,6 +196,10 @@
         }
     }
 
+    private async Task GenerarFactura()
+    {
+        navigationManager.NavigateTo($"/Cobro/FacturaCobro/{CobroId}");
+    }
 
     private void Volver()
     {
