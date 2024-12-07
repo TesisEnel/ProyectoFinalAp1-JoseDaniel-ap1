@@ -170,3 +170,9 @@ footer {
     padding: 1rem 0;
     font-size: 0.9rem;
 }
+
+.user-name {
+    color: white;
+    font-weight: normal; /* Opcional para resaltar el texto */
+    font-size: 1rem; /* Ajusta el tamaño de letra si es necesario */
+}

@@ -33,15 +33,15 @@
                 <a href="#contacto" class="menu-floating-item contacto">
                     <i class="fas fa-envelope"></i> Contacto
                 </a>
+                <span class="user-name">Usuario: @userName</span> <!-- Aplicar la clase aquí -->
                 <AuthorizeView>
                     <Authorized>
                         <a>
-                            Usuario: @userName
                             <form action="Account/Logout" method="post">
                                 <AntiforgeryToken />
                                 <input type="hidden" name="ReturnUrl" value="" />
                                 <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-plus"></i>Logout
+                                    <i class="fas fa-plus"></i>Cerrar Sesion
                                 </button>
                             </form>
                         </a>
