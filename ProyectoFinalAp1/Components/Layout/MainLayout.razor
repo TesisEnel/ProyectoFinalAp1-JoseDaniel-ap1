@@ -1,34 +1,84 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager navigationManager
 <link href="css/CobroCreate.css" rel="stylesheet" />
 
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
-<div class="page">
+<div class="card">
+    @* Barra superior dentro del card, con menú flotante integrado *@
+    <div class="top-row px-7">
+        <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
+        <div class="menu-floating custom-align">
+            <!-- Ítem Prestamax SRL a la izquierda, visible solo si el usuario está autenticado -->
+            <AuthorizeView>
+                <Authorized>
+                    <a href="/Menu" class="prestamax-item">
+                        <img src="/Rectangle 101.png" alt="Ícono de Menú" class="prestamax-icon" />
+                        <span class="prestamax-text">Prestamos SRL</span>
+                    </a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="/" class="prestamax-item">
+                        <img src="/Rectangle 101.png" alt="Ícono de Menú" class="prestamax-icon" />
+                        <span class="prestamax-text">Prestamos SRL</span>
+                    </a>
+                </NotAuthorized>
+            </AuthorizeView>
 
-    <div class="card">
-        @* Barra superior dentro del card, con menú flotante integrado *@
-        <div class="top-row px-7">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
-            <div class="menu-floating custom-align">
+            <div class="user-container">
                 <a href="#soporte" class="menu-floating-item soporte">
                     <i class="fas fa-life-ring"></i> Soporte
                 </a>
-                <a href="#contacto" class="menu-floating-item contacto">
+                <a href="#contacto" class="menu-floating-item contact o">
                     <i class="fas fa-envelope"></i> Contacto
                 </a>
+                <button @onclick="SalirMenu">
+                    Usuario: @userName
+                </button>
             </div>
         </div>
-
-        <div class="content" style="margin-top: 0rem; margin-bottom: 1rem;">
-            @Body
-        </div>
     </div>
-    @* Nuevo card idéntico en la parte inferior *@
-    <div class="card mt-5">
-        <div class="top-row px-4">
-            <footer>
-                <p>© 2024 Prestamos SRL</p>
-            </footer>
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
-        </div>
+
+    <div class="content" style="margin-top: 0rem; margin-bottom: 1rem;">
+        @Body
     </div>
 </div>
+
+@* Nuevo card idéntico en la parte inferior *@
+<div class="card mt-5">
+    <div class="top-row px-4">
+        <footer>
+            <p>© 2024 Prestamos SRL</p>
+        </footer>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
+    private bool IsAuthenticated { get; set; }
+    private string userName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = authState.User.Identity.IsAuthenticated;
+
+        if (IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name ?? "Usuario no disponible";
+        }
+    }
+
+    private void SalirMenu()
+    {
+        // Redirige al logout, asegurándose de que se cierre la sesión
+        navigationManager.NavigateTo("/logout");
+    }
+
+    private void IrALogin()
+    {
+        // Redirige al login si no está autenticado
+        navigationManager.NavigateTo("/login");
+    }
+}
