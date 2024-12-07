@@ -64,6 +64,31 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ToListAsync();
     }
 
+    public async Task<bool> EliminarDetalles(List<int> detalleIds)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+
+        try
+        {
+            var detalles = await contexto.garantiasDetalle
+                .Where(d => detalleIds.Contains(d.DetalleId))
+                .ToListAsync();
+
+            if (detalles.Any())
+            {
+                contexto.garantiasDetalle.RemoveRange(detalles);
+                await contexto.SaveChangesAsync();
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar detalles: {ex.Message}");
+            return false;
+        }
+    }
+
     public async Task<List<GarantiasDetalle>> ObtenerDetallesPorGarantiaId(int garantiaid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
