@@ -1,0 +1,140 @@
+﻿/Css edit cobrador con su detalle incluido en el mismo/
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Estilos de la tarjeta */
+.card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #008DD9;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-size: 24px;
+    margin: 0;
+}
+
+/* Botón de búsqueda de deudor */
+.search-btn {
+    background-color: #ffffff;
+    color: #008DD9;
+    border: none;
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .search-btn:hover, .search-btn:focus {
+        background-color: #008DD9;
+        color: white;
+    }
+
+    .search-btn span {
+        margin-right: 8px;
+    }
+
+/* Títulos y secciones */
+.section-title {
+    color: #008DD9;
+    margin-bottom: 15px;
+}
+
+.info-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+.col-md-6 {
+    padding: 10px;
+}
+
+/* Estilos de los campos de formulario */
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 14px;
+}
+
+input[type="date"], input[type="number"], select {
+    width: 100%;
+}
+
+/* Estilos para la tabla */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table th, .table td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #008DD9;
+        color: white;
+    }
+
+    .table td {
+        background-color: #f8f9fa;
+    }
+
+/* Estilos para la sección de Total */
+.total-section {
+    font-weight: bold;
+    color: #333;
+}
+
+.custom-btn-remover:hover {
+    background-color: #cc0000;
+}
+
+.card-footer {
+    background-color: white;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #eaeaea;
+}
+
+.btn-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-105%);
+}
