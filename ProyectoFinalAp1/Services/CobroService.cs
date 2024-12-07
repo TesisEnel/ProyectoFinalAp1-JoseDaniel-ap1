@@ -84,16 +84,53 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(cobro);
     }
+
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        var eliminado = await contexto.cobros
-            .Where(a => a.CobroId == id)
-            .ExecuteDeleteAsync();
-        return eliminado > 0;
+
+        // Eliminar los detalles de cobro asociados
+        var detallesCobro = await contexto.cobrosDetalles
+            .Where(cd => cd.CobroId == id)
+            .ToListAsync();
+
+        if (detallesCobro.Any())
+        {
+            contexto.cobrosDetalles.RemoveRange(detallesCobro);
+        }
+
+        // Ahora eliminar el cobro principal
+        var cobro = await contexto.cobros
+            .FirstOrDefaultAsync(c => c.CobroId == id);
+
+        if (cobro != null)
+        {
+            contexto.cobros.Remove(cobro);
+        }
+
+        try
+        {
+            // Guardar los cambios
+            var eliminado = await contexto.SaveChangesAsync();
+            return eliminado > 0;
+        }
+        catch (Exception ex)
+        {
+            // Manejar cualquier error de eliminación
+            Console.WriteLine($"Error al eliminar cobro: {ex.Message}");
+            return false;
+        }
     }
 
-    
+    //public async Task<bool> Eliminar(int id)
+    //{
+    //    await using var contexto = await DbFactory.CreateDbContextAsync();
+    //    var eliminado = await contexto.cobros
+    //        .Where(a => a.CobroId== id)
+    //        .ExecuteDeleteAsync();
+    //    return eliminado > 0;
+    //}
+
     public async Task<Cobros?> Buscar(int cobroid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
