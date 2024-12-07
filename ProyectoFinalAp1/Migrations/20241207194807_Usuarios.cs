@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class Proyecto : Migration
+    public partial class Usuarios : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -214,11 +214,7 @@ namespace ProyectoFinalAp1.Migrations
                     TotalInteres = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     MontoTotalPagar = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Periodicidad = table.Column<int>(type: "int", nullable: false),
-                    FechaInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DuracionMeses = table.Column<int>(type: "int", nullable: false),
-                    PagosRealizados = table.Column<int>(type: "int", nullable: false)
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
