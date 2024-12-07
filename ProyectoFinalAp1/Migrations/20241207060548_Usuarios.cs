@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class Proyecto : Migration
+    public partial class Usuarios : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -298,10 +298,8 @@ namespace ProyectoFinalAp1.Migrations
                 {
                     GarantiaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TipoGarantia = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValorGarantia = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FechaGarantia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FotoGarantiaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeudorId = table.Column<int>(type: "int", nullable: false),
                     PrestamoId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -347,6 +345,30 @@ namespace ProyectoFinalAp1.Migrations
                         principalTable: "prestamos",
                         principalColumn: "PrestamoId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "garantiasDetalle",
+                columns: table => new
+                {
+                    DetalleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GarantiaId = table.Column<int>(type: "int", nullable: false),
+                    Articulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FotoDetalleUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_garantiasDetalle", x => x.DetalleId);
+                    table.ForeignKey(
+                        name: "FK_garantiasDetalle_garantias_GarantiaId",
+                        column: x => x.GarantiaId,
+                        principalTable: "garantias",
+                        principalColumn: "GarantiaId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -434,6 +456,11 @@ namespace ProyectoFinalAp1.Migrations
                 column: "PrestamoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_garantiasDetalle_GarantiaId",
+                table: "garantiasDetalle",
+                column: "GarantiaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_prestamos_DeudorId",
                 table: "prestamos",
                 column: "DeudorId");
@@ -464,7 +491,7 @@ namespace ProyectoFinalAp1.Migrations
                 name: "facturas");
 
             migrationBuilder.DropTable(
-                name: "garantias");
+                name: "garantiasDetalle");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -474,6 +501,9 @@ namespace ProyectoFinalAp1.Migrations
 
             migrationBuilder.DropTable(
                 name: "cobros");
+
+            migrationBuilder.DropTable(
+                name: "garantias");
 
             migrationBuilder.DropTable(
                 name: "cobradores");

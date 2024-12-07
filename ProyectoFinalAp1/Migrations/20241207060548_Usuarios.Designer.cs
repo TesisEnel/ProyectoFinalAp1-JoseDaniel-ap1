@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241207001059_Proyecto")]
-    partial class Proyecto
+    [Migration("20241207060548_Usuarios")]
+    partial class Usuarios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -428,19 +428,10 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<DateTime>("FechaGarantia")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FotoGarantiaUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TipoGarantia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("ValorGarantia")
-                        .IsRequired()
+                    b.Property<decimal>("ValorGarantia")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("GarantiaId");
@@ -450,6 +441,41 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasIndex("PrestamoId");
 
                     b.ToTable("garantias");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.GarantiasDetalle", b =>
+                {
+                    b.Property<int>("DetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
+
+                    b.Property<string>("Articulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FotoDetalleUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GarantiaId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ValorUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("DetalleId");
+
+                    b.HasIndex("GarantiaId");
+
+                    b.ToTable("garantiasDetalle");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
@@ -642,6 +668,17 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("Prestamos");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.GarantiasDetalle", b =>
+                {
+                    b.HasOne("ProyectoFinalAp1.Models.Garantias", "Garantia")
+                        .WithMany("Detalles")
+                        .HasForeignKey("GarantiaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Garantia");
+                });
+
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
                 {
                     b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
@@ -670,6 +707,11 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("Garantias");
 
                     b.Navigation("Prestamos");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Garantias", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 
             modelBuilder.Entity("ProyectoFinalAp1.Models.Prestamos", b =>
