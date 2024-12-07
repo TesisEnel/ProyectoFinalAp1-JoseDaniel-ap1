@@ -52,7 +52,7 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.deudores
             .Where(criterio)
-            .Include(d =>d.Prestamos)
+            .Include(d => d.Prestamos)
             .ToListAsync();
     }
     public async Task<List<Deudores>> ListarDeudores()
