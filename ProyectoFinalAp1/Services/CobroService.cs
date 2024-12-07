@@ -93,7 +93,7 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return eliminado > 0;
     }
 
- 
+    
     public async Task<Cobros?> Buscar(int cobroid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
