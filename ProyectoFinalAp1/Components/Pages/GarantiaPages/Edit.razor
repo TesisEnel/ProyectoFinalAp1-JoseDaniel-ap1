@@ -120,9 +120,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (listadestalle.Any())
+                        @if (listadestalles.Any())
                         {
-                            @foreach (var detalle in listadestalle)
+                            @foreach (var detalle in listadestalles)
                             {
                                 <tr class="text-center">
                                     <td>@detalle.Articulo</td>
@@ -140,7 +140,7 @@
                                     </td>
                                     <td>$@detalle.Total</td>
                                     <td>
-                                        <button class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                        <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                             <span class="bi bi-trash"></span> Remover
                                         </button>
                                     </td>
@@ -183,7 +183,7 @@
     public Prestamos prestamo = new Prestamos();
     public List<Deudores> listadeudore = new List<Deudores>();
     public GarantiasDetalle detalle = new GarantiasDetalle();
-    public List<GarantiasDetalle> listadestalle = new List<GarantiasDetalle>();
+    public List<GarantiasDetalle> listadestalles = new List<GarantiasDetalle>();
     public Deudores deudor = new Deudores();
     private bool existe = false;
     public decimal gananciaTotal = 0;
@@ -203,7 +203,7 @@
             listagarantias = await garantiaService.Listargarantias();
             listadeudore = await deudorService.ListarDeudores();
             listaprestamo = await prestamoService.ListarPrestamos();
-            listadestalle = await garantiaService.ObtenerDetallesPorGarantiaId(GarantiaId);
+            listadestalles = await garantiaService.ObtenerDetallesPorGarantiaId(GarantiaId);
         }
 
     }
@@ -216,61 +216,75 @@
 
     public async Task Guardar()
     {
-        if (existe == true)
+
+
+        if (garantia.DeudorId == null || garantia.PrestamoId == null || listadestalles.Count == 0)
         {
 
+            return;
+        }
+
+        if (detallesAEliminar.Any())
+        {
+            bool detallesEliminados = await garantiaService.EliminarDetalles(detallesAEliminar);
+            if (!detallesEliminados)
+            {
+
+                return;
+            }
+            detallesAEliminar.Clear(); // Limpiar lista de eliminaciones
+        }
+
+        garantia.Detalles = listadestalles; // Asignar la lista actualizada de detalles
+
+        if (await garantiaService.Guardar(garantia))
+        {
+
+            navigationManager.NavigateTo("/garantia/Index");
         }
         else
         {
-            if (garantia.PrestamoId == 0)
-            {
 
-            }
-            else
-            {
-                if (listadestalle.Count == 0)
-                {
-
-                }
-                else
-                {
-                    garantia.Detalles = listadestalle;
-                    await garantiaService.Guardar(garantia);
-                    navigationManager.NavigateTo("/garantia/Index");
-
-                }
-            }
         }
     }
 
     private void AgregarDetalle()
     {
         detalle.Total = detalle.Cantidad * detalle.ValorUnitario;
-        listadestalle.Add(detalle);
+        listadestalles.Add(detalle);
         ActualizarValorGarantia();
         detalle = new GarantiasDetalle(); // Limpiar formulario de detalles
     }
 
+  
     private async Task EliminarDetalle(GarantiasDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
-            detallesAEliminar.Add(detalle.DetalleId);
+            detallesAEliminar.Add(detalle.DetalleId); // Registrar el detalle para eliminación en el servidor
         }
-        listadestalle.Remove(detalle); // Remover de la lista local
 
-        // Forzar una actualización de la UI
-        StateHasChanged();
+        // Confirmar si el detalle existe en la lista antes de intentar removerlo
+        if (listadestalles.Contains(detalle))
+        {
+            listadestalles.Remove(detalle); // Remover del listado local
+            await ActualizarValorGarantia(); // Actualizar el valor total de la garantía
+            
+        }
+       
+
+        StateHasChanged(); // Forzar la actualización de la interfaz de usuario
     }
+
 
     private async Task ActualizarValorGarantia()
     {
-        garantia.ValorGarantia = listadestalle.Sum(detalle => detalle.Total);
+        garantia.ValorGarantia = listadestalles.Sum(detalle => detalle.Total);
     }
 
     private async Task CalcularGananciaTotal()
     {
-        gananciaTotal = listadestalle.Sum(d => d.Total); // Sumar los valores de la columna "Total"
+        gananciaTotal = listadestalles.Sum(d => d.Total); // Sumar los valores de la columna "Total"
     }
 
     public async Task Volver()
