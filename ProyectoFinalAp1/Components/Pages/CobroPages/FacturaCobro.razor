@@ -5,11 +5,14 @@
 @inject CobradorService cobradorService
 @inject PrestamoService prestamoService
 @rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+
 
 <PageTitle>Factura de Cobro</PageTitle>
 
 <div class="factura-container">
     <div class="header">
+        <img src="/Rectangle 101.png" alt="Ícono de casa" class="icono-header">
         <h2>Prestamos SRL</h2>
         <p>RNC: 132-40961-2</p>
         <p>Tel: +8092993745 / +18297641456</p>
@@ -36,13 +39,17 @@
 
 
     <div class="footer">
-        <p class="firma"><i class="bi bi-pencil-fill"></i> FIRMA: </p>
-
+        <hr class="linea-firma"> 
+        <p class="firma">FIRMA</p>
     </div>
+
 
     <div class="footer text-center">
         <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
             <i class="bi bi-arrow-left-circle-fill"></i> Volver
+        </button>
+        <button class="btn btn-lg btn-success ms-3" @onclick="Imprimir">
+            <i class="bi bi-printer"></i> Imprimir
         </button>
     </div>
 
@@ -89,6 +96,10 @@
     private void Volver()
     {
         NavigationManager.NavigateTo($"/Cobro/Details/{CobroId}");
+    }
+    private async Task Imprimir()
+    {
+        await JSRuntime.InvokeVoidAsync("generarPDF", ".factura-container");
     }
 
 
