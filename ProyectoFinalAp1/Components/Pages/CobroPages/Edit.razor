@@ -123,7 +123,7 @@
                                         <td>@detalle.Prestamo?.Concepto</td>
                                         <td>$@detalle.ValorCobrado</td>
                                         <td>
-                                            <button class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                            <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                                 <span class="bi bi-trash"></span> Remover
                                             </button>
                                         </td>
@@ -171,7 +171,9 @@
     private List<Cobradores> ListaCobradores = new();
     private string mensajeError;
     private Cobros cobro = new();
+    private List<int> detallesAEliminar = new();
 
+    private CobrosDetalle? detalleEnEdicion;
     protected override async Task OnInitializedAsync()
     {
         try
@@ -216,16 +218,33 @@
     {
         if (cobrodetalle.PrestamoId != 0 && cobrodetalle.ValorCobrado > 0)
         {
-            var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
-            if (prestamo == null)
+            if (detalleEnEdicion != null)
             {
-                mensajeError = "Préstamo no encontrado.";
-                return;
+                // Modificar un detalle existente
+                var detalle = listacobrodetalle.FirstOrDefault(d => d.DetalleId == detalleEnEdicion.DetalleId);
+                if (detalle != null)
+                {
+                    detalle.PrestamoId = cobrodetalle.PrestamoId;
+                    detalle.ValorCobrado = cobrodetalle.ValorCobrado;
+                }
+                detalleEnEdicion = null; // Limpiar la referencia después de modificar
+            }
+            else
+            {
+                // Agregar un nuevo detalle
+                var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
+                if (prestamo == null)
+                {
+                    mensajeError = "Préstamo no encontrado.";
+                    return;
+                }
+
+                cobrodetalle.Prestamo = prestamo;
+                listacobrodetalle.Add(cobrodetalle);
             }
 
-            cobrodetalle.Prestamo = prestamo; // Asociar el préstamo al detalle
-            listacobrodetalle.Add(cobrodetalle);
-            cobrodetalle = new CobrosDetalle(); // Reinicia el detalle para nuevos registros
+            // Reiniciar los campos del detalle
+            cobrodetalle = new CobrosDetalle();
         }
         else
         {
@@ -233,12 +252,28 @@
         }
     }
 
-    private void EliminarDetalle(CobrosDetalle detalle)
+    private async Task EliminarDetalle(CobrosDetalle detalle)
     {
-        listacobrodetalle.Remove(detalle);
+        if (detalle.DetalleId != 0)
+        {
+            detallesAEliminar.Add(detalle.DetalleId);
+        }
+        listacobrodetalle.Remove(detalle); // Remover de la lista local
+
+        // Forzar una actualización de la UI
+        StateHasChanged();
     }
 
-   
+    private void EditarDetalle(CobrosDetalle detalle)
+    {
+        detalleEnEdicion = detalle; // Guardar referencia al detalle
+        cobrodetalle = new CobrosDetalle
+            {
+                DetalleId = detalle.DetalleId,
+                PrestamoId = detalle.PrestamoId,
+                ValorCobrado = detalle.ValorCobrado
+            };
+    }
     private async Task Guardar()
     {
         if (cobro.DeudorId == 0 || cobro.CobradorId == 0 || !listacobrodetalle.Any())
@@ -247,10 +282,26 @@
             return;
         }
 
-        // Asocia los detalles actualizados al cobro
+
+
+        if (detallesAEliminar.Any())
+        {
+            var eliminados = await cobroService.EliminarDetalles(detallesAEliminar);
+            if (!eliminados)
+            {
+                mensajeError = "Ocurrió un error al eliminar los detalles seleccionados.";
+                return;
+            }
+
+            detallesAEliminar.Clear(); // Limpiar la lista después de eliminar.
+        }
         cobro.CobrosDetalles = listacobrodetalle;
 
+        // Guardar cobro
         var resultado = await cobroService.Guardar(cobro);
+
+
+
         if (resultado)
         {
             navigationManager.NavigateTo("/Cobro/Index");
@@ -264,5 +315,5 @@
 
 
 
-    
-}
+
+} 
