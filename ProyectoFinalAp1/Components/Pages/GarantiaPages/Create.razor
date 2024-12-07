@@ -139,10 +139,11 @@
                                     </td>
                                     <td>$@detalle.Total</td>
                                     <td>
-                                        <button class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                        <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                             <span class="bi bi-trash"></span> Remover
                                         </button>
                                     </td>
+
                                 </tr>
                             }
                         }
@@ -195,32 +196,38 @@
 
     public async Task Guardar()
     {
-        if (existe == true)
-        {
 
+
+        if (garantia.DeudorId == null || garantia.PrestamoId == null || listadestalles.Count == 0)
+        {
+          
+            return;
+        }
+
+        if (detallesAEliminar.Any())
+        {
+            bool detallesEliminados = await garantiaService.EliminarDetalles(detallesAEliminar);
+            if (!detallesEliminados)
+            {
+                
+                return;
+            }
+            detallesAEliminar.Clear(); // Limpiar lista de eliminaciones
+        }
+
+        garantia.Detalles = listadestalles; // Asignar la lista actualizada de detalles
+
+        if (await garantiaService.Guardar(garantia))
+        {
+            
+            navigationManager.NavigateTo("/garantia/Index");
         }
         else
         {
-            if (garantia.PrestamoId == 0)
-            {
-
-            }
-            else
-            {
-                if (listadestalles.Count == 0)
-                {
-
-                }
-                else
-                {
-                    garantia.Detalles = listadestalles;
-                    await garantiaService.Guardar(garantia);
-                    navigationManager.NavigateTo("/garantia/Index");
-
-                }
-            }
+            
         }
     }
+
 
     private async Task Volver()
     {
@@ -241,19 +248,23 @@
         detalle = new GarantiasDetalle(); // Limpiar formulario de detalles
     }
 
-    private async Task EliminarDetalle(GarantiasDetalle detalle)
+    private void EliminarDetalle(GarantiasDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
-            detallesAEliminar.Add(detalle.DetalleId);
+            detallesAEliminar.Add(detalle.DetalleId); // Agregar a la lista de eliminaciones
         }
-        listadestalles.Remove(detalle); // Remover de la lista local
 
-        // Forzar una actualización de la UI
-        ActualizarValorGarantia();
-        StateHasChanged();
+        listadestalles.Remove(detalle); // Remover del listado local
 
+        ActualizarValorGarantia(); // Recalcular el valor total
+        StateHasChanged(); // Forzar actualización visual
     }
+
+
+
+
+   
 
     private async Task ActualizarValorGarantia()
     {
