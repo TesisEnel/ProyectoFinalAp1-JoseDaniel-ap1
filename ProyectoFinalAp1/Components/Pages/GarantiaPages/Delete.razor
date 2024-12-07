@@ -1,5 +1,4 @@
-﻿@page "/Garantia/Delete"
-@page "/Garantia/Delete/{GarantiaId:int}"
+﻿@page "/Garantia/Delete/{GarantiaId:int}"
 @inject DeudorService deudorService
 @inject PrestamoService prestamoService
 @inject GarantiaService garantiaService
@@ -7,76 +6,101 @@
 @rendermode InteractiveServer
 @inject ToastService toastService
 
-
 <PageTitle>Eliminar  garantia</PageTitle>
-
 <div class="container mt-5 pt-3">
+    <!-- Tarjeta principal -->
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
-            <h2>Eliminar  garantia</h2>
+            <h2>Eliminar Garantia</h2>
         </div>
 
         <div class="card-body">
+            <!-- Fila de datos principales -->
             <div class="row">
-                @* Foto de la Garantia *@
-                <div class="col-md-4 text-center mb-4">
-                    <strong class="d-block mb-2">Foto de la Garantia</strong>
-                    @if (!string.IsNullOrEmpty(garantia?.FotoGarantiaUrl))
-                    {
-                        <img src="@garantia.FotoGarantiaUrl" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
-                    }
-                </div>
-
-                @* Datos Personales *@
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <div class="info-block">
-                                <strong>TipoGarantia:</strong>
-                                <p class="d-block">@garantia.TipoGarantia</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="info-block">
-                                <strong>Valor garantia:</strong>
-                                <p class="d-block">@garantia.ValorGarantia</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="info-block">
-                                <strong>FechaGarantia:</strong>
-                                <p class="d-block">@garantia.FechaGarantia.ToShortDateString()</p>
-                            </div>
-                        </div>
-
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong>Valor garantia:</strong>
+                        <p class="d-block">@garantia.ValorGarantia</p>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <div class="info-block">
-                                <strong>Deudor:</strong>
-                                <p class="d-block">@deudor?.Nombres @deudor?.Apellidos</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="info-block">
-                                <strong>Préstamo:</strong>
-                                <p class="d-block"> @prestamo?.PrestamoId</p>
-                            </div>
-                        </div>
-                    </div>
-
-
                 </div>
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong>Fecha de Garantia:</strong>
+                        <p class="d-block">@garantia.FechaGarantia.ToShortDateString()</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila de información de deudor y préstamo -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong>Deudor:</strong>
+                        <p class="d-block">@deudor?.Nombres @deudor?.Apellidos</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="info-block">
+                        <strong>Préstamo:</strong>
+                        <p class="d-block">@prestamo?.PrestamoId</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalles de los cobros -->
+            <div class="mt-5">
+                <h4 class="text-primary">Detalles de las garantias</h4>
+                @if (listagarantiadetalle.Any())
+                {
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Artículo</th>
+                                <th>Cantidad</th>
+                                <th>Valor Unitario</th>
+                                <th>Foto Garantia</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in listagarantiadetalle)
+                            {
+                                <tr class="text-center">
+                                    <td>@detalle.Articulo</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>$@detalle.ValorUnitario</td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(detalle.FotoDetalleUrl))
+                                        {
+                                            <img src="@detalle.FotoDetalleUrl" alt="Foto del artículo" style="width: 50px; height: 50px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <span>No disponible</span>
+                                        }
+                                    </td>
+                                    <td>$@detalle.Total</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center">
+                        No se encontraron detalles para el deudor especificado.
+                    </div>
+                }
             </div>
         </div>
 
+        <!-- Pie de la tarjeta con el botón Volver -->
         <div class="card-footer text-center footer-bar">
-            <button class="btn btn-lg" @onclick="Volver">
+            <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
             </button>
             <button class="btn btn-lg delete-btn" @onclick="EliminarGarantia">
-                <i class="bi bi-trash-fill mt-3"></i> Eliminar Garantia
+                <i class="bi bi-trash-fill mt-3"></i> Eliminar
             </button>
         </div>
     </div>
@@ -88,6 +112,7 @@
     public Garantias? garantia = new Garantias();
     public Prestamos? prestamo = new Prestamos();
     public Deudores? deudor = new Deudores();
+    private List<GarantiasDetalle> listagarantiadetalle = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -103,6 +128,7 @@
 
 
                 prestamo = await prestamoService.Buscar(garantia.PrestamoId);
+                listagarantiadetalle = await garantiaService.ObtenerDetallesPorGarantiaId(GarantiaId);
             }
         }
     }
@@ -123,4 +149,3 @@
         navigationManager.NavigateTo("/garantia/Index");
     }
 }
-
