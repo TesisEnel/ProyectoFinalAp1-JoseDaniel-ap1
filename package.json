@@ -1,0 +1,25 @@
+{
+  "name": "ProyectoFinalAp1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cape23180909/ProyectoFinalAp1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cape23180909/ProyectoFinalAp1/issues"
+  },
+  "homepage": "https://github.com/Cape23180909/ProyectoFinalAp1#readme"
+}
