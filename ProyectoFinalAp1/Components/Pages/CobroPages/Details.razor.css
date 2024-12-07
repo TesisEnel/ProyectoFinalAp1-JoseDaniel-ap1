@@ -1,11 +1,11 @@
-﻿/* css oficial del details de deudores */
-.container {
+﻿.container {
     margin-top: 5rem;
     padding-top: 3rem;
 }
 
 .card {
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
@@ -37,18 +37,19 @@
 
 .info-block p {
     font-size: 16px;
+    color: #555;
 }
 
-/* Foto Cedula */
 .img-thumbnail {
     max-width: 200px;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .text-muted em {
     font-style: italic;
+    color: #777;
 }
-
 
 .footer-bar {
     background: linear-gradient(45deg, #008DD9, #4A667F);
@@ -64,8 +65,22 @@
     padding: 10px 25px;
     border-radius: 50px;
     transition: all 0.3s ease;
+    font-size: 16px;
 }
 
-    .btn i {
-        margin-top: 3px;
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+/* Botón Generar Factura (verde) */
+.btn-success {
+    background-color: #28a745 !important;
+    border: none;
+    font-weight: bold;
+}
+
+    .btn-success:hover {
+        background-color: #218838 !important;
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
     }
