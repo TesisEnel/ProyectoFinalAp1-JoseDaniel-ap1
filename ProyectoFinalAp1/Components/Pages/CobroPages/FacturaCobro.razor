@@ -1,0 +1,96 @@
+﻿@page "/Cobro/FacturaCobro/{CobroId:int}"
+@inject NavigationManager NavigationManager
+@inject CobroService cobroService
+@inject DeudorService deudorService
+@inject CobradorService cobradorService
+@inject PrestamoService prestamoService
+@rendermode InteractiveServer
+
+<PageTitle>Factura de Cobro</PageTitle>
+
+<div class="factura-container">
+    <div class="header">
+        <h2>Prestamos SRL</h2>
+        <p>RNC: 132-40961-2</p>
+        <p>Tel: +8092993745 / +18297641456</p>
+        <p>CALLE PRINCIPAL LOS RIVERAS,SFM #51</p>
+    </div>
+
+    <body class="body">
+        <h3 class="text-center">RECIBO DE COBRO</h3>
+        <p><strong>Recibo No:</strong> @cobro?.CobroId</p>
+        <p><strong>Fecha Cobro:</strong> @cobro?.FechaCobro.ToString("dd/MM/yyyy hh:mm tt")</p>
+        <p><strong>Número de Cédula:</strong> @deudor?.NumeroCedula</p>
+        <p><strong>Deudor:</strong> @deudor?.Nombres @deudor?.Apellidos</p>
+        <p><strong>ImportePagar:</strong> RD$@cobro.ImportePagar</p>
+        <p><strong>FORMA DE PAGO:</strong> Efectivo</p>
+        <p><strong>COBRADOR:</strong> @cobrador?.Nombres @cobrador?.Apellidos</p>
+        <p class="mora"><strong>MORA:</strong> RD$0</p>
+        <p><strong>Número de Préstamo:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.PrestamoId</p>
+        <p><strong>Valor Cobrado:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.ValorCobrado</p>
+        <p><strong>Concepto:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.Prestamo?.Concepto</p>
+        
+
+
+     </body>
+
+
+    <div class="footer">
+        <p class="firma"><i class="bi bi-pencil-fill"></i> FIRMA: </p>
+
+    </div>
+
+    <div class="footer text-center">
+        <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
+            <i class="bi bi-arrow-left-circle-fill"></i> Volver
+        </button>
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public int CobroId { get; set; }
+    private Deudores deudor;
+    private Prestamos prestamo;
+    public Cobradores? cobrador = new Cobradores();
+    private CobrosDetalle cobrodetalle = new();
+    private List<CobrosDetalle> listacobrodetalle = new();
+    private List<Prestamos> ListaPrestamos = new();
+    public List<Cobradores> listacobradores = new List<Cobradores>();
+    private Cobros cobro = new();
+
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            cobro = await cobroService.Buscar(CobroId);
+            if (cobro != null)
+            {
+                deudor = await deudorService.Buscar(cobro.DeudorId);
+                cobrador = await cobradorService.Buscar(cobro.CobradorId);
+                listacobrodetalle = cobro.CobrosDetalles.ToList();
+
+                foreach (var detalle in listacobrodetalle)
+                {
+                    detalle.Prestamo = await prestamoService.Buscar(detalle.PrestamoId);
+                }
+
+               
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar la factura: {ex.Message}");
+        }
+    }
+    private void Volver()
+    {
+        NavigationManager.NavigateTo($"/Cobro/Details/{CobroId}");
+    }
+
+
+}
+
