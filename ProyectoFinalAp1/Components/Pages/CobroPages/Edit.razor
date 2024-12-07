@@ -9,13 +9,15 @@
 
 <PageTitle>Modificar Cobro</PageTitle>
 
+
 <EditForm Model="cobro" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="container-fluid pt-7 mt-5 d-flex flex-column align-items-center">
-        <div class="card shadow-lg w-75">
-            <div class="card-header text-center">
-                <h3 class="card-title text-primary">Modificar Cobro</h3>
+    <div class="container mt-5 pt-3">
+        <div class="card shadow-lg border-0">
+          
+            <div class="card-header text-center justify-content-center py-5">
+                <h2>Modificar Cobro</h2>
             </div>
             <div class="card-body">
                 <!-- Información del Deudor -->
@@ -216,41 +218,54 @@
     }
     private void AgregarDetalle()
     {
-        if (cobrodetalle.PrestamoId != 0 && cobrodetalle.ValorCobrado > 0)
+        // Verificar que los campos estén completos
+        if (cobrodetalle.PrestamoId == 0)
         {
-            if (detalleEnEdicion != null)
-            {
-                // Modificar un detalle existente
-                var detalle = listacobrodetalle.FirstOrDefault(d => d.DetalleId == detalleEnEdicion.DetalleId);
-                if (detalle != null)
-                {
-                    detalle.PrestamoId = cobrodetalle.PrestamoId;
-                    detalle.ValorCobrado = cobrodetalle.ValorCobrado;
-                }
-                detalleEnEdicion = null; // Limpiar la referencia después de modificar
-            }
-            else
-            {
-                // Agregar un nuevo detalle
-                var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
-                if (prestamo == null)
-                {
-                    mensajeError = "Préstamo no encontrado.";
-                    return;
-                }
+            mensajeError = "Debe seleccionar un préstamo.";
+            return;
+        }
 
-                cobrodetalle.Prestamo = prestamo;
-                listacobrodetalle.Add(cobrodetalle);
-            }
+        if (cobrodetalle.ValorCobrado <= 0)
+        {
+            mensajeError = "El valor cobrado debe ser mayor a cero.";
+            return;
+        }
 
-            // Reiniciar los campos del detalle
-            cobrodetalle = new CobrosDetalle();
+        if (detalleEnEdicion != null)
+        {
+            // Modificar un detalle existente
+            var detalle = listacobrodetalle.FirstOrDefault(d => d.DetalleId == detalleEnEdicion.DetalleId);
+            if (detalle != null)
+            {
+                detalle.PrestamoId = cobrodetalle.PrestamoId;
+                detalle.ValorCobrado = cobrodetalle.ValorCobrado;
+            }
+            detalleEnEdicion = null; // Limpiar la referencia después de modificar
         }
         else
         {
-            mensajeError = "Por favor complete todos los campos del detalle.";
+            // Agregar un nuevo detalle
+            var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
+            if (prestamo == null)
+            {
+                mensajeError = "Préstamo no encontrado.";
+                return;
+            }
+
+            cobrodetalle.Prestamo = prestamo;
+            listacobrodetalle.Add(cobrodetalle);
         }
+
+        // Actualizar el objeto cobro con los detalles actuales
+        cobro.CobrosDetalles = listacobrodetalle;
+
+        // Reiniciar los campos del detalle
+        cobrodetalle = new CobrosDetalle();
+        mensajeError = null;  // Limpiar el mensaje de error al agregar correctamente
     }
+
+
+
 
     private async Task EliminarDetalle(CobrosDetalle detalle)
     {
@@ -282,8 +297,6 @@
             return;
         }
 
-
-
         if (detallesAEliminar.Any())
         {
             var eliminados = await cobroService.EliminarDetalles(detallesAEliminar);
@@ -295,12 +308,12 @@
 
             detallesAEliminar.Clear(); // Limpiar la lista después de eliminar.
         }
+
+        // Actualizar la lista de detalles del cobro
         cobro.CobrosDetalles = listacobrodetalle;
 
-        // Guardar cobro
+        // Guardar el cobro con los detalles
         var resultado = await cobroService.Guardar(cobro);
-
-
 
         if (resultado)
         {
@@ -311,6 +324,7 @@
             mensajeError = "Ocurrió un error al guardar el cobro.";
         }
     }
+
 
 
 
