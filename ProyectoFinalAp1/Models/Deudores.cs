@@ -37,7 +37,7 @@ public class Deudores
 
     // Para que no sea un dato real directamente a la base de datos
     [NotMapped]
-    public decimal Saldo { get; set; }
+    public decimal? Saldo { get; set; }
 
     public virtual ICollection<Cobros> Cobros { get; set; }
 

@@ -76,14 +76,6 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(cobro);
     }
-
-
-
-
-
-
-
-
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -93,11 +85,14 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return eliminado > 0;
     }
 
+ 
     public async Task<Cobros?> Buscar(int cobroid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.cobros
-            .FirstOrDefaultAsync(a => a.CobroId == cobroid);
+            .Include(c => c.CobrosDetalles) // Incluir detalles del cobro
+            .ThenInclude(cd => cd.Prestamo) // Incluir el préstamo asociado a cada detalle
+            .FirstOrDefaultAsync(c => c.CobroId == cobroid);
     }
 
     public async Task<List<Cobros>> Listar(Expression<Func<Cobros, bool>> criterio)

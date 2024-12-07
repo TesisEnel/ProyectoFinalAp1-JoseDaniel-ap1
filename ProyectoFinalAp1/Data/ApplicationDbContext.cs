@@ -19,6 +19,7 @@ namespace ProyectoFinalAp1.Data
         public DbSet<Garantias> garantias { get; set; }
         public DbSet<CobrosDetalle> cobrosDetalles { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

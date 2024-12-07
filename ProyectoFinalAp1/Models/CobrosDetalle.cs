@@ -28,4 +28,5 @@ public class CobrosDetalle
     [ForeignKey("PrestamoId")]
 
     public Prestamos Prestamo { get; set; } = new Prestamos();
+   
 }

@@ -1,0 +1,200 @@
+﻿@page "/Cobro/Details"
+@page "/Cobro/Details/{CobroId:int}"
+@inject DeudorService deudorService
+@inject PrestamoService prestamoService
+@inject CobroService cobroService
+@inject CobradorService CobradorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalles del cobro</PageTitle>
+
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5">
+            <h2>Detalles del cobro</h2>
+        </div>
+
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger text-center">
+                    @mensajeError
+                </div>
+            }
+            else if (deudore != null)
+            {
+                <div class="row">
+                    @* Foto de la Cedula *@
+                    <div class="col-md-4 text-center mb-4">
+                        <strong class="d-block mb-2">Foto de la Cédula</strong>
+                        @if (!string.IsNullOrEmpty(deudore?.FotoCedulaURL))
+                        {
+                            <img src="@deudore.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
+                        }
+                        else
+                        {
+                            <p class="text-muted">No disponible</p>
+                        }
+                    </div>
+
+                    @* Datos Personales *@
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Número de Cédula:</strong>
+                                    <p class="d-block">@deudore?.NumeroCedula</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Nombre Completo:</strong>
+                                    <p class="d-block">@deudore?.Nombres @deudore?.Apellidos</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Fecha Cobro:</strong>
+                                    <p class="d-block">@cobro?.FechaCobro</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Cobrador:</strong>
+                                    <p class="d-block">@cobrador?.Nombres @cobrador?.Apellidos</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Apellidos:</strong>
+                                    <p class="d-block">@deudore?.Apellidos</p>
+                                </div>
+                            </div>
+                         
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Dirección:</strong>
+                                    <p class="d-block">@deudore?.Direccion</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Información de Contacto *@
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Teléfono:</strong>
+                                    <p class="d-block">@deudore?.Telefono</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="info-block">
+                                    <strong>Ciudad:</strong>
+                                    <p class="d-block">@deudore?.Ciudad</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* Detalles de los Cobros *@
+                <div class="mt-5">
+                    <h4 class="text-primary">Detalles de los Cobros</h4>
+                    @if (listacobrodetalle.Any())
+                    {
+                        <table class="table table-bordered mt-3">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>Préstamo</th>
+                                    <th>Concepto</th>
+                                    <th>Valor Cobrado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detalle in listacobrodetalle)
+                                {
+                                    <tr>
+                                        <td>@detalle.PrestamoId</td>
+                                        <td>@detalle.Prestamo?.Concepto</td>
+                                        <td>$@detalle.ValorCobrado</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-center text-muted">No hay detalles de cobros disponibles para este deudor.</p>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    No se encontraron detalles para el deudor especificado.
+                </div>
+            }
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int CobroId { get; set; }
+    private Deudores deudore;
+   
+    public Cobradores? cobrador = new Cobradores();
+    private CobrosDetalle cobrodetalle = new();
+    private List<CobrosDetalle> listacobrodetalle = new();
+    private List<Prestamos> ListaPrestamos = new();
+    public List<Cobradores> listacobradores = new List<Cobradores>();
+    private Cobros cobro = new();
+    private string mensajeError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (CobroId > 0)
+            {
+                cobro = await cobroService.Buscar(CobroId);
+                if (cobro != null)
+                {
+                    deudore = await deudorService.Buscar(cobro.DeudorId);
+                    ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
+                    listacobrodetalle = cobro.CobrosDetalles.ToList();
+                    cobrador = await CobradorService.Buscar(cobro.CobradorId); // Carga del cobrador
+
+                    foreach (var detalle in listacobrodetalle)
+                    {
+                        detalle.Prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == detalle.PrestamoId);
+                    }
+                }
+                else
+                {
+                    mensajeError = "No se encontró el cobro especificado.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al inicializar el componente: {ex.Message}";
+        }
+    }
+
+
+    private void Volver()
+    {
+        navigationManager.NavigateTo("/Cobro/Index");
+    }
+}

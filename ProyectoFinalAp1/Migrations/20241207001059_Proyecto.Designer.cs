@@ -12,7 +12,7 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241206144414_Proyecto")]
+    [Migration("20241207001059_Proyecto")]
     partial class Proyecto
     {
         /// <inheritdoc />
@@ -439,7 +439,8 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ValorGarantia")
+                    b.Property<decimal?>("ValorGarantia")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("GarantiaId");

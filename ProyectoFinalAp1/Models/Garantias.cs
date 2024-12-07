@@ -13,7 +13,7 @@ public class Garantias
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "El valor de la garantía debe ser mayor que cero.")]
-    public decimal ValorGarantia { get; set; }
+    public decimal? ValorGarantia { get; set; }
 
     [Required(ErrorMessage = "Favor colocar la fecha de garantía de su deudor.")]
     public DateTime FechaGarantia { get; set; }

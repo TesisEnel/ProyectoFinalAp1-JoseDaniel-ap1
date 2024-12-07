@@ -436,7 +436,8 @@ namespace ProyectoFinalAp1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ValorGarantia")
+                    b.Property<decimal?>("ValorGarantia")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("GarantiaId");
