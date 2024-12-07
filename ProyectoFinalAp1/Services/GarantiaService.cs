@@ -63,4 +63,13 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<List<GarantiasDetalle>> ObtenerDetallesPorGarantiaId(int garantiaid)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.garantiasDetalle
+     .Where(detalle => detalle.GarantiaId == garantiaid)
+     .ToListAsync();
+    }
+
 }
