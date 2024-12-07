@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager navigationManager
+
 <link href="css/CobroCreate.css" rel="stylesheet" />
 
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
@@ -29,12 +30,23 @@
                 <a href="#soporte" class="menu-floating-item soporte">
                     <i class="fas fa-life-ring"></i> Soporte
                 </a>
-                <a href="#contacto" class="menu-floating-item contact o">
+                <a href="#contacto" class="menu-floating-item contacto">
                     <i class="fas fa-envelope"></i> Contacto
                 </a>
-                <button @onclick="SalirMenu">
-                    Usuario: @userName
-                </button>
+                <AuthorizeView>
+                    <Authorized>
+                        <a>
+                            Usuario: @userName
+                            <form action="Account/Logout" method="post">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="ReturnUrl" value="" />
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-plus"></i>Logout
+                                </button>
+                            </form>
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
             </div>
         </div>
     </div>
@@ -53,11 +65,18 @@
     </div>
 </div>
 
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
 @code {
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
     private bool IsAuthenticated { get; set; }
     private string userName = string.Empty;
+    private string? currentUrl;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,17 +87,31 @@
         {
             userName = authState.User.Identity.Name ?? "Usuario no disponible";
         }
+
+        currentUrl = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        navigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = navigationManager.ToBaseRelativePath(e.Location);
+
+        // Opcional: redirigir a login si la sesión expira
+        if (currentUrl == "Account/Logout")
+        {
+            navigationManager.NavigateTo("/login");
+        }
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        navigationManager.LocationChanged -= OnLocationChanged;
     }
 
     private void SalirMenu()
     {
-        // Redirige al logout, asegurándose de que se cierre la sesión
         navigationManager.NavigateTo("/logout");
-    }
-
-    private void IrALogin()
-    {
-        // Redirige al login si no está autenticado
-        navigationManager.NavigateTo("/login");
     }
 }
