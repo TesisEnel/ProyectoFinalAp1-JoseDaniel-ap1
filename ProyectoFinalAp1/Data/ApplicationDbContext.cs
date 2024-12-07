@@ -34,6 +34,13 @@ namespace ProyectoFinalAp1.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Cobros>()
+    .HasMany(c => c.CobrosDetalles)
+    .WithOne(cd => cd.Cobro)
+    .HasForeignKey(cd => cd.CobroId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+
             // Relación entre Facturas y Deudores
             modelBuilder.Entity<Facturas>()
                 .HasOne(f => f.deudores)
@@ -77,6 +84,7 @@ namespace ProyectoFinalAp1.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
+    
 
 
 
