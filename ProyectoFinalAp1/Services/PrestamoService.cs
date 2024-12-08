@@ -82,11 +82,33 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         }
         return prestamos;
     }
-    public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
+    //public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
+    //{
+    //    await using var contexto = await DbFactory.CreateDbContextAsync();
+    //    contexto.prestamos.Update(prestamo);
+    //    return await contexto.SaveChangesAsync() > 0;
+    //}
+
+    public async Task<bool> Actualizar(Prestamos prestamo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        contexto.prestamos.Update(prestamo);
-        return await contexto.SaveChangesAsync() > 0;
+        try
+        {
+            var prestamoExistente = await contexto.prestamos.FirstOrDefaultAsync(p => p.PrestamoId == prestamo.PrestamoId);
+            if (prestamoExistente != null)
+            {
+                prestamoExistente.Saldo = prestamo.Saldo;
+                prestamoExistente.FechaCobro = prestamo.FechaCobro;
+                await contexto.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al actualizar el préstamo: {ex.Message}");
+            return false;
+        }
     }
 
     public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int deudorId)
