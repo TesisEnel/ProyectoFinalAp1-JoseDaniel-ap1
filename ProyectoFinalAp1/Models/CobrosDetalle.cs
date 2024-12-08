@@ -17,7 +17,7 @@ public class CobrosDetalle
 
     [Required(ErrorMessage = "El Valor Cobrado es obligatorio.")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El Valor Cobrado debe ser mayor que 0.")]
-    public decimal ValorCobrado { get; set; }
+    public decimal? ValorCobrado { get; set; }
     [ForeignKey("CobroId")]
     public virtual Cobros Cobro { get; set; } = new Cobros();
     [ForeignKey("PrestamoId")]
