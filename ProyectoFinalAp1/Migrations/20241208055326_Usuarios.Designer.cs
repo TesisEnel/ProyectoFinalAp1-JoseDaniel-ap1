@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241208050236_Proyecto")]
-    partial class Proyecto
+    [Migration("20241208055326_Usuarios")]
+    partial class Usuarios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -287,19 +287,16 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("FechaCobro")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaCobro")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaPrestamo")
-                        .IsRequired()
+                    b.Property<DateTime>("FechaPrestamo")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("ImportePagar")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("Mora")
-                        .IsRequired()
+                    b.Property<decimal>("Mora")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("PrestamosPrestamoId")
@@ -437,7 +434,6 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("ValorGarantia")
-                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("GarantiaId");
@@ -508,7 +504,6 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaPrestamo")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FormaPago")

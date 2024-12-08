@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class Proyecto : Migration
+    public partial class Usuarios : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -208,7 +208,7 @@ namespace ProyectoFinalAp1.Migrations
                     Concepto = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Cuotas = table.Column<int>(type: "int", nullable: true),
                     FormaPago = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MontoCuota = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     TotalInteres = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -298,7 +298,7 @@ namespace ProyectoFinalAp1.Migrations
                 {
                     GarantiaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ValorGarantia = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ValorGarantia = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     FechaGarantia = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeudorId = table.Column<int>(type: "int", nullable: false),
                     PrestamoId = table.Column<int>(type: "int", nullable: false)
