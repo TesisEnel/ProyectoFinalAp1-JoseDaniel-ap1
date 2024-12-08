@@ -6,7 +6,6 @@ public class Garantias
 {
     [Key]
     public int GarantiaId { get; set; }
- 
     public decimal? ValorGarantia { get; set; }
     [Required(ErrorMessage = "Favor colocar la fecha de garantía de su deudor.")]
     [DataType(DataType.Date, ErrorMessage = "La fecha ingresada debe tener un formato válido.")]
