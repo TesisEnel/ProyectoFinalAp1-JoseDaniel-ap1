@@ -59,7 +59,7 @@ namespace ProyectoFinalAp1.Migrations
                     Nombres = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FotoCedulaURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumeroCedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -205,7 +205,7 @@ namespace ProyectoFinalAp1.Migrations
                     DeudorId = table.Column<int>(type: "int", nullable: false),
                     MontoPrestado = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Interes = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Concepto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Concepto = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Cuotas = table.Column<int>(type: "int", nullable: true),
                     FormaPago = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -214,7 +214,7 @@ namespace ProyectoFinalAp1.Migrations
                     TotalInteres = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     MontoTotalPagar = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Estado = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -357,7 +357,6 @@ namespace ProyectoFinalAp1.Migrations
                     Articulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FotoDetalleUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

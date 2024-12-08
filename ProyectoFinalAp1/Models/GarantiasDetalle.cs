@@ -5,11 +5,7 @@ namespace ProyectoFinalAp1.Models;
 public class GarantiasDetalle
 {
     [Key]
-    [Required(ErrorMessage = "El ID del detalle es obligatorio.")]
-    [Range(1, int.MaxValue, ErrorMessage = "El ID del detalle debe ser válido.")]
     public int DetalleId { get; set; }
-    [Required(ErrorMessage = "El ID de la garantía es obligatorio.")]
-    [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una garantía válida.")]
     public int GarantiaId { get; set; }
     [ForeignKey("GarantiaId")]
     public Garantias Garantia { get; set; }
@@ -20,10 +16,10 @@ public class GarantiasDetalle
     public int Cantidad { get; set; }
     [Required(ErrorMessage = "La cantidad es obligatoria.")]
     [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0.")]
-    public decimal ValorUnitario { get; set; }
+    public decimal? ValorUnitario { get; set; }
     [NotMapped]
     [Range(0.01, double.MaxValue, ErrorMessage = "El total debe ser mayor que cero.")]
-    public decimal Total { get; set; }
+    public decimal? Total { get; set; }
     [Required(ErrorMessage = "Favor proporcionar un enlace válido para la foto del detalle.")]
     [Url(ErrorMessage = "El enlace proporcionado no es válido.")]
     public string? FotoDetalleUrl { get; set; }  

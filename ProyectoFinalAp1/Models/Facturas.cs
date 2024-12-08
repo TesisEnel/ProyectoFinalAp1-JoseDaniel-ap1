@@ -11,8 +11,6 @@ public class Facturas
     public int DeudorId { get; set; }
     [ForeignKey("DeudorId")]
     public Deudores? deudores { get; set; }
-    [Required(ErrorMessage = "Favor seleccionar un préstamo.")]
-    [Range(1, int.MaxValue, ErrorMessage = "Favor seleccionar un préstamo válido.")]
     public int PrestamoId { get; set; }
     [ForeignKey("PrestamoId")]
     public Prestamos? prestamos { get; set; }

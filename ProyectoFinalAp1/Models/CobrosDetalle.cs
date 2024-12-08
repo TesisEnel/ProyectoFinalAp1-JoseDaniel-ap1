@@ -5,11 +5,7 @@ namespace ProyectoFinalAp1.Models;
 public class CobrosDetalle
 {
     [Key]
-    [Required(ErrorMessage = "Debe seleccionar un préstamo válido.")]
-    [Range(1, int.MaxValue, ErrorMessage = "El PrestamoId no puede ser 0.")]
     public int DetalleId { get; set; }
-    [Required(ErrorMessage = "Debe asociar el detalle a un cobro válido.")]
-    [Range(1, int.MaxValue, ErrorMessage = "El CobroId debe ser un valor mayor que 0.")]
     public int CobroId { get; set; } 
     [Required(ErrorMessage = "Debe asociar el detalle a un préstamo válido.")]
     [Range(1, int.MaxValue, ErrorMessage = "El PrestamoId debe ser un valor mayor que 0.")]

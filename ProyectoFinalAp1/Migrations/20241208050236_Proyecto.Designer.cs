@@ -12,7 +12,7 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241207225947_Proyecto")]
+    [Migration("20241208050236_Proyecto")]
     partial class Proyecto
     {
         /// <inheritdoc />
@@ -240,6 +240,7 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -286,16 +287,19 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("DeudorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaCobro")
+                    b.Property<DateTime?>("FechaCobro")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaPrestamo")
+                    b.Property<DateTime?>("FechaPrestamo")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("ImportePagar")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Mora")
+                    b.Property<decimal?>("Mora")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("PrestamosPrestamoId")
@@ -326,7 +330,8 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValorCobrado")
+                    b.Property<decimal?>("ValorCobrado")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("DetalleId");
@@ -431,7 +436,8 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("PrestamoId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValorGarantia")
+                    b.Property<decimal?>("ValorGarantia")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("GarantiaId");
@@ -465,10 +471,8 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int>("GarantiaId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ValorUnitario")
+                    b.Property<decimal?>("ValorUnitario")
+                        .IsRequired()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("DetalleId");
@@ -487,7 +491,8 @@ namespace ProyectoFinalAp1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamoId"));
 
                     b.Property<string>("Concepto")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int?>("Cuotas")
                         .HasColumnType("int");
@@ -496,7 +501,8 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("FechaCobro")
                         .HasColumnType("datetime2");
@@ -517,8 +523,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<decimal?>("MontoCuota")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("MontoPrestado")
-                        .IsRequired()
+                    b.Property<decimal>("MontoPrestado")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("MontoTotalPagar")

@@ -20,7 +20,7 @@
     <body class="body">
         <h3 class="text-center">RECIBO DE COBRO</h3>
         <p><strong>Recibo No:</strong> @cobro?.CobroId</p>
-        <p><strong>Fecha Cobro:</strong> @cobro?.FechaCobro.ToString("dd/MM/yyyy hh:mm tt")</p>
+        <p><strong>Fecha Cobro:</strong> @cobro?.FechaCobro</p>
         <p><strong>Número de Cédula:</strong> @deudor?.NumeroCedula</p>
         <p><strong>Deudor:</strong> @deudor?.Nombres @deudor?.Apellidos</p>
         <p><strong>ImportePagar:</strong> RD$@cobro.ImportePagar</p>

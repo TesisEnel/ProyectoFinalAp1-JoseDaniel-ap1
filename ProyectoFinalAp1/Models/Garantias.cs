@@ -6,9 +6,8 @@ public class Garantias
 {
     [Key]
     public int GarantiaId { get; set; }
-    [Required(ErrorMessage = "El valor de la garantía es obligatorio.")]
-    [Range(0.01, double.MaxValue, ErrorMessage = "El valor de la garantía debe ser mayor que cero.")]
-    public decimal ValorGarantia { get; set; }
+ 
+    public decimal? ValorGarantia { get; set; }
     [Required(ErrorMessage = "Favor colocar la fecha de garantía de su deudor.")]
     [DataType(DataType.Date, ErrorMessage = "La fecha ingresada debe tener un formato válido.")]
     public DateTime FechaGarantia { get; set; }

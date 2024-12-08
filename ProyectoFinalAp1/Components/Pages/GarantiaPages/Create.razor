@@ -257,6 +257,6 @@
 
     private async Task CalcularGananciaTotal()
     {
-        gananciaTotal = listadestalles.Sum(d => d.Total); 
+        gananciaTotal = listadestalles.Sum(d => d.Total ?? 0);
     }
 }
