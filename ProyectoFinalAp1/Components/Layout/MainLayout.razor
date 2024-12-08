@@ -102,12 +102,12 @@
         StateHasChanged();
     }
 
-    public async Task Dispose()
+    public void Dispose()
     {
         navigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private async Task SalirMenu()
+    private void SalirMenu()
     {
         navigationManager.NavigateTo("/logout");
     }

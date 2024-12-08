@@ -72,19 +72,19 @@
 @code {
     private string? currentUrl;
 
-    protected override async Task OnInitialized()
+    protected override void OnInitialized()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
     }
 
-    private async Task OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
         StateHasChanged();
     }
 
-    public async Task Dispose()
+    public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
