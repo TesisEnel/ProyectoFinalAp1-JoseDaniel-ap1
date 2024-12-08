@@ -100,6 +100,7 @@
                         <InputText class="form-control" placeholder="URL de la foto" @bind-Value="detalle.FotoDetalleUrl" />
                         <ValidationMessage For="@(() => detalle.FotoDetalleUrl)" />
                     </div>
+
                 </div>
                 @* Boton Agregar *@
                 <div class="col-md-12 d-flex justify-content-end">
@@ -109,6 +110,7 @@
                 </div>
 
                 <table class="table table-bordered table-hover mt-3">
+
                     <thead>
                         <tr class="text-center">
                             <th>Artículo</th>
@@ -128,6 +130,7 @@
                                     <td>@detalle.Articulo</td>
                                     <td>@detalle.Cantidad</td>
                                     <td>$@detalle.ValorUnitario</td>
+
                                     <td class="text-center">
                                         @if (!string.IsNullOrEmpty(detalle.FotoDetalleUrl))
                                         {
@@ -138,7 +141,9 @@
                                             <span>No disponible</span>
                                         }
                                     </td>
-                                    <td>$@detalle.Total</td>
+                                    <td>@detalle.Total</td>
+
+
                                     <td>
                                         <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                             <span class="bi bi-trash"></span> Remover
@@ -183,8 +188,9 @@
     public List<Prestamos> listaprestamo = new List<Prestamos>();
     public List<Prestamos> listaprestamoFiltrados = new List<Prestamos>();
     public List<Deudores> listadeudore = new List<Deudores>();
-    public GarantiasDetalle detalle = new GarantiasDetalle();
+    public GarantiasDetalle detalle { get; set; } = new GarantiasDetalle();
     public List<GarantiasDetalle> listadestalles = new List<GarantiasDetalle>();
+
     private bool existe = false;
     public decimal gananciaTotal = 0;
     private List<int> detallesAEliminar = new();
@@ -228,6 +234,7 @@
     private async Task Nuevo()
     {
         garantia = new Garantias();
+        detalle = new GarantiasDetalle();
         listadestalles.Clear();
     }
 

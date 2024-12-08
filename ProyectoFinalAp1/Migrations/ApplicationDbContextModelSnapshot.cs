@@ -296,6 +296,9 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<decimal>("Mora")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("PrestamoId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 

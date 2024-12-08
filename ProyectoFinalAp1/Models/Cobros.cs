@@ -17,6 +17,9 @@ public class Cobros
 
     [ForeignKey("CobradorId")]
     public Cobradores Cobrador { get; set; }
+
+    public int PrestamoId { get; set; }
+   
     public decimal ImporteAPagar { get; set; }
     public decimal Mora { get; set; }
     [Required(ErrorMessage = "El campo Fecha de Cobro es obligatorio.")]

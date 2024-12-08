@@ -62,6 +62,8 @@
                     </tbody>
                 </table>
 
+
+                
                 <h5 class="mb-3">Cobros Detallados</h5>
                 <table class="table table-bordered text-center">
                     <thead>
@@ -73,34 +75,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @{
-                            decimal saldoRestante = listaPrestamos.FirstOrDefault(p => p.PrestamoId == filtroPrestamo)?.MontoTotalPagar ?? 0;
-                        }
-
                         @foreach (var cobro in listaCobros.OrderBy(c => c.FechaCobro))
                         {
-                            var cobrosDetalle = listaCobrosDetalle.Where(d => d.CobroId == cobro.CobroId).ToList();
-                            decimal valorCobrado = cobrosDetalle.Sum(d => d.ValorCobrado ?? 0);
-
-                            saldoRestante -= valorCobrado;
-                            saldoRestante = saldoRestante < 0 ? 0 : saldoRestante;
+                            // Obtén el préstamo asociado al cobro actual.
+                            var prestamoAsociado = listaPrestamos.FirstOrDefault(p => p.PrestamoId == cobro.PrestamoId);
+                            decimal saldoRestante = prestamoAsociado?.Saldo ?? 0;
 
                             <tr>
                                 <td>@cobro.CobroId</td>
                                 <td>@cobro.ImporteAPagar.ToString("C")</td>
                                 <td>@cobro.FechaCobro.ToShortDateString()</td>
-                                <td>@saldoRestante.ToString("C")</td>
-                            </tr>
-                        }
-
-                        @if (saldoRestante == 0)
-                        {
-                            <tr>
-                                <td colspan="4" class="text-success text-center"><strong>¡El préstamo ha sido completamente saldado!</strong></td>
+                                <td><span class="text-success fw-bold">@saldoRestante.ToString("C")</span></td>
                             </tr>
                         }
                     </tbody>
                 </table>
+
             }
             else
             {
