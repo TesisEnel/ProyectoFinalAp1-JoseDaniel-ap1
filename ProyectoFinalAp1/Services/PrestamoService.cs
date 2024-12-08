@@ -68,13 +68,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.prestamos.FirstOrDefaultAsync(p => p.PrestamoId == prestamoId);
     }
-    public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int prestamoid)
-    {
-        await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.prestamos
-            .Where(p => p.PrestamoId == prestamoid)
-            .ToListAsync();
-    }
     public async Task<List<Prestamos>> ListarPrestamosConDeudores()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -95,4 +88,13 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         contexto.prestamos.Update(prestamo);
         return await contexto.SaveChangesAsync() > 0;
     }
+
+    public async Task<List<Prestamos>> ObtenerPrestamosPorDeudor(int deudorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.prestamos
+            .Where(p => p.DeudorId == deudorId)
+            .ToListAsync();
+    }
+
 }
