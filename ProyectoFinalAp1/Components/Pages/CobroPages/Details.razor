@@ -141,14 +141,19 @@
         </div>
 
         <div class="card-footer text-center footer-bar">
-            <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
+            <button class="btn btn-lg btn-primary" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
             </button>
 
-            <button class="btn btn-lg btn-success ms-3" @onclick="GenerarFactura">
+            <button class="btn btn-lg btn-cris ms-3" @onclick="GenerarFactura">
                 <i class="bi bi-receipt mt-3"></i> Generar Factura
             </button>
+
+            <button type="button" @onclick="EnviarMensajeWhatsApp" class="btn btn-lg btn-whatsapp">
+                <span class="bi bi-whatsapp mt-3"></span> Finalizar
+            </button>
         </div>
+
     </div>
 </div>
 
@@ -196,6 +201,25 @@
     private async Task GenerarFactura()
     {
         navigationManager.NavigateTo($"/Cobro/FacturaCobro/{CobroId}");
+    }
+
+    private string ObtenerUrlWhatsApp()
+    {
+        if (deudore?.Telefono!= null)
+        {
+            string mensaje = $"El Cobro con ID {cobro?.CobroId} para {deudore?.Nombres} ya está finalizado.";
+            return $"https://wa.me/{deudore.Telefono}?text={Uri.EscapeDataString(mensaje)}";
+        }
+        return "#";
+    }
+
+    private async Task EnviarMensajeWhatsApp()
+    {
+        string urlWhatsApp = ObtenerUrlWhatsApp();
+        if (urlWhatsApp != "#")
+        {
+            navigationManager.NavigateTo(urlWhatsApp, true);
+        }
     }
     private async Task Volver()
     {
