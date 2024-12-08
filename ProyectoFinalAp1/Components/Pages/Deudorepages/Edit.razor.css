@@ -1,0 +1,9 @@
+﻿/*Css Oficial de edit de deudores*/
+
+.custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #008DD9;
+    color: #fff;
+}
