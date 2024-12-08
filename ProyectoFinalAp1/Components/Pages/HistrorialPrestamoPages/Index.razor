@@ -68,7 +68,7 @@
                     <thead>
                         <tr>
                             <th>CobroId</th>
-                            <th>Monto Cobrado</th>
+                            <th>Importe Pagar</th>
                             <th>Fecha Cobro</th>
                             <th>Saldo Restante</th>
                         </tr>
@@ -77,18 +77,26 @@
                         @{
                             decimal saldoRestante = listaPrestamos.FirstOrDefault(p => p.PrestamoId == filtroPrestamo)?.MontoTotalPagar ?? 0;
                         }
-                        @foreach (var cobro in listaCobros)
+                        @foreach (var cobro in listaCobros.OrderBy(c => c.FechaCobro)) // Ordenar por fecha
                         {
-                            saldoRestante -= cobro.ImportePagar;
+                            saldoRestante -= cobro.ImportePagar; // Resta el importe del cobro al saldo restante
+                            saldoRestante = saldoRestante < 0 ? 0 : saldoRestante; // Asegurarse que no sea negativo
                             <tr>
                                 <td>@cobro.CobroId</td>
-                                <td>@cobro.ImportePagar</td>
-                                <td>@cobro.FechaCobro</td>
+                                <td>@cobro.ImportePagar.ToString("C")</td>
+                                <td>@cobro.FechaCobro.ToShortDateString()</td>
                                 <td>@saldoRestante.ToString("C")</td>
+                            </tr>
+                        }
+                        @if (saldoRestante == 0)
+                        {
+                            <tr>
+                                <td colspan="4" class="text-success text-center"><strong>¡El préstamo ha sido completamente saldado!</strong></td>
                             </tr>
                         }
                     </tbody>
                 </table>
+
             }
             else
             {
@@ -112,13 +120,16 @@
     public List<Prestamos> listaPrestamos = new List<Prestamos>();
     public List<Cobros> listaCobros = new List<Cobros>();
     public int filtroPrestamo { get; set; }
+    public List<CobrosDetalle> listaCobrosDetalle = new List<CobrosDetalle>();
 
     protected override async Task OnInitializedAsync()
     {
         deudore = await deudorService.ObtenerDeudorePorId(HistorialId);
         listaPrestamos = await prestamoService.Listar(p => p.DeudorId == HistorialId);
-     
+        listaCobros = await cobroService.ObtenerCobrosPorDeudor(HistorialId);
+        listaCobrosDetalle = await cobroService.ObtenerCobrosDetallePorDeudor(HistorialId);
     }
+
 }
 
 
