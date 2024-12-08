@@ -5,7 +5,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Consulta de deudores para cobros</PageTitle>
-
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -86,26 +85,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Obtener todos los deudores
         var todosDeudores = await deudorService.ObtenerTodos();
-
-        // Obtener todos los préstamos
         var todosPrestamos = await prestamoService.ListarPrestamosConDeudores();
-
-        // Filtrar los deudores que tienen préstamos registrados
         listardeudore = todosDeudores
             .Where(d => todosPrestamos.Any(p => p.DeudorId == d.DeudorId))
             .ToList();
-
         Console.WriteLine($"Deudores con préstamos registrados: {listardeudore.Count}");
     }
-
     private async Task SeleccionarCliente(int deudorId)
     {
-        // Navegar a la ruta de creación de cobros pasando el clienteId como parámetro
         navigationManager.NavigateTo($"/Cobro/Create?deudorId={deudorId}");
     }
-
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))

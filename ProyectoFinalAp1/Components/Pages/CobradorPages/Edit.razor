@@ -4,58 +4,56 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject ToastService toastService
-<PageTitle>Modificar Cobradores</PageTitle>
 
+<PageTitle>Modificar Cobradores</PageTitle>
 <EditForm Model="cobrador" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
         <div class="card shadow-lg w-100">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
-                <h3 class="card-title text-center w-100">Registrar Cobradores</h3>
+                <h3 class="card-title text-center w-100">Modificar Cobradores</h3>
             </div>
 
             <div class="card-body">
                 <div class="row">
-                    @* Campo CobradorId *@
+                    @* CobradorId *@
                     <div class="col-md-6 mb-4">
                         <label for="CobradorId" class="form-label"><strong>CobradorId:</strong></label>
                         <InputNumber id="CobradorId" class="form-control" readonly @bind-Value="cobrador.CobradorId" />
                         <ValidationMessage For="@(() => cobrador.CobradorId)" />
                     </div>
 
-                    @* Campo Nombres *@
+                    @*Nombres *@
                     <div class="col-md-6 mb-4">
                         <label for="Nombres" class="form-label"><strong>Nombres:</strong></label>
                         <InputText id="nombres" class="form-control" placeholder="Ingrese los nombres" @bind-Value="cobrador.Nombres" />
                         <ValidationMessage For="@(() => cobrador.Nombres)" />
                     </div>
-
                 </div>
 
                 <div class="row">
-                    @* Campo Apellidos *@
+                    @* Apellidos *@
                     <div class="col-md-6 mb-4">
                         <label for="Apellidos" class="form-label"><strong>Apellidos:</strong></label>
                         <InputText id="apellidos" class="form-control" placeholder="Ingrese el apellidos" @bind-Value="cobrador.Apellidos" />
                         <ValidationMessage For="@(() => cobrador.Apellidos)" />
                     </div>
-
-                    @* Campo Email *@
+                    @*  Email *@
                     <div class="col-md-6 mb-4">
                         <label for="Email" class="form-label"><strong>Email:</strong></label>
                         <InputText id="Email" class="form-control" placeholder="Ingrese el Email" @bind-Value="cobrador.Email" />
                         <ValidationMessage For="@(() => cobrador.Email)" />
                     </div>
-
                 </div>
 
                 <div class="row">
-                    @* Campo Dirección *@
+                    @* Dirección *@
                     <div class="col-md-6 mb-4">
                         <label for="Direccion" class="form-label"><strong>Dirección:</strong></label>
                         <InputText id="Direccion" class="form-control" placeholder="Ingrese la dirección" @bind-Value="cobrador.Direccion" />
                         <ValidationMessage For="@(() => cobrador.Direccion)" />
                     </div>
+                   @*  Estado *@
                     <div class="col-md-6 mb-4">
                         <label for="Estado" class="form-label"><strong>Estado:</strong></label>
                         <InputSelect id="Estado" class="form-control" @bind-Value="cobrador.Estado">
@@ -65,42 +63,36 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => cobrador.Estado)" />
                     </div>
-
-
-
                 </div>
 
                 <div class="row">
-                    @* Campo Foto Cédula *@
+                    @*  Foto Cédula *@
                     <div class="col-md-6 mb-4">
                         <label for="foto" class="form-label"><strong>Foto Cédula:</strong></label>
                         <InputText id="foto" class="form-control" placeholder="Ingrese la URL de la foto de su cédula" @bind-Value="cobrador.FotoCedulaURL" />
                         <ValidationMessage For="@(() => cobrador.FotoCedulaURL)" />
                     </div>
-
-                    @*Campo Número Cédula *@
+                    @*Número Cédula *@
                     <div class="col-md-6 mb-4">
                         <label for="cedula" class="form-label"><strong>Número Cédula:</strong></label>
-                        <InputText id="cedula" class="form-control" placeholder="Ingrese la cédula" @bind-Value="cobrador.NumeroCedula" />
+                        <InputText id="cedula" class="form-control" placeholder="Ingrese el numero de cédula" @bind-Value="cobrador.NumeroCedula" />
                         <ValidationMessage For="@(() => cobrador.NumeroCedula)" />
                     </div>
-
                 </div>
                 <div class="row">
-                    @* Campo Teléfono *@
+                    @*Teléfono *@
                     <div class="col-md-6 mb-4">
                         <label for="telefono" class="form-label"><strong>Teléfono:</strong></label>
                         <InputText id="telefono" class="form-control" placeholder="Ingrese el teléfono" @bind-Value="cobrador.Telefono" />
                         <ValidationMessage For="@(() => cobrador.Telefono)" />
                     </div>
-                    @* Campo Ciudad *@
+                    @* Ciudad *@
                     <div class="col-md-6 mb-4">
                         <label for="ciudad" class="form-label"><strong>Ciudad:</strong></label>
                         <InputText id="ciudad" class="form-control" placeholder="Ingrese la ciudad" @bind-Value="cobrador.Ciudad" />
                         <ValidationMessage For="@(() => cobrador.Ciudad)" />
                     </div>
                 </div>
-
             </div>
 
             <div class="card-footer justify-content-center text-center custom-footer mt-5 pt-4">
@@ -142,9 +134,7 @@
             cobrador = await CobradorService.Buscar(CobradorId) ?? new Cobradores();
             listacobradores = await CobradorService.ListarCobradores();
         }
-
     }
-
     public async Task<bool> Validar()
     {
         var Listacobrador = await CobradorService.Listar(C => C.Nombres == cobrador.Nombres && C.CobradorId != cobrador.CobradorId);
@@ -163,7 +153,6 @@
             Volver();
         }
     }
-
     public async Task Volver()
     {
         toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));

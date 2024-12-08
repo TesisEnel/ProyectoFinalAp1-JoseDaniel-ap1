@@ -4,7 +4,6 @@ using ProyectoFinalAp1.Models;
 using System.Linq.Expressions;
 
 namespace ProyectoFinalAp1.Services;
-
 public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     public async Task<bool> Existe(int deudorid)
@@ -31,7 +30,6 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(deudor);
     }
-
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -40,7 +38,6 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-
     public async Task<Deudores?> Buscar(int deudorid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -67,13 +64,11 @@ public class DeudorService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.deudores.FirstOrDefaultAsync(c => c.DeudorId == id);
     }
-
     public async Task<List<Deudores>> ObtenerTodos()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.deudores.ToListAsync();
     }
-
     public async Task<List<Deudores>> ObtenerDeudoreConPrestamos()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();

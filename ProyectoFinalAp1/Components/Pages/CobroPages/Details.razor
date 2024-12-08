@@ -8,7 +8,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Detalles del cobro</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
@@ -37,45 +36,47 @@
                             <p class="text-muted">No disponible</p>
                         }
                     </div>
-
-                    @* Datos Personales *@
                     <div class="col-md-8">
                         <div class="row">
+                           @*  Número de Cédula *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Número de Cédula:</strong>
                                     <p class="d-block">@deudore?.NumeroCedula</p>
                                 </div>
                             </div>
+                           @*  Nombre Completo *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Nombre Completo:</strong>
                                     <p class="d-block">@deudore?.Nombres @deudore?.Apellidos</p>
                                 </div>
                             </div>
+                           @*  Fecha Cobro *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Fecha Cobro:</strong>
                                     <p class="d-block">@cobro?.FechaCobro</p>
                                 </div>
                             </div>
+                            @* Cobrador *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Cobrador:</strong>
                                     <p class="d-block">@cobrador?.Nombres @cobrador?.Apellidos</p>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row">
+                           @*  Apellidos *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Apellidos:</strong>
                                     <p class="d-block">@deudore?.Apellidos</p>
                                 </div>
                             </div>
-                         
+                          @*   Dirección *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Dirección:</strong>
@@ -83,15 +84,15 @@
                                 </div>
                             </div>
                         </div>
-
-                        @* Información de Contacto *@
                         <div class="row">
+                           @*  Teléfono *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Teléfono:</strong>
                                     <p class="d-block">@deudore?.Telefono</p>
                                 </div>
                             </div>
+                            @* Ciudad *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Ciudad:</strong>
@@ -101,8 +102,6 @@
                         </div>
                     </div>
                 </div>
-
-                @* Detalles de los Cobros *@
                 <div class="mt-5">
                     <h4 class="text-primary">Detalles de los Cobros</h4>
                     @if (listacobrodetalle.Any())
@@ -156,7 +155,6 @@
 @code {
     [Parameter] public int CobroId { get; set; }
     private Deudores deudore;
-   
     public Cobradores? cobrador = new Cobradores();
     private CobrosDetalle cobrodetalle = new();
     private List<CobrosDetalle> listacobrodetalle = new();
@@ -177,7 +175,7 @@
                     deudore = await deudorService.Buscar(cobro.DeudorId);
                     ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
                     listacobrodetalle = cobro.CobrosDetalles.ToList();
-                    cobrador = await CobradorService.Buscar(cobro.CobradorId); // Carga del cobrador
+                    cobrador = await CobradorService.Buscar(cobro.CobradorId); 
 
                     foreach (var detalle in listacobrodetalle)
                     {
@@ -195,13 +193,11 @@
             mensajeError = $"Error al inicializar el componente: {ex.Message}";
         }
     }
-
     private async Task GenerarFactura()
     {
         navigationManager.NavigateTo($"/Cobro/FacturaCobro/{CobroId}");
     }
-
-    private void Volver()
+    private async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
     }

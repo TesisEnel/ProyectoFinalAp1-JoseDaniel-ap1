@@ -5,7 +5,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Registrar Deudor</PageTitle>
-
 <EditForm Model="deudor" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
@@ -16,30 +15,28 @@
 
             <div class="card-body">
                 <div class="row">
-                    @* Campo Cliente ID *@
+                    @* DeudorId *@
                     <div class="col-md-6 mb-4">
-                        <label for="deudorId" class="form-label"><strong>Cliente Id:</strong></label>
+                        <label for="deudorId" class="form-label"><strong>DeudorId:</strong></label>
                         <InputNumber id="deudorId" class="form-control" readonly @bind-Value="deudor.DeudorId" />
                         <ValidationMessage For="@(() => deudor.DeudorId)" />
                     </div>
-
-                    @*Campo Número Cédula *@
+                    @*Número Cédula *@
                     <div class="col-md-6 mb-4">
                         <label for="cedula" class="form-label"><strong>Número Cédula:</strong></label>
-                        <InputText id="cedula" class="form-control" placeholder="Ingrese la cédula" @bind-Value="deudor.NumeroCedula" />
+                        <InputText id="cedula" class="form-control" placeholder="Ingrese el numero de cédula" @bind-Value="deudor.NumeroCedula" />
                         <ValidationMessage For="@(() => deudor.NumeroCedula)" />
                     </div>
                 </div>
 
                 <div class="row">
-                    @* Campo Foto Cédula *@
+                    @* Foto Cédula *@
                     <div class="col-md-6 mb-4">
                         <label for="foto" class="form-label"><strong>Foto Cédula:</strong></label>
                         <InputText id="foto" class="form-control" placeholder="Ingrese la URL de la foto de su cédula" @bind-Value="deudor.FotoCedulaURL" />
                         <ValidationMessage For="@(() => deudor.FotoCedulaURL)" />
                     </div>
-
-                    @* Campo Nombres *@
+                    @*Nombres *@
                     <div class="col-md-6 mb-4">
                         <label for="nombres" class="form-label"><strong>Nombres:</strong></label>
                         <InputText id="nombres" class="form-control" placeholder="Ingrese los nombres" @bind-Value="deudor.Nombres" />
@@ -48,14 +45,13 @@
                 </div>
 
                 <div class="row">
-                    @* Campo Apellidos *@
+                    @* Apellidos *@
                     <div class="col-md-6 mb-4">
                         <label for="apellidos" class="form-label"><strong>Apellidos:</strong></label>
                         <InputText id="apellidos" class="form-control" placeholder="Ingrese los apellidos" @bind-Value="deudor.Apellidos" />
                         <ValidationMessage For="@(() => deudor.Apellidos)" />
                     </div>
-
-                    @* Campo Dirección  *@
+                    @* Dirección  *@
                     <div class="col-md-6 mb-4">
                         <label for="direccion" class="form-label"><strong>Dirección:</strong></label>
                         <InputText id="direccion" class="form-control" placeholder="Ingrese la dirección" @bind-Value="deudor.Direccion" />
@@ -64,14 +60,13 @@
                 </div>
 
                 <div class="row">
-                    @* Campo Teléfono *@
+                    @* Teléfono *@
                     <div class="col-md-6 mb-4">
                         <label for="telefono" class="form-label"><strong>Teléfono:</strong></label>
                         <InputText id="telefono" class="form-control" placeholder="Ingrese el teléfono" @bind-Value="deudor.Telefono" />
                         <ValidationMessage For="@(() => deudor.Telefono)" />
                     </div>
-
-                    @* Campo Ciudad*@
+                    @*  Ciudad*@
                     <div class="col-md-6 mb-4">
                         <label for="ciudad" class="form-label"><strong>Ciudad:</strong></label>
                         <InputText id="ciudad" class="form-control" placeholder="Ingrese la ciudad" @bind-Value="deudor.Ciudad" />
@@ -129,13 +124,11 @@
             Nuevo();
         }
     }
-
     public async Task<bool> Validar()
     {
         existe = await deudorService.Existe(deudor.DeudorId);
         return !existe;
     }
-
     public async Task Guardar()
     {
         if (!await Validar())
@@ -149,7 +142,6 @@
             Volver();
         }
     }
-
     public async Task Volver()
     {
         toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));

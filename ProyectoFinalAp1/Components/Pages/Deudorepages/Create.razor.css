@@ -1,1 +1,52 @@
-﻿
+﻿.detalles-garantia-border {
+    border: 2px solid #28a745;
+}
+
+.custom-footer button {
+    margin: 0 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-header {
+    padding: 15px;
+    font-size: 1.2em;
+}
+
+.container-fluid {
+    padding-top: 0rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-header {
+    background-color: #008DD9;
+    color: #fff;
+}
+
+.detalles-garantia-border {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.card-footer.custom-footer {
+    margin-top: 5rem;
+    padding-top: 2rem;
+}
+
+table thead {
+    background-color: #008DD9;
+    color: #fff;
+}
+
+table tbody img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}

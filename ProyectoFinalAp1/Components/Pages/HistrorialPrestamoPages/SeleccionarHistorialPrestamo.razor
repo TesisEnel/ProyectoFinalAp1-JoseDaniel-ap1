@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Seleccionar Deudor</PageTitle>
-
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -112,12 +111,12 @@
         }
     }
 
-    private void NavegarADeudorHistorial(int DeudorId)
+    private async Task NavegarADeudorHistorial(int DeudorId)
     {
         navigationManager.NavigateTo($"/Deudor/Historial/{DeudorId}");
     }
 
-    private void Volver()
+    private async Task Volver()
     {
         navigationManager.NavigateTo("/menu");
     }

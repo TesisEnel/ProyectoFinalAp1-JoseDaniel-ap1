@@ -5,14 +5,14 @@
 @inject ToastService toastService
 @rendermode InteractiveServer
 
-<PageTitle>Crear prestamo</PageTitle>
+<PageTitle>Registrar prestamo</PageTitle>
 <EditForm Model="prestamo" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid vh-100 d-flex flex-column justify-content-center p-3">
         <div class="card shadow-lg border-0 rounded-lg">
 
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
-                <h3 class="m-0">Registrar Préstamo</h3>
+                <h3 class="m-0">Modificar Préstamo</h3>
                 <button type="button" class="btn btn-light btn-sm" @onclick="RedirigirDeudores">
                     <i class="bi bi-person-fill-check me-2"></i> Buscar Deudor
                 </button>
@@ -23,6 +23,7 @@
                     <h5 class="text-secondary border-bottom pb-2">Información del Cliente</h5>
                     @if (deudor != null)
                     {
+                        @* La informacion del deudor *@
                         <div class="card bg-white shadow-sm p-3 rounded">
                             <div class="row">
                                 <div class="col-md-6">
@@ -55,31 +56,31 @@
                     }
                 </section>
 
-                @*Detalles del Préstamo *@
                 <section class="mb-4">
                     <h5 class="text-secondary border-bottom pb-2">Detalles del Préstamo</h5>
 
                     <div class="row">
+                       @*  Fecha del Préstamo *@
                         <div class="col-md-6 mb-3">
                             <label for="fecha" class="form-label"><strong>Fecha del Préstamo:</strong></label>
                             <InputDate id="fecha" class="form-control shadow-sm" @bind-Value="prestamo.FechaPrestamo" />
                             <ValidationMessage For="@(() => prestamo.FechaPrestamo)" />
                         </div>
-
+                        @* Monto Préstamo *@
                         <div class="col-md-6 mb-3">
                             <label for="montoPrestado" class="form-label"><strong>Monto Préstamo:</strong></label>
                             <InputNumber id="montoPrestado" class="form-control shadow-sm" @bind-Value="prestamo.MontoPrestado" />
                             <ValidationMessage For="@(() => prestamo.MontoPrestado)" />
                         </div>
                     </div>
-
+                   @*  Interes *@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="interes" class="form-label"><strong>Interés (%):</strong></label>
                             <InputNumber id="interes" class="form-control shadow-sm" @bind-Value="prestamo.Interes" />
                             <ValidationMessage For="@(() => prestamo.Interes)" />
                         </div>
-
+                      @*   Cuotas *@
                         <div class="col-md-6 mb-3">
                             <label for="cuotas" class="form-label"><strong>Cuotas:</strong></label>
                             <InputNumber id="cuotas" class="form-control shadow-sm" @bind-Value="prestamo.Cuotas" />
@@ -88,6 +89,7 @@
                     </div>
 
                     <div class="row">
+                       @*  Forma de Pago *@
                         <div class="col-md-6 mb-3">
                             <label for="formaPago" class="form-label"><strong>Forma de Pago:</strong></label>
                             <select id="formaPago" class="form-select shadow-sm" @bind="prestamo.FormaPago">
@@ -98,7 +100,7 @@
                             <ValidationMessage For="@(() => prestamo.FormaPago)" />
                         </div>
 
-                        <!-- Campo Concepto alineado a la derecha -->
+                     @*   Concepto  *@
                         <div class="col-md-6 mb-3">
                             <label for="Concepto" class="form-label text-end"><strong>Concepto:</strong></label>
                             <InputText id="Concepto" class="form-control shadow-sm" @bind-Value="prestamo.Concepto" />
@@ -111,18 +113,22 @@
                 <section>
                     <h5 class="text-secondary border-bottom pb-2">Montos Calculados</h5>
                     <div class="row">
+                       @*  Monto por Cuota *@
                         <div class="col-md-6 mb-3">
                             <label for="montoCuota" class="form-label"><strong>Monto por Cuota:</strong></label>
                             <InputNumber id="montoCuota" class="form-control shadow-sm" @bind-Value="prestamo.MontoCuota" disabled />
                         </div>
+                       @*  Total Interés *@
                         <div class="col-md-6 mb-3">
                             <label for="totalInteres" class="form-label"><strong>Total Interés:</strong></label>
                             <InputNumber id="totalInteres" class="form-control shadow-sm" @bind-Value="prestamo.TotalInteres" disabled />
                         </div>
+                       @*  Monto Total a Pagar *@
                         <div class="col-md-6 mb-3">
                             <label for="montoTotalPagar" class="form-label"><strong>Monto Total a Pagar:</strong></label>
                             <InputNumber id="montoTotalPagar" class="form-control shadow-sm" @bind-Value="prestamo.MontoTotalPagar" disabled />
                         </div>
+                      @*   Fecha de Cobro *@
                         <div class="col-md-6 mb-3">
                             <label for="fechacobro" class="form-label"><strong>Fecha de Cobro:</strong></label>
                             <InputDate class="form-control shadow-sm" @bind-Value="prestamo.FechaCobro" disabled />
@@ -158,14 +164,12 @@
     protected override async Task OnInitializedAsync()
     {
         editContext = new EditContext(prestamo);
-
         var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
         if (query.TryGetValue("DeudorId", out var clienteId))
         {
             deudor = await deudorService.Buscar(int.Parse(clienteId));
             prestamo.DeudorId = deudor.DeudorId;
-
         }
     }
 
@@ -173,17 +177,14 @@
     {
         if (prestamo.FechaPrestamo == DateTime.MinValue)
         {
-
             return;
         }
         else if (prestamo.MontoPrestado == 0)
         {
-
             return;
         }
         else if (prestamo.FormaPago == null)
         {
-
             return;
         }
         else
@@ -194,25 +195,20 @@
             {
                 Volver();
             }
-
         }
     }
-
     private async Task RedirigirDeudores()
     {
         navigationManager.NavigateTo("/prestamo/SeleccionarDeudor");
     }
-
     private async Task Nuevo()
     {
         prestamo = new Prestamos();
     }
-
     private async Task Volver()
     {
         navigationManager.NavigateTo("/Prestamo/Index");
     }
-
     private async Task CalcularMontos()
     {
         if (prestamo.MontoPrestado != 0)
@@ -231,7 +227,6 @@
             }
             prestamo.Saldo = prestamo.MontoTotalPagar ?? 0;
             DateTime fechaCreacion = prestamo.FechaPrestamo.Value;
-            // Asignar la fecha de cobro con base en la fecha de préstamo y las cuotas o si esta es indefinida la misma
             if (prestamo.FormaPago == "Semanal")
                 prestamo.FechaCobro = fechaCreacion.AddDays(7);
             else if (prestamo.FormaPago == "Quincenal")

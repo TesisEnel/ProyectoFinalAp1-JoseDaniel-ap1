@@ -7,20 +7,18 @@
 @rendermode InteractiveServer
 
 <PageTitle>Registrar Garantía</PageTitle>
-
 <EditForm Model="garantia" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container-fluid">
         <div class="card shadow-lg w-100">
-            <!-- Encabezado -->
+            @* Encabezado  *@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="card-title text-center w-100">Registrar Garantía</h3>
             </div>
 
-            <!-- Cuerpo del formulario -->
             <div class="card-body">
                 <div class="row">
-                    <!-- Campo Garantía ID -->
+                   @* Garantía ID  *@
                     <div class="col-md-6 mb-4">
                         <label for="GarantiaId" class="form-label text-dark"><strong>Garantía ID:</strong></label>
                         <InputNumber id="GarantiaId" class="form-control" readonly @bind-Value="garantia.GarantiaId" />
@@ -29,14 +27,14 @@
                 </div>
 
                 <div class="row">
-                    <!-- Campo Valor de la Garantía -->
+                    @* Valor de la Garantía  *@
                     <div class="col-md-6 mb-4">
                         <label for="ValorGarantia" class="form-label text-dark"><strong>Valor de la Garantía:</strong></label>
                         <InputNumber id="ValorGarantia" class="form-control" @bind-Value="garantia.ValorGarantia" readonly />
                         <ValidationMessage For="@(() => garantia.ValorGarantia)" />
                     </div>
 
-                    <!-- Campo Fecha de la Garantía -->
+                   @*  Fecha de la Garantía  *@
                     <div class="col-md-6 mb-4">
                         <label for="FechaGarantia" class="form-label text-dark"><strong>Fecha de la Garantía:</strong></label>
                         <InputDate id="FechaGarantia" class="form-control" @bind-Value="garantia.FechaGarantia" />
@@ -45,7 +43,7 @@
                 </div>
 
                 <div class="row">
-                    <!-- Campo Deudor -->
+                    @* Deudor  *@
                     <div class="col-md-6 mb-4">
                         <label for="Deudor" class="form-label text-dark"><strong>Deudor:</strong></label>
                         <InputSelect id="Deudor" class="form-control" @bind-Value="garantia.DeudorId">
@@ -60,7 +58,7 @@
                 </div>
 
                 <div class="row">
-                    <!-- Campo Préstamo -->
+                    @* Préstamo  *@
                     <div class="col-md-6 mb-4">
                         <label for="Prestamo" class="form-label text-dark"><strong>Préstamo:</strong></label>
                         <InputSelect id="Prestamos" class="form-control" @bind-Value="garantia.PrestamoId">
@@ -75,32 +73,35 @@
                 </div>
             </div>
 
-            <!-- Detalles de la Garantía -->
             <div class="border rounded p-4 mb-4 detalles-garantia-border">
                 <h5 class="text-black">Detalles de las Garantías</h5>
                 <div class="row mb-3">
+                    @* Articulo *@
                     <div class="col-md-4">
                         <label for="Articulo" class="form-label text-dark"><strong>Artículo:</strong></label>
                         <InputText class="form-control" placeholder="Artículo" @bind-Value="detalle.Articulo" />
                         <ValidationMessage For="@(() => detalle.Articulo)" />
                     </div>
+                   @*  Cantidad *@
                     <div class="col-md-2">
                         <label for="Cantidad" class="form-label text-dark"><strong>Cantidad:</strong></label>
                         <InputNumber class="form-control" @bind-Value="detalle.Cantidad" />
                         <ValidationMessage For="@(() => detalle.Cantidad)" />
                     </div>
+                    @* Valor Unitario *@
                     <div class="col-md-3">
                         <label for="ValorUnitario" class="form-label text-dark"><strong>Valor Unitario:</strong></label>
                         <InputNumber class="form-control" @bind-Value="detalle.ValorUnitario" />
                         <ValidationMessage For="@(() => detalle.ValorUnitario)" />
                     </div>
+                   @*  Foto *@
                     <div class="col-md-3">
                         <label for="Foto" class="form-label text-dark"><strong>Foto:</strong></label>
                         <InputText class="form-control" placeholder="URL de la foto" @bind-Value="detalle.FotoDetalleUrl" />
                         <ValidationMessage For="@(() => detalle.FotoDetalleUrl)" />
                     </div>
                 </div>
-
+                @* Boton Agregar *@
                 <div class="col-md-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-outline-success" @onclick="AgregarDetalle">
                         <span class="bi bi-plus-circle"></span> Agregar
@@ -196,11 +197,8 @@
 
     public async Task Guardar()
     {
-
-
         if (garantia.DeudorId == null || garantia.PrestamoId == null || listadestalles.Count == 0)
         {
-          
             return;
         }
 
@@ -212,23 +210,16 @@
                 
                 return;
             }
-            detallesAEliminar.Clear(); // Limpiar lista de eliminaciones
+            detallesAEliminar.Clear(); 
         }
 
-        garantia.Detalles = listadestalles; // Asignar la lista actualizada de detalles
+        garantia.Detalles = listadestalles; 
 
         if (await garantiaService.Guardar(garantia))
         {
-            
             navigationManager.NavigateTo("/garantia/Index");
         }
-        else
-        {
-            
-        }
     }
-
-
     private async Task Volver()
     {
         navigationManager.NavigateTo("/garantia/Index");
@@ -245,26 +236,19 @@
         detalle.Total = detalle.Cantidad * detalle.ValorUnitario;
         listadestalles.Add(detalle);
         ActualizarValorGarantia();
-        detalle = new GarantiasDetalle(); // Limpiar formulario de detalles
+        detalle = new GarantiasDetalle(); 
     }
 
-    private void EliminarDetalle(GarantiasDetalle detalle)
+    private async Task EliminarDetalle(GarantiasDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
-            detallesAEliminar.Add(detalle.DetalleId); // Agregar a la lista de eliminaciones
+            detallesAEliminar.Add(detalle.DetalleId); 
         }
-
-        listadestalles.Remove(detalle); // Remover del listado local
-
-        ActualizarValorGarantia(); // Recalcular el valor total
-        StateHasChanged(); // Forzar actualización visual
+        listadestalles.Remove(detalle); 
+        ActualizarValorGarantia(); 
+        StateHasChanged(); 
     }
-
-
-
-
-   
 
     private async Task ActualizarValorGarantia()
     {
@@ -273,6 +257,6 @@
 
     private async Task CalcularGananciaTotal()
     {
-        gananciaTotal = listadestalles.Sum(d => d.Total); // Sumar los valores de la columna "Total"
+        gananciaTotal = listadestalles.Sum(d => d.Total); 
     }
 }

@@ -1,34 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProyectoFinalAp1.Models
+namespace ProyectoFinalAp1.Models;
+public class GarantiasDetalle
 {
-    public class GarantiasDetalle
-    {
-        public int DetalleId { get; set; }
-
-        [Required]
-        public int GarantiaId { get; set; }
-
-        [ForeignKey("GarantiaId")]
-        public Garantias Garantia { get; set; }
-
-        [Required(ErrorMessage = "El nombre del artículo es requerido.")]
-        public string? Articulo { get; set; }
-
-        [Required(ErrorMessage = "La cantidad es requerida.")]
-        [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0.")]
-        public int Cantidad { get; set; }
-
-        [Required(ErrorMessage = "El valor unitario es requerido.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "El valor debe ser mayor que cero.")]
-        public decimal ValorUnitario { get; set; }
-
-        // Cálculo del total (Cantidad * ValorUnitario)
-        public decimal Total { get; set; }
-
-        [Required(ErrorMessage = "Favor proporcionar un enlace válido para la foto del detalle.")]
-        [Url(ErrorMessage = "El enlace proporcionado no es válido.")]
-        public string? FotoDetalleUrl { get; set; }  // Foto del detalle de la garantía
-    }
+    [Key]
+    [Required(ErrorMessage = "El ID del detalle es obligatorio.")]
+    [Range(1, int.MaxValue, ErrorMessage = "El ID del detalle debe ser válido.")]
+    public int DetalleId { get; set; }
+    [Required(ErrorMessage = "El ID de la garantía es obligatorio.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una garantía válida.")]
+    public int GarantiaId { get; set; }
+    [ForeignKey("GarantiaId")]
+    public Garantias Garantia { get; set; }
+    [Required(ErrorMessage = "El nombre del artículo es requerido.")]
+    public string? Articulo { get; set; }
+    [Required(ErrorMessage = "La cantidad es obligatoria.")]
+    [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0.")]
+    public int Cantidad { get; set; }
+    [Required(ErrorMessage = "La cantidad es obligatoria.")]
+    [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0.")]
+    public decimal ValorUnitario { get; set; }
+    [NotMapped]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El total debe ser mayor que cero.")]
+    public decimal Total { get; set; }
+    [Required(ErrorMessage = "Favor proporcionar un enlace válido para la foto del detalle.")]
+    [Url(ErrorMessage = "El enlace proporcionado no es válido.")]
+    public string? FotoDetalleUrl { get; set; }  
 }

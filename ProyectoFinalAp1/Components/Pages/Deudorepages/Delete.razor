@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Eliminar Deudor</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5 header-style">
@@ -24,15 +23,16 @@
                     }
                 </div>
 
-                @* Datos Personales de un deudor x *@
                 <div class="col-md-8">
                     <div class="row">
+                       @*  Número de Cédula *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Número de Cédula:</strong>
                                 <p class="info-text">@deudor?.NumeroCedula</p>
                             </div>
                         </div>
+                       @*  Nombres *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Nombres:</strong>
@@ -42,12 +42,14 @@
                     </div>
 
                     <div class="row">
+                        @* Apellidos *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Apellidos:</strong>
                                 <p class="info-text">@deudor?.Apellidos</p>
                             </div>
                         </div>
+                      @*   Dirección *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Dirección:</strong>
@@ -57,12 +59,14 @@
                     </div>
 
                     <div class="row">
+                      @*   Teléfono *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Teléfono:</strong>
                                 <p class="info-text">@deudor?.Telefono</p>
                             </div>
                         </div>
+                        @* Ciudad *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong class="info-label">Ciudad:</strong>
@@ -94,7 +98,6 @@
     {
         deudor = await deudorServices.Buscar(DeudorId);
     }
-
     public async Task EliminarDeudor()
     {
         if (deudor == null)
@@ -106,7 +109,6 @@
             Volver();
         }
     }
-
     public async Task Volver()
     {
         navigation.NavigateTo("/Deudore/Index");

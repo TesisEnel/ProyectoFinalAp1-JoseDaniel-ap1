@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Consulta de deudores</PageTitle>
-
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -104,7 +103,6 @@
     {
         listadeudore = await deudorService.Listar(a => true);
     }
-
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))
@@ -128,7 +126,6 @@
             listadeudore = await deudorService.Listar(c => c.Ciudad.Contains(valorFiltro));
         }
     }
-
     public async Task Volver()
     {
         navigationManager.NavigateTo("/menu");

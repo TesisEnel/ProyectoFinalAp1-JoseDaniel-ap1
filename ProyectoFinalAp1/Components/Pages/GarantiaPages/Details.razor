@@ -7,23 +7,24 @@
 @rendermode InteractiveServer
 
 <PageTitle>Detalles de la garantia</PageTitle>
-
 <div class="container mt-5 pt-3">
-    <!-- Tarjeta principal -->
+    
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
             <h2>Detalle Garantia</h2>
         </div>
 
         <div class="card-body">
-            <!-- Fila de datos principales -->
+            
             <div class="row">
+                @* Valor garantia *@
                 <div class="col-md-6 mb-4">
                     <div class="info-block">
                         <strong>Valor garantia:</strong>
                         <p class="d-block">@garantia.ValorGarantia</p>
                     </div>
                 </div>
+                @* Fecha garantia *@
                 <div class="col-md-6 mb-4">
                     <div class="info-block">
                         <strong>Fecha de Garantia:</strong>
@@ -31,15 +32,15 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Fila de información de deudor y préstamo -->
             <div class="row">
+               @*  Nombre completo *@
                 <div class="col-md-6 mb-4">
                     <div class="info-block">
                         <strong>Deudor:</strong>
                         <p class="d-block">@deudor?.Nombres @deudor?.Apellidos</p>
                     </div>
                 </div>
+                @* Prestamo *@
                 <div class="col-md-6 mb-4">
                     <div class="info-block">
                         <strong>Préstamo:</strong>
@@ -47,8 +48,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Detalles de los cobros -->
             <div class="mt-5">
                 <h4 class="text-primary">Detalles de las garantias</h4>
                 @if (listagarantiadetalle.Any())
@@ -94,8 +93,6 @@
                 }
             </div>
         </div>
-
-        <!-- Pie de la tarjeta con el botón Volver -->
         <div class="card-footer text-center footer-bar">
             <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
@@ -116,16 +113,11 @@
     {
         if (GarantiaId > 0)
         {
-            // Cargar la garantía
             garantia = await garantiaService.Buscar(GarantiaId);
-
             if (garantia != null)
             {
-                // Cargar el deudor y el préstamo asociados
                 deudor = await deudorService.Buscar(garantia.DeudorId);
                 prestamo = await prestamoService.Buscar(garantia.PrestamoId);
-
-                // Cargar los detalles de la garantía
                 listagarantiadetalle = await garantiaService.ObtenerDetallesPorGarantiaId(GarantiaId);
             }
         }

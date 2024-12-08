@@ -10,7 +10,7 @@
     <div class="top-row px-7">
         <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
         <div class="menu-floating custom-align">
-            <!-- Ítem Prestamax SRL a la izquierda, visible solo si el usuario está autenticado -->
+             @* Ítem Prestamax SRL a la izquierda, visible solo si el usuario está autenticado  *@
             <AuthorizeView>
                 <Authorized>
                     <a href="/Menu" class="prestamax-item">
@@ -33,7 +33,7 @@
                 <a href="#contacto" class="menu-floating-item contacto">
                     <i class="fas fa-envelope"></i> Contacto
                 </a>
-                <span class="user-name">Usuario: @userName</span> <!-- Aplicar la clase aquí -->
+                <span class="user-name">Usuario: @userName</span> 
                 <AuthorizeView>
                     <Authorized>
                         <a>
@@ -55,7 +55,6 @@
         @Body
     </div>
 </div>
-
 @* Nuevo card idéntico en la parte inferior *@
 <div class="card mt-5">
     <div class="top-row px-4">
@@ -95,8 +94,6 @@
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         currentUrl = navigationManager.ToBaseRelativePath(e.Location);
-
-        // Opcional: redirigir a login si la sesión expira
         if (currentUrl == "Account/Logout")
         {
             navigationManager.NavigateTo("/login");
@@ -105,12 +102,12 @@
         StateHasChanged();
     }
 
-    public void Dispose()
+    public async Task Dispose()
     {
         navigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private void SalirMenu()
+    private async Task SalirMenu()
     {
         navigationManager.NavigateTo("/logout");
     }

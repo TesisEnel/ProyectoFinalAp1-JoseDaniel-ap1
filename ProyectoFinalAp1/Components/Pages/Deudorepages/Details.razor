@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Detalles del Deudor</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
@@ -22,15 +21,16 @@
                     }
                 </div>
 
-                @* Datos Personales *@
                 <div class="col-md-8">
                     <div class="row">
+                      @*   Número de Cédula *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Número de Cédula:</strong>
                                 <p class="d-block">@deudor?.NumeroCedula</p>
                             </div>
                         </div>
+                       @*  Nombres *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Nombres:</strong>
@@ -40,12 +40,14 @@
                     </div>
 
                     <div class="row">
+                       @*  Apellidos *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Apellidos:</strong>
                                 <p class="d-block">@deudor?.Apellidos</p>
                             </div>
                         </div>
+                       @*  Dirección *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Dirección:</strong>
@@ -53,15 +55,15 @@
                             </div>
                         </div>
                     </div>
-
-                    @* Información de Contacto *@
                     <div class="row">
+                       @*  Teléfono *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Teléfono:</strong>
                                 <p class="d-block">@deudor?.Telefono</p>
                             </div>
                         </div>
+                        @* Ciudad *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Ciudad:</strong>
@@ -89,7 +91,6 @@
     {
         deudor = await deudorServices.Buscar(deudorId);
     }
-
     public async Task Volver()
     {
         navigation.NavigateTo("/Deudore/Index");

@@ -7,9 +7,7 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
 
-
 <PageTitle>Factura de Cobro</PageTitle>
-
 <div class="factura-container">
     <div class="header">
         <img src="/Rectangle 101.png" alt="Ícono de casa" class="icono-header">
@@ -33,16 +31,12 @@
         <p><strong>Valor Cobrado:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.ValorCobrado</p>
         <p><strong>Concepto:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.Prestamo?.Concepto</p>
         
-
-
-     </body>
-
+    </body>
 
     <div class="footer">
         <hr class="linea-firma"> 
         <p class="firma">FIRMA</p>
     </div>
-
 
     <div class="footer text-center">
         <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
@@ -66,8 +60,6 @@
     public List<Cobradores> listacobradores = new List<Cobradores>();
     private Cobros cobro = new();
 
-    
-
     protected override async Task OnInitializedAsync()
     {
         try
@@ -83,9 +75,6 @@
                 {
                     detalle.Prestamo = await prestamoService.Buscar(detalle.PrestamoId);
                 }
-
-               
-
             }
         }
         catch (Exception ex)
@@ -93,7 +82,7 @@
             Console.WriteLine($"Error al cargar la factura: {ex.Message}");
         }
     }
-    private void Volver()
+    private async Task Volver()
     {
         NavigationManager.NavigateTo($"/Cobro/Details/{CobroId}");
     }
@@ -101,7 +90,5 @@
     {
         await JSRuntime.InvokeVoidAsync("generarPDF", ".factura-container");
     }
-
-
 }
 

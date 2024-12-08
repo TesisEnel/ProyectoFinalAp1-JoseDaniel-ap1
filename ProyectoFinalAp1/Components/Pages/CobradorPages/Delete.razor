@@ -6,7 +6,6 @@
 @inject ToastService toastService
 
 <PageTitle>Eliminar del cobrador</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
@@ -23,28 +22,31 @@
                         <img src="@cobrador.FotoCedulaURL" alt="Foto de la cédula" class="img-thumbnail shadow-sm">
                     }
                 </div>
-
-                @* Datos Personales *@
+               
                 <div class="col-md-8">
                     <div class="row">
+                     @*    Numero de cedula *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Número de Cédula:</strong>
                                 <p class="d-block">@cobrador?.NumeroCedula</p>
                             </div>
                         </div>
+                        @* Nombres *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Nombres:</strong>
                                 <p class="d-block">@cobrador?.Nombres</p>
                             </div>
                         </div>
+                        @* Email *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Email:</strong>
                                 <p class="d-block">@cobrador?.Email</p>
                             </div>
                         </div>
+                        @* Estado *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Estado:</strong>
@@ -54,12 +56,14 @@
                     </div>
 
                     <div class="row">
+                     @*    Apellidos *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Apellidos:</strong>
                                 <p class="d-block">@cobrador?.Apellidos</p>
                             </div>
                         </div>
+                       @*  Direccion *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Dirección:</strong>
@@ -67,15 +71,15 @@
                             </div>
                         </div>
                     </div>
-
-                    @* Información de Contacto *@
                     <div class="row">
+                       @*  Telefono *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Teléfono:</strong>
                                 <p class="d-block">@cobrador?.Telefono</p>
                             </div>
                         </div>
+                      @*   Ciudad *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Ciudad:</strong>
@@ -113,7 +117,6 @@
             cobrador = await CobradorService.Buscar(CobradorId) ?? new Cobradores();
             listacobradores = await CobradorService.ListarCobradores();
         }
-
     }
     public async Task EliminarCobrador()
     {

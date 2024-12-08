@@ -6,7 +6,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Historial de Préstamos</PageTitle>
-
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -20,7 +19,6 @@
         <div class="card-body overflow-auto">
             @if (deudore != null)
             {
-
                 <div class="border-bottom pb-3 mb-3">
                     <h5>Información del Deudor</h5>
                     <ul class="list-unstyled">
@@ -121,8 +119,6 @@
         listaPrestamos = await prestamoService.Listar(p => p.DeudorId == HistorialId);
      
     }
-
-   
 }
 
 

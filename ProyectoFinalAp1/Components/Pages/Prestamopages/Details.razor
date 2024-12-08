@@ -5,7 +5,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Detalle Préstamo</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
@@ -15,6 +14,7 @@
         <div class="card-body">
             @if (prestamo != null && prestamo.deudores != null)
             {
+                @* Deudor *@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="info-block">
@@ -22,6 +22,7 @@
                             <p class="d-block">@prestamo.deudores.Nombres @prestamo.deudores.Apellidos</p>
                         </div>
                     </div>
+                   @*  Cédula *@
                     <div class="col-md-6">
                         <div class="info-block">
                             <strong>Cédula:</strong>
@@ -38,12 +39,14 @@
             }
 
             <div class="row">
+               @*  PréstamoId *@
                 <div class="col-md-6">
                     <div class="info-block">
                         <strong>PréstamoId:</strong>
                         <p class="d-block">@prestamo?.PrestamoId</p>
                     </div>
                 </div>
+                @* Monto Prestado *@
                 <div class="col-md-6">
                     <div class="info-block">
                         <strong>Monto Prestado:</strong>
@@ -53,21 +56,26 @@
             </div>
 
             <div class="row">
+              @*   Interés *@
                 <div class="col-md-6">
                     <div class="info-block">
                         <strong>Interés:</strong>
                         <p class="d-block">@prestamo?.Interes%</p>
                     </div>
+                    @* Monto cuota *@
                     <div class="info-block">
                         <strong>Monto cuota:</strong>
                         <p class="d-block">@prestamo?.MontoCuota</p>
                     </div>
                 </div>
+
                 <div class="col-md-6">
+                    @* Cuotas *@
                     <div class="info-block">
                         <strong>Cuotas:</strong>
                         <p class="d-block">@prestamo?.Cuotas</p>
                     </div>
+                    @* Forma pago *@
                     <div class="info-block">
                         <strong>Forma pago:</strong>
                         <p class="d-block">@prestamo?.FormaPago</p>
@@ -76,12 +84,14 @@
             </div>
 
             <div class="row">
+                @* Fecha Préstamo *@
                 <div class="col-md-6">
                     <div class="info-block">
                         <strong>Fecha Préstamo:</strong>
                         <p class="d-block">@prestamo?.FechaPrestamo?.ToString("dd/MM/yyyy")</p>
                     </div>
                 </div>
+                @* Fecha Pago *@
                 <div class="col-md-6">
                     <div class="info-block">
                         <strong>Fecha Pago:</strong>
@@ -92,20 +102,24 @@
 
             <div class="row">
                 <div class="col-md-6">
+                    @* Saldo Pendiente *@
                     <div class="info-block">
                         <strong>Saldo Pendiente:</strong>
                         <p class="d-block">@prestamo?.Saldo</p>
                     </div>
+                    @* Monto total pagar *@
                     <div class="info-block">
                         <strong>Monto total pagar:</strong>
                         <p class="d-block">@prestamo?.MontoTotalPagar</p>
                     </div>
                 </div>
                 <div class="col-md-6">
+                    @* Total Interés *@
                     <div class="info-block">
                         <strong>Total Interés:</strong>
                         <p class="d-block">@prestamo?.TotalInteres</p>
                     </div>
+                   @*  Concepto *@
                     <div class="info-block">
                         <strong>Concepto:</strong>
                         <p class="d-block">@prestamo?.Concepto</p>
@@ -137,8 +151,7 @@
             prestamo.deudores = await deudorService.Buscar(prestamo.DeudorId);
         }
     }
-
-    public void Volver()
+    public async Task Volver()
     {
         navigationManager.NavigateTo("/Prestamo/Index");
     }

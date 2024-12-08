@@ -4,7 +4,6 @@ using ProyectoFinalAp1.Models;
 using System.Linq.Expressions;
 
 namespace ProyectoFinalAp1.Services;
-
 public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     public async Task<bool> Existe(int garantiaid)
@@ -31,7 +30,6 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(garantia);
     }
-
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -40,7 +38,6 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-
     public async Task<Garantias?> Buscar(int garantiaid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -63,23 +60,19 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .AsNoTracking()
             .ToListAsync();
     }
-
     public async Task<bool> EliminarDetalles(List<int> detalleIds)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-
         try
         {
             var detalles = await contexto.garantiasDetalle
                 .Where(d => detalleIds.Contains(d.DetalleId))
                 .ToListAsync();
-
             if (detalles.Any())
             {
                 contexto.garantiasDetalle.RemoveRange(detalles);
                 await contexto.SaveChangesAsync();
             }
-
             return true;
         }
         catch (Exception ex)
@@ -88,7 +81,6 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
             return false;
         }
     }
-
     public async Task<List<GarantiasDetalle>> ObtenerDetallesPorGarantiaId(int garantiaid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -96,5 +88,4 @@ public class GarantiaService(IDbContextFactory<ApplicationDbContext> DbFactory)
      .Where(detalle => detalle.GarantiaId == garantiaid)
      .ToListAsync();
     }
-
 }

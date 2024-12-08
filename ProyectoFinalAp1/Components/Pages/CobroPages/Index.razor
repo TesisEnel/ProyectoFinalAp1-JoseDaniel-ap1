@@ -6,7 +6,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Consulta de cobros</PageTitle>
-
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
     <div class="card shadow-lg w-100 h-100">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -65,7 +64,6 @@
                         <tr>
                             <td>@cobro.CobroId</td>
                             <td>@($"{cobro.Deudor?.Nombres} {cobro.Deudor?.Apellidos}")</td>
-                         
                             <td>@cobro.Mora</td>
                             <td>@cobro.ImportePagar</td>
                             <td>@cobro.FechaCobro</td>
@@ -111,14 +109,11 @@
         listaprestamo = await prestamoService.Listar(p => true);
         await ActualizarListaPrestamos();
     }
-
     public async Task ActualizarListaPrestamos()
     {
-        // Cargar los préstamos relacionados con los deudores
         listaprestamo = await prestamoService.ListarPrestamosConDeudores();
-        StateHasChanged(); // Refresca la UI y Forza de ser necesario
+        StateHasChanged(); 
     }
-
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))
@@ -132,7 +127,6 @@
                 listadeudore = await deudorService.Listar(d => d.Nombres.Contains(valorFiltro));
                 listacobro = listacobro.Where(c => c.Deudor?.Nombres?.Contains(valorFiltro) ?? false).ToList();
             }
-          
             else if (filtro == "Mora" && decimal.TryParse(valorFiltro, out decimal Mora))
             {
                 listacobro = await cobroService.Listar(c => c.Mora == Mora);
@@ -143,7 +137,6 @@
             }
         }
     }
-
     private async Task Volver()
     {
         navigationManager.NavigateTo("/menu");

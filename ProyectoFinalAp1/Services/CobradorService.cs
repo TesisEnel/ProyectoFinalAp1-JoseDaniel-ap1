@@ -4,7 +4,6 @@ using ProyectoFinalAp1.Models;
 using System.Linq.Expressions;
 
 namespace ProyectoFinalAp1.Services;
-
 public class CobradorService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     public async Task<bool> Existe(int Cobradorid)
@@ -31,7 +30,6 @@ public class CobradorService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(cobrador);
     }
-
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -40,7 +38,6 @@ public class CobradorService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-
     public async Task<Cobradores?> Buscar(int Cobradorid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();

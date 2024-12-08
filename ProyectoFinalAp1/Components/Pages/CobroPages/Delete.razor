@@ -8,7 +8,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Eliminar Cobro</PageTitle>
-
 <div class="container mt-5 pt-3">
     <div class="card shadow-lg border-0">
         <div class="card-header text-center py-5">
@@ -25,6 +24,7 @@
             else if (deudore != null)
             {
                 <div class="row">
+                   @*  Foto de la Cédula *@
                     <div class="col-md-4 text-center mb-4">
                         <strong class="d-block mb-2">Foto de la Cédula</strong>
                         @if (!string.IsNullOrEmpty(deudore?.FotoCedulaURL))
@@ -39,24 +39,28 @@
 
                     <div class="col-md-8">
                         <div class="row">
+                          @*   Número de Cédula *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Número de Cédula:</strong>
                                     <p class="d-block">@deudore?.NumeroCedula</p>
                                 </div>
                             </div>
+                            @* Nombre Completo *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Nombre Completo:</strong>
                                     <p class="d-block">@deudore?.Nombres @deudore?.Apellidos</p>
                                 </div>
                             </div>
+                            @* Fecha Cobro *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Fecha Cobro:</strong>
                                     <p class="d-block">@cobro?.FechaCobro</p>
                                 </div>
                             </div>
+                            @* Cobrador *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Cobrador:</strong>
@@ -66,13 +70,14 @@
                         </div>
 
                         <div class="row">
+                           @*  Apellidos *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Apellidos:</strong>
                                     <p class="d-block">@deudore?.Apellidos</p>
                                 </div>
                             </div>
-
+                            @* Dirección *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Dirección:</strong>
@@ -82,12 +87,14 @@
                         </div>
 
                         <div class="row">
+                           @*  Teléfono *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Teléfono:</strong>
                                     <p class="d-block">@deudore?.Telefono</p>
                                 </div>
                             </div>
+                         @*    Ciudad *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Ciudad:</strong>
@@ -169,8 +176,6 @@
                     deudore = await deudorService.Buscar(cobro.DeudorId);
                     ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
                     ListaCobradores = await cobradorService.ListarCobradores();
-
-                    // Cargar detalles existentes
                     listacobrodetalle = cobro.CobrosDetalles?.ToList() ?? new List<CobrosDetalle>();
                 }
             }
@@ -180,23 +185,18 @@
             mensajeError = $"Error al inicializar el componente: {ex.Message}";
         }
     }
-
     public async Task EliminarCobro()
     {
         if (CobroId == 0 || cobro == null)
         {
             return;
         }
-       
             if (await cobroService.Eliminar(CobroId))
             {
                 Volver();
             }
-           
     }
-
-
-    private void Volver()
+    private async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
     }

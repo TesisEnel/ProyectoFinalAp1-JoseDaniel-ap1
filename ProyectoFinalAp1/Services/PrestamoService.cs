@@ -5,7 +5,6 @@ using ProyectoFinalAp1.Models;
 using System.Linq.Expressions;
 
 namespace ProyectoFinalAp1.Services;
-
 public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     public async Task<bool> Existe(int prestamoid)
@@ -19,8 +18,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         contexto.prestamos.Add(prestamo);
         return await contexto.SaveChangesAsync() > 0;
     }
-  
-
     private async Task<bool> Modificar(Prestamos prestamo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -34,7 +31,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         else
             return await Modificar(prestamo);
     }
-
     public async Task<bool> Eliminar(int id)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -43,7 +39,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-
     public async Task<Prestamos?> Buscar(int prestamoid)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -80,7 +75,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .Where(p => p.PrestamoId == prestamoid)
             .ToListAsync();
     }
-
     public async Task<List<Prestamos>> ListarPrestamosConDeudores()
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -93,11 +87,8 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         {
             Console.WriteLine($"Préstamo ID: {prestamo.PrestamoId}, Deudor: {prestamo.deudores?.Nombres}, Saldo: {prestamo.Saldo}");
         }
-
         return prestamos;
     }
-
-
     public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();

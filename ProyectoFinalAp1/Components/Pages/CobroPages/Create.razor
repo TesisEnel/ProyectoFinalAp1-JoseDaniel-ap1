@@ -7,7 +7,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Registrar Cobro</PageTitle>
-
 <EditForm Model="cobro" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -25,6 +24,7 @@
                             <label for="fechaCobro"><strong>Fecha Cobro:</strong></label>
                             <InputDate @bind-Value="cobro.FechaCobro" class="form-control" />
                         </div>
+                        @* Buscar Deudor *@
                         <div class="col-md-6 mb-3">
                             <label for="deudor"><strong>Buscar Deudor:</strong></label>
                             <button class="form-control btn btn-outline-primary" @onclick="RedirigirABuscarDeudor">
@@ -33,13 +33,13 @@
                         </div>
                     </div>
                 </div>
-
                 @* Mostrar deudor seleccionado *@
                 <div class="border rounded p-3 mb-4">
                     <h5 class="text-secondary">Deudor Seleccionado</h5>
                     @if (deudore != null)
                     {
                         <div class="card p-3 bg-light">
+                            @* Datos del deudor selecionado *@
                             <div class="row">
                                 <div class="col-md-6">
                                     <p><strong>Cédula:</strong> @deudore.NumeroCedula</p>
@@ -77,10 +77,10 @@
                     </div>
                 </div>
 
-                @* Detalles del cobro *@
                 <div class="border rounded p-3 mb-4">
                     <h5 class="text-secondary">Detalles del Cobro</h5>
                     <div class="row mb-3">
+                      @*   PrestamoId *@
                         <div class="col-md-5">
                             <InputSelect class="form-control" @bind-Value="cobrodetalle.PrestamoId">
                                 <option value="0">-- Seleccione un préstamo --</option>
@@ -91,6 +91,7 @@
                             </InputSelect>
                             <ValidationMessage For="@(() => cobrodetalle.PrestamoId)" />
                         </div>
+                       @*  Valor Cobrado *@
                         <div class="col-md-4">
                             <label for="valorCobrado"><strong>Valor Cobrado:</strong></label>
                             <InputNumber class="form-control" @bind-Value="cobrodetalle.ValorCobrado" />
@@ -122,8 +123,6 @@
                                         <td>@detalle.Prestamo?.Concepto</td>
                                         <td>$@detalle.ValorCobrado</td>
                                         <td>
-                                            
-
                                             <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
                                                 <span class="bi bi-trash"></span> Remover
                                             </button>
@@ -142,7 +141,6 @@
                     </table>
                 </div>
 
-                @* Botones de acción *@
                 <div class="card-footer text-center">
                     <div class="btn-group">
                         <button class="btn btn-outline-primary" type="button" @onclick="Nuevo">
@@ -181,10 +179,8 @@
             {
                 deudore = await deudorService.Buscar(int.Parse(deudorid));
                 cobro.DeudorId = deudore?.DeudorId ?? 0;
-
                 ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
                 ListaCobradores = await cobradorService.ListarCobradores();
-
                 if (!ListaPrestamos.Any())
                 {
                     mensajeError = "No se encontraron préstamos asociados al deudor.";
@@ -196,9 +192,7 @@
             mensajeError = $"Error al inicializar el componente: {ex.Message}";
         }
     }
-
-    private void RedirigirABuscarDeudor() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
-
+    private async Task RedirigirABuscarDeudor() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
     private async Task Nuevo()
     {
         cobro = new();
@@ -209,7 +203,6 @@
         ListaCobradores.Clear();
         mensajeError = null;
     }
-
     private async Task AgregarDetalle()
     {
         if (cobrodetalle.PrestamoId == 0 || cobrodetalle.ValorCobrado <= 0)
@@ -217,32 +210,20 @@
             mensajeError = "Seleccione un préstamo válido y asegúrese de que el valor cobrado sea mayor a 0.";
             return;
         }
-
         var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
-        cobrodetalle.Prestamo = prestamo;  // No se debe establecer PrestamoId manualmente
-
+        cobrodetalle.Prestamo = prestamo;  
         listacobrodetalle.Add(cobrodetalle);
-        cobrodetalle = new(); // Limpiar detalle después de agregarlo.
+        cobrodetalle = new(); 
     }
-
-
-
-
-
-  
     private async Task EliminarDetalle(CobrosDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
             detallesAEliminar.Add(detalle.DetalleId);
         }
-        listacobrodetalle.Remove(detalle); // Remover de la lista local
-
-        // Forzar una actualización de la UI
+        listacobrodetalle.Remove(detalle); 
         StateHasChanged();
     }
-
-
     private async Task Guardar()
     {
         if (cobro.DeudorId == 0 || cobro.CobradorId == 0 || !listacobrodetalle.Any())
@@ -250,9 +231,6 @@
             mensajeError = "Debe seleccionar un deudor, un cobrador y agregar al menos un detalle de cobro.";
             return;
         }
-
-       
-
         if (detallesAEliminar.Any())
         {
             var eliminados = await cobroService.EliminarDetalles(detallesAEliminar);
@@ -261,16 +239,10 @@
                 mensajeError = "Ocurrió un error al eliminar los detalles seleccionados.";
                 return;
             }
-
-            detallesAEliminar.Clear(); // Limpiar la lista después de eliminar.
+            detallesAEliminar.Clear();
         }
         cobro.CobrosDetalles = listacobrodetalle;
-
-        // Guardar cobro
         var resultado = await cobroService.Guardar(cobro);
-
-
-       
         if (resultado)
         {
             navigationManager.NavigateTo("/Cobro/Index");
@@ -280,8 +252,7 @@
             mensajeError = "Ocurrió un error al guardar el cobro.";
         }
     }
-
-    private void Volver()
+    private async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
     }

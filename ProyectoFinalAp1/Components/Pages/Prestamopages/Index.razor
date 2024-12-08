@@ -132,12 +132,10 @@
             {
                 listadeudore = await deudorService.Listar(p => p.Nombres.Contains(valorFiltro));
             }
-
             else if (filtro == "MontoPrestado" && decimal.TryParse(valorFiltro, out decimal MontoPrestado))
             {
                 listaprestamo = await prestamoService.Listar(p => p.MontoPrestado == MontoPrestado);
             }
-
             else if (filtro == "FormaPago")
             {
                 listaprestamo = await prestamoService.Listar(p => p.FormaPago.Contains(valorFiltro));
