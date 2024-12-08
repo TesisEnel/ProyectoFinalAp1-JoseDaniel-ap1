@@ -120,4 +120,23 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .AsNoTracking()
             .ToListAsync();
     }
+    public async Task<List<CobrosDetalle>> ObtenerCobrosDetallePorDeudor(int deudorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.cobrosDetalles
+            .Include(cd => cd.Cobro)
+            .Include(cd => cd.Prestamo)
+            .Where(cd => cd.Cobro.DeudorId == deudorId)
+            .ToListAsync();
+    }
+
+    public async Task<List<Cobros>> ObtenerCobrosPorDeudor(int deudorId)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.cobros
+            .Where(c => c.DeudorId == deudorId)
+            .ToListAsync();
+    }
+
+
 }
