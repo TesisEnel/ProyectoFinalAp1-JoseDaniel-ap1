@@ -21,7 +21,7 @@
                         <option value="deudores">Deudores</option>
                         <option value="PrestamoId">PrestamoId</option>
                         <option value="Mora">Mora</option>
-                        <option value="ImportePagar">ImportePagar</option>
+                        <option value="ImporteAPagar">ImporteAPagar</option>
                     </select>
                 </div>
 
@@ -49,9 +49,8 @@
                     <tr>
                         <th>CobroId</th>
                         <th>Deudores</th>
-                        
                         <th>Mora</th>
-                        <th>ImportePagar</th>
+                        <th>ImporteAPagar</th>
                         <th>FechaCobro</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -65,7 +64,7 @@
                             <td>@cobro.CobroId</td>
                             <td>@($"{cobro.Deudor?.Nombres} {cobro.Deudor?.Apellidos}")</td>
                             <td>@cobro.Mora</td>
-                            <td>@cobro.ImportePagar</td>
+                            <td>@cobro.ImporteAPagar</td>
                             <td>@cobro.FechaCobro</td>
                             <td>
                                 <a href="/Cobro/Details/@cobro.CobroId" class="btn btn-outline-primary">
@@ -78,7 +77,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/Cobro/Delete/@cobro.CobroId" class="btn  btn-outline-danger">
+                                <a href="/Cobro/Delete/@cobro.CobroId" class="btn btn-outline-danger">
                                     <span class="bi bi-trash mt-3"></span>
                                 </a>
                             </td>
@@ -109,11 +108,13 @@
         listaprestamo = await prestamoService.Listar(p => true);
         await ActualizarListaPrestamos();
     }
+
     public async Task ActualizarListaPrestamos()
     {
         listaprestamo = await prestamoService.ListarPrestamosConDeudores();
-        StateHasChanged(); 
+        StateHasChanged();
     }
+
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorFiltro))
@@ -131,12 +132,13 @@
             {
                 listacobro = await cobroService.Listar(c => c.Mora == Mora);
             }
-            else if (filtro == "ImportePagar" && decimal.TryParse(valorFiltro, out decimal ImportePagar))
+            else if (filtro == "ImporteAPagar" && decimal.TryParse(valorFiltro, out decimal ImporteAPagar))
             {
-                listacobro = await cobroService.Listar(c => c.ImportePagar == ImportePagar);
+                listacobro = await cobroService.Listar(c => c.ImporteAPagar == ImporteAPagar);
             }
         }
     }
+
     private async Task Volver()
     {
         navigationManager.NavigateTo("/menu");
