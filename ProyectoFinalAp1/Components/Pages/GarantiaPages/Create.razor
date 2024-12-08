@@ -18,7 +18,7 @@
 
             <div class="card-body">
                 <div class="row">
-                   @* Garantía ID  *@
+                    @* Garantía ID  *@
                     <div class="col-md-6 mb-4">
                         <label for="GarantiaId" class="form-label text-dark"><strong>Garantía ID:</strong></label>
                         <InputNumber id="GarantiaId" class="form-control" readonly @bind-Value="garantia.GarantiaId" />
@@ -34,7 +34,7 @@
                         <ValidationMessage For="@(() => garantia.ValorGarantia)" />
                     </div>
 
-                   @*  Fecha de la Garantía  *@
+                    @*  Fecha de la Garantía  *@
                     <div class="col-md-6 mb-4">
                         <label for="FechaGarantia" class="form-label text-dark"><strong>Fecha de la Garantía:</strong></label>
                         <InputDate id="FechaGarantia" class="form-control" @bind-Value="garantia.FechaGarantia" />
@@ -82,7 +82,7 @@
                         <InputText class="form-control" placeholder="Artículo" @bind-Value="detalle.Articulo" />
                         <ValidationMessage For="@(() => detalle.Articulo)" />
                     </div>
-                   @*  Cantidad *@
+                    @*  Cantidad *@
                     <div class="col-md-2">
                         <label for="Cantidad" class="form-label text-dark"><strong>Cantidad:</strong></label>
                         <InputNumber class="form-control" @bind-Value="detalle.Cantidad" />
@@ -94,7 +94,7 @@
                         <InputNumber class="form-control" @bind-Value="detalle.ValorUnitario" />
                         <ValidationMessage For="@(() => detalle.ValorUnitario)" />
                     </div>
-                   @*  Foto *@
+                    @*  Foto *@
                     <div class="col-md-3">
                         <label for="Foto" class="form-label text-dark"><strong>Foto:</strong></label>
                         <InputText class="form-control" placeholder="URL de la foto" @bind-Value="detalle.FotoDetalleUrl" />
@@ -207,13 +207,13 @@
             bool detallesEliminados = await garantiaService.EliminarDetalles(detallesAEliminar);
             if (!detallesEliminados)
             {
-                
+
                 return;
             }
-            detallesAEliminar.Clear(); 
+            detallesAEliminar.Clear();
         }
 
-        garantia.Detalles = listadestalles; 
+        garantia.Detalles = listadestalles;
 
         if (await garantiaService.Guardar(garantia))
         {
@@ -236,18 +236,18 @@
         detalle.Total = detalle.Cantidad * detalle.ValorUnitario;
         listadestalles.Add(detalle);
         ActualizarValorGarantia();
-        detalle = new GarantiasDetalle(); 
+        detalle = new GarantiasDetalle();
     }
 
     private async Task EliminarDetalle(GarantiasDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
-            detallesAEliminar.Add(detalle.DetalleId); 
+            detallesAEliminar.Add(detalle.DetalleId);
         }
-        listadestalles.Remove(detalle); 
-        ActualizarValorGarantia(); 
-        StateHasChanged(); 
+        listadestalles.Remove(detalle);
+        ActualizarValorGarantia();
+        StateHasChanged();
     }
 
     private async Task ActualizarValorGarantia()
