@@ -290,7 +290,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<DateTime>("FechaPrestamo")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("ImportePagar")
+                    b.Property<decimal>("ImporteAPagar")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Mora")

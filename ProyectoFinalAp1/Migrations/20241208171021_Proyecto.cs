@@ -235,8 +235,8 @@ namespace ProyectoFinalAp1.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeudorId = table.Column<int>(type: "int", nullable: false),
                     CobradorId = table.Column<int>(type: "int", nullable: false),
+                    ImporteAPagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Mora = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImportePagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true)

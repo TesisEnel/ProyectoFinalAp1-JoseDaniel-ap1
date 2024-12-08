@@ -12,7 +12,7 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241208141946_Proyecto")]
+    [Migration("20241208171021_Proyecto")]
     partial class Proyecto
     {
         /// <inheritdoc />
@@ -293,7 +293,7 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<DateTime>("FechaPrestamo")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("ImportePagar")
+                    b.Property<decimal>("ImporteAPagar")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Mora")
