@@ -139,6 +139,13 @@
                             }
                         </tbody>
                     </table>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12 text-right">
+                            <h5><strong>Total Importe a Pagar:</strong> $@cobro.ImporteAPagar</h5>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-footer text-center">
@@ -218,6 +225,7 @@
         ListaCobradores.Clear();
         mensajeError = null;
     }
+  
     private async Task AgregarDetalle()
     {
         if (cobrodetalle.PrestamoId == 0 || cobrodetalle.ValorCobrado <= 0)
@@ -226,19 +234,24 @@
             return;
         }
         var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
-        cobrodetalle.Prestamo = prestamo;  
+        cobrodetalle.Prestamo = prestamo;
         listacobrodetalle.Add(cobrodetalle);
-        cobrodetalle = new(); 
+        cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado??0);
+        cobrodetalle = new();
     }
+
     private async Task EliminarDetalle(CobrosDetalle detalle)
     {
         if (detalle.DetalleId != 0)
         {
             detallesAEliminar.Add(detalle.DetalleId);
         }
-        listacobrodetalle.Remove(detalle); 
+        listacobrodetalle.Remove(detalle);
+        cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado??0);
+
         StateHasChanged();
     }
+
     private async Task Guardar()
     {
         if (cobro.DeudorId == 0 || cobro.CobradorId == 0 || !listacobrodetalle.Any())
@@ -246,6 +259,7 @@
             mensajeError = "Debe seleccionar un deudor, un cobrador y agregar al menos un detalle de cobro.";
             return;
         }
+
         if (detallesAEliminar.Any())
         {
             var eliminados = await cobroService.EliminarDetalles(detallesAEliminar);
@@ -258,9 +272,22 @@
         }
 
         cobro.CobrosDetalles = listacobrodetalle;
+
         var resultado = await cobroService.Guardar(cobro);
+
         if (resultado)
         {
+            foreach (var detalle in listacobrodetalle)
+            {
+                var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == detalle.PrestamoId);
+                if (prestamo != null)
+                {
+                    prestamo.Saldo -= detalle.ValorCobrado;
+                    prestamo.FechaCobro = prestamo.FechaCobro?.AddMonths(1); 
+                    await prestamoService.Actualizar(prestamo);
+                }
+            }
+
             navigationManager.NavigateTo("/Cobro/Index");
         }
         else
@@ -268,6 +295,7 @@
             mensajeError = "Ocurrió un error al guardar el cobro.";
         }
     }
+
     private async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
