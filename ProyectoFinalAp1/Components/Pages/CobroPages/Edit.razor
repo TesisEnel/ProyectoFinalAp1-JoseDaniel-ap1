@@ -136,6 +136,11 @@
                             }
                         </tbody>
                     </table>
+                    <div class="row mb-3">
+                        <div class="col-md-12 text-right">
+                            <h5><strong>Total Importe a Pagar:</strong> $@cobro.ImporteAPagar</h5>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-footer text-center">
@@ -203,44 +208,19 @@
         ListaCobradores.Clear();
         mensajeError = null;
     }
+
     private async Task AgregarDetalle()
     {
-        if (cobrodetalle.PrestamoId == 0)
+        if (cobrodetalle.PrestamoId == 0 || cobrodetalle.ValorCobrado <= 0)
         {
-            mensajeError = "Debe seleccionar un préstamo.";
+            mensajeError = "Seleccione un préstamo válido y asegúrese de que el valor cobrado sea mayor a 0.";
             return;
         }
-
-        if (cobrodetalle.ValorCobrado <= 0)
-        {
-            mensajeError = "El valor cobrado debe ser mayor a cero.";
-            return;
-        }
-
-        if (detalleEnEdicion != null)
-        {
-            var detalle = listacobrodetalle.FirstOrDefault(d => d.DetalleId == detalleEnEdicion.DetalleId);
-            if (detalle != null)
-            {
-                detalle.PrestamoId = cobrodetalle.PrestamoId;
-                detalle.ValorCobrado = cobrodetalle.ValorCobrado;
-            }
-            detalleEnEdicion = null; 
-        }
-        else
-        {
-            var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
-            if (prestamo == null)
-            {
-                mensajeError = "Préstamo no encontrado.";
-                return;
-            }
-            cobrodetalle.Prestamo = prestamo;
-            listacobrodetalle.Add(cobrodetalle);
-        }
-        cobro.CobrosDetalles = listacobrodetalle;
-        cobrodetalle = new CobrosDetalle();
-        mensajeError = null; 
+        var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
+        cobrodetalle.Prestamo = prestamo;
+        listacobrodetalle.Add(cobrodetalle);
+        cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado ?? 0);
+        cobrodetalle = new();
     }
     private async Task EliminarDetalle(CobrosDetalle detalle)
     {
@@ -249,6 +229,7 @@
             detallesAEliminar.Add(detalle.DetalleId);
         }
         listacobrodetalle.Remove(detalle); 
+        cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado ?? 0);
         StateHasChanged();
     }
     private async Task EditarDetalle(CobrosDetalle detalle)
@@ -277,12 +258,26 @@
                 mensajeError = "Ocurrió un error al eliminar los detalles seleccionados.";
                 return;
             }
-            detallesAEliminar.Clear(); 
+            detallesAEliminar.Clear();
         }
+
         cobro.CobrosDetalles = listacobrodetalle;
+
         var resultado = await cobroService.Guardar(cobro);
+
         if (resultado)
         {
+            foreach (var detalle in listacobrodetalle)
+            {
+                var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == detalle.PrestamoId);
+                if (prestamo != null)
+                {
+                    prestamo.Saldo -= detalle.ValorCobrado;
+                    prestamo.FechaCobro = prestamo.FechaCobro?.AddMonths(1);
+                    await prestamoService.Actualizar(prestamo);
+                }
+            }
+
             navigationManager.NavigateTo("/Cobro/Index");
         }
         else
