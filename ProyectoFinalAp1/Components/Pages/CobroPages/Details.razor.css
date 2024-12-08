@@ -30,27 +30,6 @@
     padding: 30px;
 }
 
-.info-block strong {
-    color: #008DD9;
-    font-size: 16px;
-}
-
-.info-block p {
-    font-size: 16px;
-    color: #555;
-}
-
-.img-thumbnail {
-    max-width: 200px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.text-muted em {
-    font-style: italic;
-    color: #777;
-}
-
 .footer-bar {
     background: linear-gradient(45deg, #008DD9, #4A667F);
     color: white;
@@ -58,9 +37,10 @@
     border-radius: 0 0 10px 10px;
 }
 
-.btn {
-    background-color: #008DD9;
-    color: white;
+/* Botón estándar (Volver) */
+.btn-primary {
+    background-color: #008DD9 !important;
+    color: white !important;
     font-weight: bold;
     padding: 10px 25px;
     border-radius: 50px;
@@ -68,19 +48,43 @@
     font-size: 16px;
 }
 
-    .btn:hover {
-        transform: scale(1.05);
+    .btn-primary:hover {
+        background-color: #005F8C !important;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-/* Botón Generar Factura (verde) */
-.btn-success {
-    background-color: #28a745 !important;
-    border: none;
+/* Botón Generar Factura */
+.btn-cris {
+    background: linear-gradient(45deg, #333, #555);
+    color: white !important;
     font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
 }
 
-    .btn-success:hover {
-        background-color: #218838 !important;
-        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+    .btn-cris:hover {
+        background: linear-gradient(45deg, #555, #333);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+/* Botón Enviar WhatsApp */
+.btn-whatsapp {
+    background-color: #25D366 !important;
+    color: white !important;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+    .btn-whatsapp:hover {
+        background-color: #1EBE57 !important;
+        box-shadow: 0 4px 8px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-whatsapp .bi {
+        font-size: 20px;
+        margin-right: 8px;
     }
