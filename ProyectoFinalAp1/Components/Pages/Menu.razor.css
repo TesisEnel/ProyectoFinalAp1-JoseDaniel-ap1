@@ -1,10 +1,15 @@
-﻿/* Estilos para el título del menú */
+﻿
+/* Estilos para el título del menú */
 .menu-title {
-    color: #fff; /* Establece el color del texto a blanco */
-    font-size: 36px; /* Tamaño del texto */
-    font-weight: 600; /* Negrita */
-    margin-bottom: 20px; /* Espacio debajo del título */
-    text-align: center; /* Alineación centrada */
+    color: #FFD700; /* Cambiar el color a dorado para mayor impacto */
+    font-size: 48px; /* Aumentar el tamaño de la fuente */
+    font-weight: 800; /* Hacer el texto más grueso */
+    margin-bottom: 60px; /* Mantener espacio inferior */
+    text-align: center; /* Centrar el texto */
+    text-transform: uppercase; /* Convertir el texto a mayúsculas */
+    letter-spacing: 2px; /* Añadir espaciado entre letras */
+    font-family: 'Poppins', sans-serif; /* Aplicar una fuente estilizada */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.7); /* Añadir sombras de texto */
 }
 
 /* Estilos para el contenedor del menú */
@@ -13,14 +18,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #008DD9; /* Fondo azul */
-    height: calc(100vh - 50px); /* Reducido el alto para que se mueva hacia arriba */
-    width: 100vw; /* 100% del ancho de la ventana */
+    background-color: #008DD9;
+    height: calc(100vh - 50px);
+    width: 100vw;
     padding: 40px;
     box-sizing: border-box;
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    margin-top: -5px; /* Mover el menú hacia arriba */
+    margin-top: -5px;
 }
 
 /* Estilos para las filas del menú */
@@ -28,8 +33,14 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
-    margin-bottom: 40px; /* Menos espacio debajo de cada fila */
+    margin-bottom: 40px;
 }
+
+    /* Estilos para la tercera fila */
+    .menu-row:last-child {
+        justify-content: center; /* Centra los elementos en esta fila */
+        margin-top: 20px; /* Ajusta el margen superior */
+    }
 
 /* Estilos para cada ítem del menú */
 .menu-item {
@@ -37,13 +48,13 @@
     color: #fff;
     text-align: center;
     transition: transform 0.3s, color 0.3s, background-color 0.3s ease, box-shadow 0.3s ease;
-    width: 160px; /* Ancho aumentado para los ítems */
-    height: 160px; /* Altura aumentada para coincidir con los íconos */
+    width: 160px;
+    height: 160px;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Ajusta la posición vertical de los íconos y texto */
+    justify-content: center;
     align-items: center;
-    padding: 5px 0; /* Ajusta el padding para acercar el texto al ícono */
+    padding: 5px 0;
     border-radius: 15px;
     background-color: #C6C6C0;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
@@ -52,25 +63,22 @@
     transition: all 0.3s ease;
 }
 
-    /* Ajustes para los íconos */
     .menu-item img {
-        width: 120px; /* Tamaño fijo para el ícono */
-        height: 120px; /* Tamaño fijo para el ícono */
-        margin-bottom: 10px; /* Espacio ajustado debajo de la imagen */
+        width: 120px;
+        height: 120px;
+        margin-bottom: 10px;
         transition: transform 0.3s, filter 0.3s;
     }
 
-    /* Estilo para el texto de cada ítem del menú */
     .menu-item span {
         display: block;
-        font-size: 12px; /* Tamaño de letra más pequeño */
+        font-size: 12px;
         font-weight: 600;
         letter-spacing: 1px;
-        margin-top: 5px; /* Ajusta el espacio encima del texto */
+        margin-top: 5px;
         transition: color 0.3s;
     }
 
-    /* Estilo hover para los ítems del menú */
     .menu-item:hover {
         transform: scale(1.05);
         background-color: rgba(255, 255, 255, 0.3);
@@ -78,71 +86,11 @@
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
     }
 
-        /* Efecto en los íconos al hacer hover */
         .menu-item:hover img {
             transform: rotate(15deg);
             filter: brightness(1.3);
         }
 
-        /* Cambio de color del texto en hover */
         .menu-item:hover span {
             color: #FFD700;
         }
-
-/* Nueva fila para el botón de reporte (tercera fila) */
-.menu-row-reporte {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 4px; /* Menos espacio debajo de la fila de reporte */
-}
-
-/* Contenedor para el botón de reporte */
-.menu-reporte {
-    position: absolute;
-    top: 60%; /* Ajustado para mover la fila de reporte hacia arriba */
-    left: 5%; /* Ajusta el valor para moverlo más a la izquierda */
-    transform: translateX(-50%) translateY(-50%); /* Ajusta la posición para que quede centrado */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 160px; /* Tamaño igual que los demás ítems */
-    height: 160px; /* Tamaño igual que los demás ítems */
-}
-
-    /* Asegúrate de que los ítems del reporte tengan el mismo tamaño */
-    .menu-reporte .menu-item {
-        width: 160px; /* Ajusta el ancho para que sea igual a los demás ítems */
-        height: 160px; /* Ajusta la altura para que sea igual a los demás ítems */
-        padding: 5px 0; /* Ajuste del padding para acercar el ícono al texto */
-        background-color: #C6C6C0;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        transition: all 0.3s ease;
-    }
-
-        /* Íconos del reporte con tamaño y margen ajustados */
-        .menu-reporte .menu-item img {
-            width: 90px; /* Ajusta el tamaño del ícono dentro del reporte */
-            height: 90px;
-            margin-bottom: 5px; /* Reducido el espacio debajo del ícono */
-            transition: transform 0.3s, filter 0.3s;
-        }
-
-        /* Estilo hover para los ítems del reporte */
-        .menu-reporte .menu-item:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.3);
-            color: #FFD700;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-        }
-
-            /* Efecto en los íconos del reporte */
-            .menu-reporte .menu-item:hover img {
-                transform: rotate(15deg);
-                filter: brightness(1.3);
-            }
-
-            /* Cambio de color del texto del reporte */
-            .menu-reporte .menu-item:hover span {
-                color: #FFD700;
-            }
