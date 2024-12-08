@@ -175,16 +175,30 @@
         try
         {
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(new Uri(navigationManager.Uri).Query);
+
             if (query.TryGetValue("DeudorId", out var deudorid))
             {
-                deudore = await deudorService.Buscar(int.Parse(deudorid));
-                cobro.DeudorId = deudore?.DeudorId ?? 0;
-                ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
-                ListaCobradores = await cobradorService.ListarCobradores();
-                if (!ListaPrestamos.Any())
+                cobro.DeudorId = int.Parse(deudorid);
+                deudore = await deudorService.Buscar(cobro.DeudorId);
+
+                if (deudore != null)
                 {
-                    mensajeError = "No se encontraron préstamos asociados al deudor.";
+                    ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
+                    ListaCobradores = await cobradorService.ListarCobradores();
+
+                    if (!ListaPrestamos.Any())
+                    {
+                        mensajeError = "No se encontraron préstamos asociados al deudor.";
+                    }
                 }
+                else
+                {
+                    mensajeError = "El deudor no fue encontrado.";
+                }
+            }
+            else
+            {
+                mensajeError = "No se proporcionó un DeudorId.";
             }
         }
         catch (Exception ex)
@@ -192,6 +206,7 @@
             mensajeError = $"Error al inicializar el componente: {ex.Message}";
         }
     }
+
     private async Task RedirigirABuscarDeudor() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
     private async Task Nuevo()
     {
@@ -241,6 +256,7 @@
             }
             detallesAEliminar.Clear();
         }
+
         cobro.CobrosDetalles = listacobrodetalle;
         var resultado = await cobroService.Guardar(cobro);
         if (resultado)
