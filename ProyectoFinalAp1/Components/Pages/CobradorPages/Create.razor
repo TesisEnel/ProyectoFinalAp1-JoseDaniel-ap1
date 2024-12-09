@@ -7,12 +7,13 @@
 <PageTitle>Registrar Cobradores</PageTitle>
 <EditForm Model="cobrador" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
         <div class="card shadow-lg w-100">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
                 <h3 class="card-title text-center w-100">Registrar Cobradores</h3>
             </div>
-
+            
             <div class="card-body">
                 <div class="row">
                     @* CobradorId *@
@@ -123,10 +124,19 @@
     public List<Cobradores> listacobradores = new List<Cobradores>();
     private bool existe = false;
     private bool Estado = false;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
     public async Task Nuevo()
     {
         cobrador = new Cobradores();
         existe = false;
+      
+        toastService.Notify(new ToastMessage(
+            ToastType.Info,
+            iconName: IconName.None,
+            title: "Nuevo Registro",
+            helpText: "",
+            message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
     protected override async Task OnInitializedAsync()
     {
@@ -154,18 +164,59 @@
     {
         if (!await Validar())
         {
+            toastService.Notify(new ToastMessage(
+              ToastType.Danger,
+              iconName: IconName.None,
+              title: "Error",
+              helpText: "",
+              message: "Ya existe un cobrador con este ID."));
+            await Task.Delay(3000);
             return;
         }
         var guadado = await CobradorService.Guardar(cobrador);
         if (guadado)
         {
-            toastService.Notify(new(ToastType.Success, "Exito", "Se guardó correctamente"));
+            toastService.Notify(new ToastMessage(
+                 ToastType.Success,
+                 iconName: IconName.None,
+                 title: "Guardado",
+                 helpText: "",
+                 message: "El Cobrador se ha guardado correctamente.")); 
+            await Task.Delay(3000); 
+            
             Volver();
         }
     }
     public async Task Volver()
     {
-        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        toastService.Notify(new ToastMessage(
+                 ToastType.Primary,
+                 iconName: IconName.None,
+                 title: "Volver",
+                 helpText: "",
+                 message: "El Cobrador ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Cobrador/Index");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Cobrador se ha guardado correctamente.",
+            ToastType.Primary => "El Cobrador ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el cobrador.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
