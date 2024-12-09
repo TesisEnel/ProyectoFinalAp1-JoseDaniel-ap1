@@ -10,7 +10,7 @@
         <div class="card-header text-center py-5">
             <h2>Eliminar del cobrador</h2>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
             <div class="row">
                 @* Foto de la Cedula *@
@@ -108,7 +108,7 @@
     public List<Cobradores> listacobradores = new List<Cobradores>();
     private bool existe = false;
     private bool Estado = false;
-
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
     protected override async Task OnInitializedAsync()
     {
         if (CobradorId > 0)
@@ -121,16 +121,56 @@
     {
         if (cobrador == null)
         {
+            toastService.Notify(new ToastMessage(
+            ToastType.Danger,
+            iconName: IconName.None,
+             title: "Error",
+            message: "El cobrador no fue encontrado."));
+            await Task.Delay(3000);
             return;
         }
         if (await CobradorService.Eliminar(CobradorId))
         {
+            toastService.Notify(new ToastMessage(
+                 ToastType.Danger,
+                 iconName: IconName.None,
+                 title: "EliminarCobrador",
+                 helpText: "",
+                 message: "El Cobrador ya elimino correctamente."));
+            await Task.Delay(3000);
             Volver();
         }
     }
     public async Task Volver()
     {
-        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        toastService.Notify(new ToastMessage(
+                  ToastType.Primary,
+                  iconName: IconName.None,
+                  title: "Volver",
+                  helpText: "",
+                  message: "El Cobrador ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Cobrador/Index");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Cobrador se ha guardado correctamente.",
+            ToastType.Primary => "El Cobrador ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el cobrador.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
