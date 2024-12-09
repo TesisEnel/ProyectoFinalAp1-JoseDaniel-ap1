@@ -3,6 +3,7 @@
 @inject PrestamoService prestamoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Consulta de deudores para cobros</PageTitle>
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
@@ -10,7 +11,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title w-100">Consulta de Deudores para Cobros</h3>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body overflow-auto">
             <div class="row mb-4 align-items-end">
                 <div class="col-md-4">
@@ -62,7 +63,7 @@
                                 <td>@deudor.Telefono</td>
                                 <td>@deudor.Ciudad</td>
                                 <td class="text-center">
-                                    <input type="checkbox" @onclick="() => SeleccionarCliente(deudor.DeudorId)" class="checkbox-seleccionar" />
+                                    <input type="checkbox" @onclick="() => SeleccionarDeudor(deudor.DeudorId)" class="checkbox-seleccionar" />
                                 </td>
                             </tr>
                         }
@@ -82,6 +83,7 @@
     private List<Prestamos> listarprestamo = new List<Prestamos>();
     public string filtro = "0";
     public string valorFiltro = "";
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -92,8 +94,15 @@
             .ToList();
         Console.WriteLine($"Deudores con préstamos registrados: {listardeudore.Count}");
     }
-    private async Task SeleccionarCliente(int deudorId)
+    private async Task SeleccionarDeudor(int deudorId)
     {
+        toastService.Notify(new ToastMessage(
+            ToastType.Success,
+            iconName: IconName.None,
+            title: "Deudor Seleccionado",
+            message: "El deudor ha sido seleccionado con éxito."
+        ));
+        await Task.Delay(3000);
         navigationManager.NavigateTo($"/Cobro/Create?deudorId={deudorId}");
     }
     public async Task Buscar()
@@ -118,5 +127,27 @@
         {
             listardeudore = await deudorService.Listar(c => c.Ciudad.Contains(valorFiltro));
         }
+    }
+
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Cobro se ha guardado correctamente.",
+            ToastType.Primary => "El Cobro ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el cobro.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
