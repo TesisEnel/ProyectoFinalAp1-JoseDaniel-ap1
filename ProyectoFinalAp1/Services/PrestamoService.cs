@@ -82,13 +82,6 @@ public class PrestamoService(IDbContextFactory<ApplicationDbContext> DbFactory)
         }
         return prestamos;
     }
-    //public async Task<bool> ActualizarPrestamo(Prestamos prestamo)
-    //{
-    //    await using var contexto = await DbFactory.CreateDbContextAsync();
-    //    contexto.prestamos.Update(prestamo);
-    //    return await contexto.SaveChangesAsync() > 0;
-    //}
-
     public async Task<bool> Actualizar(Prestamos prestamo)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();

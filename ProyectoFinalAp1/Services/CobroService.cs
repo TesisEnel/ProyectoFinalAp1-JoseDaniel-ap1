@@ -99,7 +99,7 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.cobros
-            .Include(c => c.CobrosDetalles) 
+            .Include(c => c.CobrosDetalles)
             .ThenInclude(cd => cd.Prestamo)
             .FirstOrDefaultAsync(c => c.CobroId == cobroid);
     }
@@ -108,9 +108,9 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.cobros
             .Where(criterio)
-            .Include(c => c.Deudor) 
+            .Include(c => c.Deudor)
             .Include(c => c.CobrosDetalles)
-            .AsNoTracking() 
+            .AsNoTracking()
             .ToListAsync();
     }
     public async Task<List<Cobros>> ListarCobros()
@@ -137,6 +137,4 @@ public class CobroService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .Where(c => c.DeudorId == deudorId)
             .ToListAsync();
     }
-
-
 }
