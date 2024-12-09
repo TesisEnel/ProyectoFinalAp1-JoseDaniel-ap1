@@ -3,6 +3,7 @@
 @inject DeudorService deudorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Eliminar Préstamo</PageTitle>
 <div class="container mt-5 pt-3">
@@ -10,6 +11,7 @@
         <div class="card-header text-center py-5 header-style">
             <h2 class="header-title">Eliminar Préstamo</h2>
         </div>
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
             @if (prestamo != null && prestamo.deudores != null)
             {
@@ -141,6 +143,7 @@
     [Parameter]
     public int PrestamoId { get; set; }
     private Prestamos? prestamo;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -155,17 +158,58 @@
     {
         if (prestamo == null)
         {
+            toastService.Notify(new ToastMessage(
+          ToastType.Danger,
+          iconName: IconName.None,
+           title: "Error",
+          message: "El prestamo no fue encontrado."));
+            await Task.Delay(3000);
             return;
         }
 
         if (await prestamoService.Eliminar(PrestamoId))
         {
+            toastService.Notify(new ToastMessage(
+                 ToastType.Danger,
+                 iconName: IconName.None,
+                 title: "EliminarPrestamo",
+                 helpText: "",
+                 message: "El prestamo ya elimino correctamente."));
+            await Task.Delay(3000);
             Volver();
         }
     }
 
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+       ToastType.Info,
+       iconName: IconName.None,
+       title: "Volver",
+       helpText: "Regresando a la página de lista de préstamos.",
+       message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Prestamo/Index");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El prestamo se ha guardado correctamente.",
+            ToastType.Primary => "El prestamo ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el prestamo.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
