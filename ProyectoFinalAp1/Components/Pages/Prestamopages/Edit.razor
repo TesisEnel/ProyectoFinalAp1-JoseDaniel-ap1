@@ -8,6 +8,7 @@
 <PageTitle>Modificar de prestamos</PageTitle>
 <EditForm Model="prestamo" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container-fluid vh-100 d-flex flex-column justify-content-center p-3">
         <div class="card shadow-lg border-0 rounded-lg">
 
@@ -56,13 +57,13 @@
                 <section class="mb-4">
                     <h5 class="text-secondary border-bottom pb-2">Detalles del Préstamo</h5>
                     <div class="row">
-                       @*  Fecha del Préstamo *@
+                        @*  Fecha del Préstamo *@
                         <div class="col-md-6 mb-3">
                             <label for="fecha" class="form-label"><strong>Fecha del Préstamo:</strong></label>
                             <InputDate id="fecha" class="form-control shadow-sm" @bind-Value="prestamo.FechaPrestamo" />
                             <ValidationMessage For="@(() => prestamo.FechaPrestamo)" />
                         </div>
-                       @*  Monto Préstamo *@
+                        @*  Monto Préstamo *@
                         <div class="col-md-6 mb-3">
                             <label for="montoPrestado" class="form-label"><strong>Monto Préstamo:</strong></label>
                             <InputNumber id="montoPrestado" class="form-control shadow-sm" @bind-Value="prestamo.MontoPrestado" />
@@ -76,7 +77,7 @@
                             <InputNumber id="interes" class="form-control shadow-sm" @bind-Value="prestamo.Interes" />
                             <ValidationMessage For="@(() => prestamo.Interes)" />
                         </div>
-                       @*  Cuotas *@
+                        @*  Cuotas *@
                         <div class="col-md-6 mb-3">
                             <label for="cuotas" class="form-label"><strong>Cuotas:</strong></label>
                             <InputNumber id="cuotas" class="form-control shadow-sm" @bind-Value="prestamo.Cuotas" />
@@ -84,7 +85,7 @@
                         </div>
                     </div>
                     <div class="row">
-                     @*    Forma de Pago *@
+                        @*    Forma de Pago *@
                         <div class="col-md-6 mb-3">
                             <label for="formaPago" class="form-label"><strong>Forma de Pago:</strong></label>
                             <select id="formaPago" class="form-select shadow-sm" @bind="prestamo.FormaPago">
@@ -111,7 +112,7 @@
                             <label for="montoCuota" class="form-label"><strong>Monto por Cuota:</strong></label>
                             <InputNumber id="montoCuota" class="form-control shadow-sm" @bind-Value="prestamo.MontoCuota" disabled />
                         </div>
-                       @*  Total Interés *@
+                        @*  Total Interés *@
                         <div class="col-md-6 mb-3">
                             <label for="totalInteres" class="form-label"><strong>Total Interés:</strong></label>
                             <InputNumber id="totalInteres" class="form-control shadow-sm" @bind-Value="prestamo.TotalInteres" disabled />
@@ -121,7 +122,7 @@
                             <label for="montoTotalPagar" class="form-label"><strong>Monto Total a Pagar:</strong></label>
                             <InputNumber id="montoTotalPagar" class="form-control shadow-sm" @bind-Value="prestamo.MontoTotalPagar" disabled />
                         </div>
-                       @*  Fecha de Cobro *@
+                        @*  Fecha de Cobro *@
                         <div class="col-md-6 mb-3">
                             <label for="fechacobro" class="form-label"><strong>Fecha de Cobro:</strong></label>
                             <InputDate class="form-control shadow-sm" @bind-Value="prestamo.FechaCobro" disabled />
@@ -171,14 +172,38 @@
     {
         if (prestamo.FechaPrestamo == DateTime.MinValue)
         {
+            toastService.Notify(new ToastMessage(
+              ToastType.Danger,
+              iconName: IconName.None,
+              title: "Error",
+              helpText: "La fecha del préstamo es requerida.",
+              message: "Por favor, ingresa una fecha válida para el préstamo."
+             ));
+            await Task.Delay(3000);
             return;
         }
         else if (prestamo.MontoPrestado == 0)
         {
+            toastService.Notify(new ToastMessage(
+             ToastType.Warning,
+             iconName: IconName.None,
+             title: "Error",
+             helpText: "El monto del préstamo no puede ser 0.",
+             message: "Por favor, ingresa un monto válido para el préstamo."
+            ));
+            await Task.Delay(3000);
             return;
         }
         else if (prestamo.FormaPago == null)
         {
+            toastService.Notify(new ToastMessage(
+         ToastType.Danger,
+         iconName: IconName.None,
+         title: "Error",
+         helpText: "La forma de pago es requerida.",
+         message: "Por favor, selecciona una forma de pago."
+          ));
+            await Task.Delay(3000);
             return;
         }
         else
@@ -187,6 +212,14 @@
             var guardado = await prestamoService.Guardar(prestamo);
             if (guardado)
             {
+                toastService.Notify(new ToastMessage(
+               ToastType.Success,
+               iconName: IconName.None,
+               title: "Guardado Exitoso",
+               helpText: "El préstamo se ha registrado exitosamente.",
+               message: "El préstamo ha sido guardado correctamente."
+                 ));
+                await Task.Delay(3000);
                 Volver();
             }
         }
@@ -201,15 +234,38 @@
     private async Task Nuevo()
     {
         prestamo = new Prestamos();
+
+        toastService.Notify(new ToastMessage(
+      ToastType.Info,
+      iconName: IconName.None,
+      title: "Nuevo Registro",
+      helpText: "",
+      message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
 
     private async Task Volver()
     {
+        
+        toastService.Notify(new ToastMessage(
+       ToastType.Info,
+       iconName: IconName.None,
+       title: "Volver",
+       helpText: "Regresando a la página de lista de préstamos.",
+       message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Prestamo/Index");
     }
 
     private async Task RedirigirDeudores()
     {
+        toastService.Notify(new ToastMessage(
+       ToastType.Info,
+       iconName: IconName.None,
+       title: "Redirigiendo",
+       helpText: "Selecciona un deudor para asociarlo al préstamo.",
+       message: "Estás siendo redirigido a la selección de deudores."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Deudor/Index");
     }
 
@@ -235,5 +291,26 @@
             else if (prestamo.FormaPago == "Quincenal")
                 prestamo.FechaCobro = fechaCreacion.AddDays(15);
         }
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El prestamo se ha guardado correctamente.",
+            ToastType.Primary => "El prestamo ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el prestamo.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
