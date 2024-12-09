@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209164741_Usuarios")]
-    partial class Usuarios
+    [Migration("20241209171239_Proyecto")]
+    partial class Proyecto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
