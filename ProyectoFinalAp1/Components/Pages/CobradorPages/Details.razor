@@ -1,5 +1,4 @@
-﻿@page "/Cobrador/Details"
-@page "/Cobrador/Details/{CobradorId:int}"
+﻿@page "/Cobrador/Details/{CobradorId:int}"
 @inject CobradorService CobradorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -23,9 +22,9 @@
                     }
                 </div>
 
-                 <div class="col-md-8">
+                <div class="col-md-8">
                     <div class="row">
-                      @*   Numero de cedula *@
+                        @*   Numero de cedula *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Número de Cédula:</strong>
@@ -39,7 +38,7 @@
                                 <p class="d-block">@cobrador?.Nombres</p>
                             </div>
                         </div>
-                       @*  Email *@
+                        @*  Email *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Email:</strong>
@@ -56,14 +55,14 @@
                     </div>
 
                     <div class="row">
-                       @*  Apellidos *@
+                        @*  Apellidos *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Apellidos:</strong>
                                 <p class="d-block">@cobrador?.Apellidos</p>
                             </div>
                         </div>
-                       @*  Direccion *@
+                        @*  Direccion *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Dirección:</strong>
@@ -73,14 +72,14 @@
                     </div>
 
                     <div class="row">
-                      @*   Telefono *@
+                        @*   Telefono *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Teléfono:</strong>
                                 <p class="d-block">@cobrador?.Telefono</p>
                             </div>
                         </div>
-                       @*  Ciudad *@
+                        @*  Ciudad *@
                         <div class="col-md-6 mb-4">
                             <div class="info-block">
                                 <strong>Ciudad:</strong>
@@ -98,7 +97,7 @@
             </button>
         </div>
     </div>
-</div>  
+</div>
 
 @code {
     [Parameter]
