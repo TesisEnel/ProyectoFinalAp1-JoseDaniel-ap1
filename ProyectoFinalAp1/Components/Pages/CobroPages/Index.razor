@@ -65,7 +65,7 @@
                             <td>@($"{cobro.Deudor?.Nombres} {cobro.Deudor?.Apellidos}")</td>
                             <td>@cobro.Mora</td>
                             <td>@cobro.ImporteAPagar</td>
-                            <td>@cobro.FechaCobro</td>
+                            <td>@cobro.FechaCobro.ToString("dd/MM/yyyy")</td>
                             <td>
                                 <a href="/Cobro/Details/@cobro.CobroId" class="btn btn-outline-primary">
                                     <span class="bi bi-eye mt-3"></span>
