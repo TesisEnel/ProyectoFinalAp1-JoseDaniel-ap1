@@ -19,9 +19,11 @@ public class Prestamos
     [Range(0.1, 100, ErrorMessage = "El interés debe estar entre 0.1% y 100%.")]
     public decimal? Interes { get; set; }
 
+    [Required(ErrorMessage = "Favor colocar el concepto de prestamo.")]
     [StringLength(250, ErrorMessage = "El concepto no puede exceder los 250 caracteres.")]
     public string? Concepto { get; set; }
 
+    [Required(ErrorMessage = "Favor colocar el numero de cuotas.")]
     [Range(1, int.MaxValue, ErrorMessage = "Las cuotas deben ser un número mayor a 0.")]
     public int? Cuotas { get; set; }
 
@@ -29,6 +31,7 @@ public class Prestamos
     [StringLength(50, ErrorMessage = "La forma de pago no puede exceder los 50 caracteres.")]
     public string? FormaPago { get; set; }
 
+    [Required(ErrorMessage = "Favor colocar la fecha del prestamo.")]
     public DateTime? FechaPrestamo { get; set; }
 
     [DataType(DataType.Date, ErrorMessage = "Formato de fecha inválido.")]
