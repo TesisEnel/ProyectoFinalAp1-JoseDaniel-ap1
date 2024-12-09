@@ -9,6 +9,7 @@
 <PageTitle>Modificar Garantia</PageTitle>
 <EditForm Model="garantia" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container-fluid">
         <div class="card shadow-lg w-100">
             @* Encabezado  *@
@@ -18,7 +19,7 @@
 
             <div class="card-body">
                 <div class="row">
-                  @*    Garantía ID  *@
+                    @*    Garantía ID  *@
                     <div class="col-md-6 mb-4">
                         <label for="GarantiaId" class="form-label text-dark"><strong>Garantía ID:</strong></label>
                         <InputNumber id="GarantiaId" class="form-control" readonly @bind-Value="garantia.GarantiaId" />
@@ -58,7 +59,7 @@
                 </div>
 
                 <div class="row">
-                   @*   Préstamo  *@
+                    @*   Préstamo  *@
                     <div class="col-md-6 mb-4">
                         <label for="Prestamo" class="form-label text-dark"><strong>Préstamo:</strong></label>
                         <InputSelect id="Prestamos" class="form-control" @bind-Value="garantia.PrestamoId">
@@ -88,7 +89,7 @@
                         <InputNumber class="form-control" @bind-Value="detalle.Cantidad" />
                         <ValidationMessage For="@(() => detalle.Cantidad)" />
                     </div>
-                 @*    Valor Unitario *@
+                    @*    Valor Unitario *@
                     <div class="col-md-3">
                         <label for="ValorUnitario" class="form-label text-dark"><strong>Valor Unitario:</strong></label>
                         <InputNumber class="form-control" @bind-Value="detalle.ValorUnitario" />
@@ -100,7 +101,7 @@
                         <InputText class="form-control" placeholder="URL de la foto" @bind-Value="detalle.FotoDetalleUrl" />
                         <ValidationMessage For="@(() => detalle.FotoDetalleUrl)" />
                     </div>
-                   
+
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-end">
@@ -189,11 +190,21 @@
     private bool existe = false;
     public decimal gananciaTotal = 0;
     private List<int> detallesAEliminar = new();
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     public async Task Nuevo()
     {
         garantia = new Garantias();
+        detalle = new GarantiasDetalle();
         existe = false;
+
+        toastService.Notify(new ToastMessage(
+     ToastType.Info,
+     iconName: IconName.None,
+     title: "Nuevo Registro",
+     helpText: "",
+     message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
     protected override async Task OnInitializedAsync()
     {
@@ -217,6 +228,12 @@
     {
         if (garantia.DeudorId == null || garantia.PrestamoId == null || listadestalles.Count == 0)
         {
+            toastService.Notify(new ToastMessage(
+           ToastType.Danger,
+           iconName: IconName.None,
+           title: "Error",
+           message: "Por favor, complete todos los campos obligatorios y agregue al menos un detalle."));
+            await Task.Delay(3000);
             return;
         }
 
@@ -225,6 +242,12 @@
             bool detallesEliminados = await garantiaService.EliminarDetalles(detallesAEliminar);
             if (!detallesEliminados)
             {
+                toastService.Notify(new ToastMessage(
+               ToastType.Danger,
+               iconName: IconName.None,
+                title: "Error",
+                message: "Ocurrió un error al eliminar los detalles."));
+                await Task.Delay(3000);
                 return;
             }
             detallesAEliminar.Clear(); 
@@ -233,6 +256,12 @@
 
         if (await garantiaService.Guardar(garantia))
         {
+            toastService.Notify(new ToastMessage(
+         ToastType.Success,
+         iconName: IconName.CheckCircleFill,
+         title: "¡Éxito!",
+         message: "La garantía se ha guardado correctamente."));
+            await Task.Delay(3000);
             navigationManager.NavigateTo("/garantia/Index");
         }
     }
@@ -243,6 +272,12 @@
         listadestalles.Add(detalle);
         ActualizarValorGarantia();
         detalle = new GarantiasDetalle(); 
+
+        toastService.Notify(new ToastMessage(
+      ToastType.Success,
+      title: "Detalle Agregado",
+      message: "El detalle se agregó correctamente."));
+        await Task.Delay(3000);
     }
     private async Task EliminarDetalle(GarantiasDetalle detalle)
     {
@@ -257,6 +292,11 @@
             await ActualizarValorGarantia();
             
         }
+        toastService.Notify(new ToastMessage(
+     ToastType.Danger,
+     title: "Detalle Removido",
+     message: "El detalle fue eliminado correctamente."));
+        await Task.Delay(3000);
         StateHasChanged(); 
     }
     private async Task ActualizarValorGarantia()
@@ -271,6 +311,13 @@
 
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+            ToastType.Primary,
+            iconName: IconName.None,
+            title: "Volver",
+            helpText: "",
+            message: "La garantia ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/garantia/Index");
     }
 }
