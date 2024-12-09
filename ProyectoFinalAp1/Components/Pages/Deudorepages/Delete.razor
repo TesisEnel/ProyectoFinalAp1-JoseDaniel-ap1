@@ -2,6 +2,7 @@
 @inject DeudorService deudorServices
 @inject NavigationManager navigation
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Eliminar Deudor</PageTitle>
 <div class="container mt-5 pt-3">
@@ -11,7 +12,7 @@
                 Eliminar Deudor
             </h2>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
             <div class="row">
                 @* Foto de la Cédula *@
@@ -93,6 +94,7 @@
     [Parameter]
     public int DeudorId { get; set; }
     private Deudores? deudor;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,15 +104,55 @@
     {
         if (deudor == null)
         {
+            toastService.Notify(new ToastMessage(
+          ToastType.Danger,
+          iconName: IconName.None,
+          title: "Error",
+          message: "No se encontró el deudor a eliminar."));
+            await Task.Delay(3000);
             return;
         }
         if (await deudorServices.Eliminar(DeudorId))
         {
+            toastService.Notify(new ToastMessage(
+          ToastType.Danger,
+          iconName: IconName.None,
+          title: "¡Éxito!",
+          message: "El deudor fue eliminado correctamente."));
+            await Task.Delay(3000);
             Volver();
         }
     }
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+             ToastType.Primary,
+             iconName: IconName.None,
+             title: "Volver",
+             helpText: "",
+             message: "El Deudor ya volvio correctamente."));
+        await Task.Delay(3000);
         navigation.NavigateTo("/Deudore/Index");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Deudor se ha guardado correctamente.",
+            ToastType.Primary => "El Deudor ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el Deudor.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
