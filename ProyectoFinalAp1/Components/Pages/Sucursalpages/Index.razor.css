@@ -1,0 +1,87 @@
+﻿<style >
+/* Css Oficial de Sucursales Consulta */
+body {
+    background-color: #C6C6C0;
+    color: #008DD9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tarjeta */
+.card {
+    background-color: #fff;
+    border: 1px solid #008DD9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado */
+.card-header {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    border-bottom: 2px solid #008DD9;
+}
+
+/* Botones */
+.btn {
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+.btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+    .btn-danger:hover {
+        background-color: #b02a37;
+    }
+
+/* Tabla */
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #C6C6C0;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #fdfdfd;
+}
+
+/* Footer */
+.card-footer {
+    background-color: #008DD9;
+    color: #fff;
+    padding: 1rem;
+    font-size: 0.9rem;
+    border-top: 2px solid #008DD9;
+}
+</style >
