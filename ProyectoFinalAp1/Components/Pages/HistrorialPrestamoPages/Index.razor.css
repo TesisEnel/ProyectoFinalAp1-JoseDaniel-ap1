@@ -1,4 +1,4 @@
-﻿/* Fondo principal */
+﻿/*Css Oficial de Historial de prestamos  */
 body {
     background-color: #C6C6C0;
     color: #008DD9;
@@ -88,7 +88,6 @@ body {
 .table-striped tbody tr:nth-of-type(even) {
     background-color: #fdfdfd; /* Fondo blanco para filas pares */
 }
-
 
 /* Foto Cedula */
 .img-thumbnail {
