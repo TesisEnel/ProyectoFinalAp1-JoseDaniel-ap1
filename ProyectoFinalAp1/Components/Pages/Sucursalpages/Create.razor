@@ -3,12 +3,12 @@
 @inject DeudorService deudorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Registrar Sucursal</PageTitle>
-
 <EditForm Model="sucursal" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container-fluid pt-5 mt-5 d-flex flex-column justify-content-center">
         <div class="card shadow-lg w-100">
             <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #008DD9; color: #fff;">
@@ -117,11 +117,20 @@
     public List<Deudores> listadeudore = new List<Deudores>();
     private bool existe = false;
     private bool Estado = false;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     public async Task Nuevo()
     {
         sucursal = new Sucursales();
         existe = false;
+
+        toastService.Notify(new ToastMessage(
+          ToastType.Info,
+         iconName: IconName.None,
+        title: "Nuevo Registro",
+         helpText: "",
+        message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
 
     protected override async Task OnInitializedAsync()
@@ -152,17 +161,62 @@
     {
         if (!await Validar())
         {
+            toastService.Notify(new ToastMessage(
+             ToastType.Danger,
+             iconName: IconName.None,
+             title: "Error",
+             helpText: "",
+             message: "Ya existe una sucursal con este ID."));
+            await Task.Delay(3000);
+           
             return;
         }
         var guadado = await sucursalService.Guardar(sucursal);
         if (guadado)
         {
+            toastService.Notify(new ToastMessage(
+              ToastType.Success,
+              iconName: IconName.None,
+              title: "Sucursal Guardada",
+              helpText: "",
+              message: "Ya  guardo correctamente la sucursal."));
+            await Task.Delay(3000);
             Volver();
         }
     }
 
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+                ToastType.Primary,
+                iconName: IconName.None,
+                title: "Volver",
+                helpText: "",
+                message: "La sucursal ya volvio correctamente."));
+        await Task.Delay(3000);
+       
         navigationManager.NavigateTo("/sucursal/Index");
+    }
+
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "La sucursal se ha guardado correctamente.",
+            ToastType.Primary => "La sucursal ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar la sucursal.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
