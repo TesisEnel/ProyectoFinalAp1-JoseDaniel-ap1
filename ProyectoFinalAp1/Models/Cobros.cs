@@ -26,6 +26,5 @@ public class Cobros
     public DateTime FechaPrestamo { get; set; }
     public DateTime FechaCobro { get; set; }
 
-
     public List<CobrosDetalle> CobrosDetalles { get; set; } = new List<CobrosDetalle>();
 }

@@ -52,10 +52,6 @@ public class Prestamos
     public virtual ICollection<Cobros> Cobros { get; set; } = new List<Cobros>();
     public virtual ICollection<Garantias> Garantias { get; set; } = new List<Garantias>();
     public List<CobrosDetalle> CobrosDetalles { get; set; } = new List<CobrosDetalle>();
-
-   
     public decimal InteresValue => Interes ?? 0m;
-
-
     public decimal MontoCuotaValue => MontoCuota ?? 0m;
 }
