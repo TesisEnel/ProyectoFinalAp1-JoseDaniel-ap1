@@ -5,17 +5,19 @@
 @inject CobradorService cobradorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Modificar Cobro</PageTitle>
 <EditForm Model="cobro" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container mt-5 pt-3">
         <div class="card shadow-lg border-0">
             <div class="card-header text-center justify-content-center py-5">
                 <h2>Modificar Cobro</h2>
             </div>
             <div class="card-body">
-              @*  Información del Deudor  *@
+                @*  Información del Deudor  *@
                 <div class="border rounded p-3 mb-4">
                     <h5 class="text-secondary">Información del Deudor</h5>
                     <div class="row">
@@ -32,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-               @*  Mostrar deudor seleccionado  *@
+                @*  Mostrar deudor seleccionado  *@
                 <div class="border rounded p-3 mb-4">
                     <h5 class="text-secondary">Deudor Seleccionado</h5>
                     @if (deudore != null)
@@ -56,7 +58,7 @@
                         <div class="alert alert-info text-center">Seleccione un deudor para registrar un cobro.</div>
                     }
                 </div>
-              @*   Selección de cobrador *@
+                @*   Selección de cobrador *@
                 <div class="section mb-4">
                     <h5 class="section-title">Cobrador:</h5>
                     <div class="row">
@@ -76,7 +78,7 @@
                 <div class="border rounded p-3 mb-4">
                     <h5 class="text-secondary">Modificar Detalles del Cobro</h5>
                     <div class="row mb-3">
-                      @*   PrestamoId *@
+                        @*   PrestamoId *@
                         <div class="col-md-5">
                             <InputSelect class="form-control" @bind-Value="cobrodetalle.PrestamoId">
                                 <option value="0">-- Seleccione un préstamo --</option>
@@ -86,7 +88,7 @@
                                 }
                             </InputSelect>
                         </div>
-                       @*  Valor Cobrado *@
+                        @*  Valor Cobrado *@
                         <div class="col-md-4">
                             <label for="valorCobrado"><strong>Valor Cobrado:</strong></label>
                             <InputNumber class="form-control" @bind-Value="cobrodetalle.ValorCobrado" />
@@ -170,7 +172,7 @@
     private Cobros cobro = new();
     private List<int> detallesAEliminar = new();
     private CobrosDetalle? detalleEnEdicion;
-
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
     protected override async Task OnInitializedAsync()
     {
         try
@@ -196,6 +198,13 @@
 
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+                ToastType.Primary,
+                iconName: IconName.None,
+                title: "Volver",
+                helpText: "",
+                message: "El cobro ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/Cobro/Index");
     }
 
@@ -208,6 +217,14 @@
         ListaPrestamos.Clear();
         ListaCobradores.Clear();
         mensajeError = null;
+
+        toastService.Notify(new ToastMessage(
+         ToastType.Info,
+         iconName: IconName.None,
+         title: "Nuevo Registro",
+         helpText: "",
+         message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
 
     private async Task AgregarDetalle()
@@ -215,6 +232,11 @@
         if (cobrodetalle.PrestamoId == 0 || cobrodetalle.ValorCobrado <= 0)
         {
             mensajeError = "Seleccione un préstamo válido y asegúrese de que el valor cobrado sea mayor a 0.";
+            toastService.Notify(new ToastMessage(
+                ToastType.Danger,
+                title: "Error al agregar detalle",
+                message: mensajeError));
+            await Task.Delay(3000);
             return;
         }
         var prestamo = ListaPrestamos.FirstOrDefault(p => p.PrestamoId == cobrodetalle.PrestamoId);
@@ -222,6 +244,12 @@
         listacobrodetalle.Add(cobrodetalle);
         cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado ?? 0);
         cobrodetalle = new();
+
+        toastService.Notify(new ToastMessage(
+       ToastType.Success,
+       title: "Detalle Agregado",
+       message: "El detalle se agregó correctamente."));
+        await Task.Delay(3000);
     }
     private async Task EliminarDetalle(CobrosDetalle detalle)
     {
@@ -231,6 +259,11 @@
         }
         listacobrodetalle.Remove(detalle); 
         cobro.ImporteAPagar = listacobrodetalle.Sum(d => d.ValorCobrado ?? 0);
+        toastService.Notify(new ToastMessage(
+       ToastType.Danger,
+       title: "Detalle Removido",
+       message: "El detalle fue eliminado correctamente."));
+        await Task.Delay(3000);
         StateHasChanged();
     }
     private async Task EditarDetalle(CobrosDetalle detalle)
@@ -248,6 +281,11 @@
         if (cobro.DeudorId == 0 || cobro.CobradorId == 0 || !listacobrodetalle.Any())
         {
             mensajeError = "Debe seleccionar un deudor, un cobrador y agregar al menos un detalle de cobro.";
+            toastService.Notify(new ToastMessage(
+                ToastType.Danger,
+                title: "Error al guardar",
+                message: mensajeError));
+            await Task.Delay(3000);
             return;
         }
 
@@ -257,6 +295,11 @@
             if (!eliminados)
             {
                 mensajeError = "Ocurrió un error al eliminar los detalles seleccionados.";
+                toastService.Notify(new ToastMessage(
+                    ToastType.Danger,
+                    title: "Error al eliminar detalles",
+                    message: mensajeError));
+                await Task.Delay(3000);
                 return;
             }
             detallesAEliminar.Clear();
@@ -279,11 +322,43 @@
                 }
             }
 
+            toastService.Notify(new ToastMessage(
+           ToastType.Success,
+           title: "Cobro Registrado",
+           message: "El cobro se registró correctamente."));
+            await Task.Delay(3000);
+           
             navigationManager.NavigateTo("/Cobro/Index");
         }
         else
         {
             mensajeError = "Ocurrió un error al guardar el cobro.";
+            toastService.Notify(new ToastMessage(
+                ToastType.Danger,
+                title: "Error al guardar",
+                message: mensajeError));
+            await Task.Delay(3000);
         }
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Cobro se ha guardado correctamente.",
+            ToastType.Primary => "El Cobro ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el cobro.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 } 
