@@ -47,8 +47,8 @@
                     @* Deudor  *@
                     <div class="col-md-6 mb-4">
                         <label for="Deudor" class="form-label text-dark"><strong>Deudor:</strong></label>
-                        <InputSelect id="Deudor" class="form-control" @bind-Value="garantia.DeudorId">
-                            <option value="">Seleccionar un deudor</option>
+                        <InputSelect id="Deudor" class="form-control form-select" @bind-Value="garantia.DeudorId">
+                            <option value="0">Seleccionar un deudor</option>
                             @foreach (var deudor in listadeudore)
                             {
                                 <option value="@deudor.DeudorId">@deudor.Nombres</option>
@@ -62,8 +62,8 @@
                     @* Préstamo  *@
                     <div class="col-md-6 mb-4">
                         <label for="Prestamo" class="form-label text-dark"><strong>Préstamo:</strong></label>
-                        <InputSelect id="Prestamos" class="form-control" @bind-Value="garantia.PrestamoId">
-                            <option value="">Seleccionar un préstamo</option>
+                        <InputSelect id="Prestamos" class="form-control form-select" @bind-Value="garantia.PrestamoId">
+                            <option value="0">Seleccionar un préstamo</option>
                             @foreach (var prestamo in listaprestamo)
                             {
                                 <option value="@prestamo.PrestamoId">@prestamo.PrestamoId</option>
