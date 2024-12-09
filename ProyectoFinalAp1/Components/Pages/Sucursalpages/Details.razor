@@ -1,0 +1,115 @@
+﻿@page "/Sucursal/Details/{SucursalId:int}"
+@inject SucursalService sucursalService
+@inject DeudorService deudorService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalle Sucursal</PageTitle>
+<div class="container mt-5 pt-3">
+    <div class="card shadow-lg border-0">
+        <div class="card-header text-center py-5">
+            <h2>Detalles de la Sucursal</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                @* Foto Sucursal *@
+                <div class="col-md-4 text-center mb-4">
+                    <strong class="d-block mb-2">Foto Sucursal:</strong>
+                    @if (!string.IsNullOrEmpty(sucursal?.FotoSucursalUrl))
+                    {
+                        <img src="@sucursal.FotoSucursalUrl" alt="Foto de la sucursal" class="img-thumbnail shadow-sm">
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        @*   Numero de cedula *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Sucursal Id:</strong>
+                                <p class="d-block">@sucursal?.SucursalId</p>
+                            </div>
+                        </div>
+                        @* Nombre Completo *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Nombre Completo Deudor:</strong>
+                                <p class="d-block">@sucursal?.deudores?.Nombres @sucursal?.deudores?.Apellidos</p>
+                            </div>
+                        </div>
+                        @* Nombre Sucursal *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Nombre Sucursal:</strong>
+                                <p class="d-block">@sucursal?.NombreSucursal</p>
+                            </div>
+                        </div>
+
+                     @*Direccion *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Direcci&oacute;n:</strong>
+                                <p class="d-block">@sucursal?.Direccion</p>
+                            </div>
+                        </div>
+
+                        @* Telefono *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Telefono:</strong>
+                                <p class="d-block">@sucursal?.Telefono</p>
+                            </div>
+                        </div>
+
+                        @* Estado *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Estado:</strong>
+                                <p class="d-block">@sucursal?.Estado</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @* Fecha Emision *@
+                        <div class="col-md-6 mb-4">
+                            <div class="info-block">
+                                <strong>Fecha Emision:</strong>
+                                <p class="d-block">@sucursal?.FechaEmision?.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center footer-bar">
+            <button class="btn btn-lg" @onclick="Volver">
+                <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int SucursalId { get; set; }
+    public Sucursales? sucursal = new Sucursales();
+    public List<Deudores> listadeudore = new List<Deudores>();
+    private bool existe = false;
+    private bool Estado = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (SucursalId > 0)
+        {
+            sucursal = await sucursalService.Buscar(SucursalId);
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/sucursal/Index");
+    }
+}
