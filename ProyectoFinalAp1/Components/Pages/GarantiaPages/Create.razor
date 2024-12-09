@@ -9,6 +9,7 @@
 <PageTitle>Registrar Garantía</PageTitle>
 <EditForm Model="garantia" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
     <div class="container-fluid">
         <div class="card shadow-lg w-100">
             @* Encabezado  *@
@@ -190,7 +191,7 @@
     public List<Deudores> listadeudore = new List<Deudores>();
     public GarantiasDetalle detalle { get; set; } = new GarantiasDetalle();
     public List<GarantiasDetalle> listadestalles = new List<GarantiasDetalle>();
-
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
     private bool existe = false;
     public decimal gananciaTotal = 0;
     private List<int> detallesAEliminar = new();
@@ -205,6 +206,12 @@
     {
         if (garantia.DeudorId == null || garantia.PrestamoId == null || listadestalles.Count == 0)
         {
+            toastService.Notify(new ToastMessage(
+            ToastType.Danger,
+            iconName: IconName.None,
+            title: "Error",
+            message: "Por favor, complete todos los campos obligatorios y agregue al menos un detalle."));
+            await Task.Delay(3000);
             return;
         }
 
@@ -213,7 +220,12 @@
             bool detallesEliminados = await garantiaService.EliminarDetalles(detallesAEliminar);
             if (!detallesEliminados)
             {
-
+                toastService.Notify(new ToastMessage(
+              ToastType.Danger,
+              iconName: IconName.None,
+              title: "Error",
+              message: "Ocurrió un error al eliminar los detalles."));
+                await Task.Delay(3000);
                 return;
             }
             detallesAEliminar.Clear();
@@ -223,11 +235,24 @@
 
         if (await garantiaService.Guardar(garantia))
         {
+            toastService.Notify(new ToastMessage(
+           ToastType.Success,
+           iconName: IconName.CheckCircleFill,
+           title: "¡Éxito!",
+           message: "La garantía se ha guardado correctamente."));
+            await Task.Delay(3000);
             navigationManager.NavigateTo("/garantia/Index");
         }
     }
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+              ToastType.Primary,
+              iconName: IconName.None,
+              title: "Volver",
+              helpText: "",
+              message: "La garantia ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/garantia/Index");
     }
 
@@ -236,6 +261,14 @@
         garantia = new Garantias();
         detalle = new GarantiasDetalle();
         listadestalles.Clear();
+
+        toastService.Notify(new ToastMessage(
+         ToastType.Info,
+         iconName: IconName.None,
+         title: "Nuevo Registro",
+         helpText: "",
+         message: "Formulario preparado para un nuevo registro."));
+        await Task.Delay(3000);
     }
 
     private async Task AgregarDetalle()
@@ -244,6 +277,12 @@
         listadestalles.Add(detalle);
         ActualizarValorGarantia();
         detalle = new GarantiasDetalle();
+
+        toastService.Notify(new ToastMessage(
+     ToastType.Success,
+     title: "Detalle Agregado",
+     message: "El detalle se agregó correctamente."));
+        await Task.Delay(3000);
     }
 
     private async Task EliminarDetalle(GarantiasDetalle detalle)
@@ -254,6 +293,12 @@
         }
         listadestalles.Remove(detalle);
         ActualizarValorGarantia();
+
+        toastService.Notify(new ToastMessage(
+       ToastType.Danger,
+       title: "Detalle Removido",
+       message: "El detalle fue eliminado correctamente."));
+        await Task.Delay(3000);
         StateHasChanged();
     }
 
@@ -265,5 +310,26 @@
     private async Task CalcularGananciaTotal()
     {
         gananciaTotal = listadestalles.Sum(d => d.Total ?? 0);
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "La garantia se ha guardado correctamente.",
+            ToastType.Primary => "La garantia ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar la garantia.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
