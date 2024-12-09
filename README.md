@@ -10,6 +10,13 @@ Hoy venimos a compartirte este proyecto inspirado de la materia análisis de sis
 
 El sistema “Prestamos SRL” contiene una serie de módulos para optimizar las dichas tareas de este como la, Gestión de Deudores, Gestión de Préstamos, Cobrar deudores con Préstamos, Historial de Préstamos, Cobradores, Garantía Préstamo, Gestionar Sucursales, si se quieren hacer prestamos especiales a grandes empresas o Sucursales. Estos módulos interconectados te permiten gestionar de manera eficiente tanto los datos de los clientes como los detalles de los préstamos, cobros y su seguimiento con sus diversas consultas que tienen dicho modulo.
 
+Usuario:
+
+
+Email: Prestamo_SRL@gmail.com
+
+PassWord: Aplicada123@@
+
 
 Gestión de Clientes:
 Permite registrar y administrar la información personal de los clientes de forma centralizada, incluyendo la foto de la cédula para mayor seguridad.
