@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoFinalAp1.Migrations
 {
     /// <inheritdoc />
-    public partial class Proyecto : Migration
+    public partial class Usuarios : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -228,40 +228,28 @@ namespace ProyectoFinalAp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "cobros",
+                name: "sucursales",
                 columns: table => new
                 {
-                    CobroId = table.Column<int>(type: "int", nullable: false)
+                    SucursalId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DeudorId = table.Column<int>(type: "int", nullable: false),
-                    CobradorId = table.Column<int>(type: "int", nullable: false),
-                    PrestamoId = table.Column<int>(type: "int", nullable: false),
-                    ImporteAPagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Mora = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true)
+                    NombreSucursal = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Direccion = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaEmision = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FotoSucursalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeudorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cobros", x => x.CobroId);
+                    table.PrimaryKey("PK_sucursales", x => x.SucursalId);
                     table.ForeignKey(
-                        name: "FK_cobros_cobradores_CobradorId",
-                        column: x => x.CobradorId,
-                        principalTable: "cobradores",
-                        principalColumn: "CobradorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_cobros_deudores_DeudorId",
+                        name: "FK_sucursales_deudores_DeudorId",
                         column: x => x.DeudorId,
                         principalTable: "deudores",
                         principalColumn: "DeudorId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_cobros_prestamos_PrestamosPrestamoId",
-                        column: x => x.PrestamosPrestamoId,
-                        principalTable: "prestamos",
-                        principalColumn: "PrestamoId");
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,6 +310,72 @@ namespace ProyectoFinalAp1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "cobros",
+                columns: table => new
+                {
+                    CobroId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeudorId = table.Column<int>(type: "int", nullable: false),
+                    CobradorId = table.Column<int>(type: "int", nullable: false),
+                    PrestamoId = table.Column<int>(type: "int", nullable: false),
+                    ImporteAPagar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Mora = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FechaPrestamo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaCobro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PrestamosPrestamoId = table.Column<int>(type: "int", nullable: true),
+                    SucursalesSucursalId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cobros", x => x.CobroId);
+                    table.ForeignKey(
+                        name: "FK_cobros_cobradores_CobradorId",
+                        column: x => x.CobradorId,
+                        principalTable: "cobradores",
+                        principalColumn: "CobradorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cobros_deudores_DeudorId",
+                        column: x => x.DeudorId,
+                        principalTable: "deudores",
+                        principalColumn: "DeudorId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_cobros_prestamos_PrestamosPrestamoId",
+                        column: x => x.PrestamosPrestamoId,
+                        principalTable: "prestamos",
+                        principalColumn: "PrestamoId");
+                    table.ForeignKey(
+                        name: "FK_cobros_sucursales_SucursalesSucursalId",
+                        column: x => x.SucursalesSucursalId,
+                        principalTable: "sucursales",
+                        principalColumn: "SucursalId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "garantiasDetalle",
+                columns: table => new
+                {
+                    DetalleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GarantiaId = table.Column<int>(type: "int", nullable: false),
+                    Articulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FotoDetalleUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_garantiasDetalle", x => x.DetalleId);
+                    table.ForeignKey(
+                        name: "FK_garantiasDetalle_garantias_GarantiaId",
+                        column: x => x.GarantiaId,
+                        principalTable: "garantias",
+                        principalColumn: "GarantiaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "cobrosDetalles",
                 columns: table => new
                 {
@@ -346,29 +400,6 @@ namespace ProyectoFinalAp1.Migrations
                         principalTable: "prestamos",
                         principalColumn: "PrestamoId",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "garantiasDetalle",
-                columns: table => new
-                {
-                    DetalleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GarantiaId = table.Column<int>(type: "int", nullable: false),
-                    Articulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", nullable: false),
-                    ValorUnitario = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FotoDetalleUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_garantiasDetalle", x => x.DetalleId);
-                    table.ForeignKey(
-                        name: "FK_garantiasDetalle_garantias_GarantiaId",
-                        column: x => x.GarantiaId,
-                        principalTable: "garantias",
-                        principalColumn: "GarantiaId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -426,6 +457,11 @@ namespace ProyectoFinalAp1.Migrations
                 column: "PrestamosPrestamoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_cobros_SucursalesSucursalId",
+                table: "cobros",
+                column: "SucursalesSucursalId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_cobrosDetalles_CobroId",
                 table: "cobrosDetalles",
                 column: "CobroId");
@@ -463,6 +499,11 @@ namespace ProyectoFinalAp1.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_prestamos_DeudorId",
                 table: "prestamos",
+                column: "DeudorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sucursales_DeudorId",
+                table: "sucursales",
                 column: "DeudorId");
         }
 
@@ -507,6 +548,9 @@ namespace ProyectoFinalAp1.Migrations
 
             migrationBuilder.DropTable(
                 name: "cobradores");
+
+            migrationBuilder.DropTable(
+                name: "sucursales");
 
             migrationBuilder.DropTable(
                 name: "prestamos");

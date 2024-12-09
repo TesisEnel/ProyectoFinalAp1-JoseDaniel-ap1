@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241208193434_Proyecto")]
-    partial class Proyecto
+    [Migration("20241209004614_Usuarios")]
+    partial class Usuarios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -305,6 +305,9 @@ namespace ProyectoFinalAp1.Migrations
                     b.Property<int?>("PrestamosPrestamoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SucursalesSucursalId")
+                        .HasColumnType("int");
+
                     b.HasKey("CobroId");
 
                     b.HasIndex("CobradorId");
@@ -312,6 +315,8 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasIndex("DeudorId");
 
                     b.HasIndex("PrestamosPrestamoId");
+
+                    b.HasIndex("SucursalesSucursalId");
 
                     b.ToTable("cobros");
                 });
@@ -540,6 +545,50 @@ namespace ProyectoFinalAp1.Migrations
                     b.ToTable("prestamos");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Sucursales", b =>
+                {
+                    b.Property<int>("SucursalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SucursalId"));
+
+                    b.Property<int>("DeudorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FechaEmision")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FotoSucursalUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreSucursal")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SucursalId");
+
+                    b.HasIndex("DeudorId");
+
+                    b.ToTable("sucursales");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -608,6 +657,10 @@ namespace ProyectoFinalAp1.Migrations
                     b.HasOne("ProyectoFinalAp1.Models.Prestamos", null)
                         .WithMany("Cobros")
                         .HasForeignKey("PrestamosPrestamoId");
+
+                    b.HasOne("ProyectoFinalAp1.Models.Sucursales", null)
+                        .WithMany("Cobros")
+                        .HasForeignKey("SucursalesSucursalId");
 
                     b.Navigation("Cobrador");
 
@@ -693,6 +746,17 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("deudores");
                 });
 
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Sucursales", b =>
+                {
+                    b.HasOne("ProyectoFinalAp1.Models.Deudores", "deudores")
+                        .WithMany()
+                        .HasForeignKey("DeudorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("deudores");
+                });
+
             modelBuilder.Entity("ProyectoFinalAp1.Models.Cobradores", b =>
                 {
                     b.Navigation("Cobros");
@@ -724,6 +788,11 @@ namespace ProyectoFinalAp1.Migrations
                     b.Navigation("CobrosDetalles");
 
                     b.Navigation("Garantias");
+                });
+
+            modelBuilder.Entity("ProyectoFinalAp1.Models.Sucursales", b =>
+                {
+                    b.Navigation("Cobros");
                 });
 #pragma warning restore 612, 618
         }
