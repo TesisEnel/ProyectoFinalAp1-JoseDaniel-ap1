@@ -27,7 +27,7 @@
                     @* Deudor  *@
                     <div class="col-md-6 mb-4">
                         <label for="Deudor" class="form-label"><strong>Deudor:</strong></label>
-                        <InputSelect id="Deudor" class="form-control" @bind-Value="sucursal.DeudorId">
+                        <InputSelect id="Deudor" class="form-control form-select" @bind-Value="sucursal.DeudorId">
                             <option value="0">Seleccionar un deudor</option>
                             @foreach (var deudor in listadeudore)
                             {
