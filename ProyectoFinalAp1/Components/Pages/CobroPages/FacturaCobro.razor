@@ -82,13 +82,14 @@
             Console.WriteLine($"Error al cargar la factura: {ex.Message}");
         }
     }
-    private async Task Volver()
+
+    public async Task Volver()
     {
         NavigationManager.NavigateTo($"/Cobro/Details/{CobroId}");
     }
+
     private async Task Imprimir()
     {
         await JSRuntime.InvokeVoidAsync("generarPDF", ".factura-container");
     }
 }
-

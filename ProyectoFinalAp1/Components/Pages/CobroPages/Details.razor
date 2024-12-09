@@ -1,5 +1,4 @@
-﻿@page "/Cobro/Details"
-@page "/Cobro/Details/{CobroId:int}"
+﻿@page "/Cobro/Details/{CobroId:int}"
 @inject DeudorService deudorService
 @inject PrestamoService prestamoService
 @inject CobroService cobroService
@@ -38,21 +37,21 @@
                     </div>
                     <div class="col-md-8">
                         <div class="row">
-                           @*  Número de Cédula *@
+                            @*  Número de Cédula *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Número de Cédula:</strong>
                                     <p class="d-block">@deudore?.NumeroCedula</p>
                                 </div>
                             </div>
-                           @*  Nombre Completo *@
+                            @*  Nombre Completo *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Nombre Completo:</strong>
                                     <p class="d-block">@deudore?.Nombres @deudore?.Apellidos</p>
                                 </div>
                             </div>
-                           @*  Fecha Cobro *@
+                            @*  Fecha Cobro *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Fecha Cobro:</strong>
@@ -69,14 +68,14 @@
                         </div>
 
                         <div class="row">
-                           @*  Apellidos *@
+                            @*  Apellidos *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Apellidos:</strong>
                                     <p class="d-block">@deudore?.Apellidos</p>
                                 </div>
                             </div>
-                          @*   Dirección *@
+                            @*   Dirección *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Dirección:</strong>
@@ -85,7 +84,7 @@
                             </div>
                         </div>
                         <div class="row">
-                           @*  Teléfono *@
+                            @*  Teléfono *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Teléfono:</strong>
@@ -185,7 +184,7 @@
                     deudore = await deudorService.Buscar(cobro.DeudorId);
                     ListaPrestamos = await prestamoService.ObtenerPrestamosPorDeudor(cobro.DeudorId);
                     listacobrodetalle = cobro.CobrosDetalles.ToList();
-                    cobrador = await CobradorService.Buscar(cobro.CobradorId); 
+                    cobrador = await CobradorService.Buscar(cobro.CobradorId);
 
                     foreach (var detalle in listacobrodetalle)
                     {
@@ -210,14 +209,14 @@
 
     private string ObtenerUrlWhatsApp()
     {
-        if (deudore?.Telefono!= null)
+        if (deudore?.Telefono != null)
         {
             string mensaje = $"El Cobro con ID {cobro?.CobroId} para {deudore?.Nombres} ya está finalizado.";
             return $"https://wa.me/{deudore.Telefono}?text={Uri.EscapeDataString(mensaje)}";
         }
         return "#";
     }
-  
+
     private async Task EnviarMensajeWhatsApp()
     {
         string urlWhatsApp = ObtenerUrlWhatsApp();

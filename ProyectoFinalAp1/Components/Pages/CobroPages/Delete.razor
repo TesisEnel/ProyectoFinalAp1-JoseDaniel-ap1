@@ -1,5 +1,4 @@
-﻿@page "/Cobro/Delete"
-@page "/Cobro/Delete/{CobroId:int}"
+﻿@page "/Cobro/Delete/{CobroId:int}"
 @inject CobroService cobroService
 @inject NavigationManager navigationManager
 @inject DeudorService deudorService
@@ -24,7 +23,7 @@
             else if (deudore != null)
             {
                 <div class="row">
-                   @*  Foto de la Cédula *@
+                    @*  Foto de la Cédula *@
                     <div class="col-md-4 text-center mb-4">
                         <strong class="d-block mb-2">Foto de la Cédula</strong>
                         @if (!string.IsNullOrEmpty(deudore?.FotoCedulaURL))
@@ -39,7 +38,7 @@
 
                     <div class="col-md-8">
                         <div class="row">
-                          @*   Número de Cédula *@
+                            @*   Número de Cédula *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Número de Cédula:</strong>
@@ -70,7 +69,7 @@
                         </div>
 
                         <div class="row">
-                           @*  Apellidos *@
+                            @*  Apellidos *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Apellidos:</strong>
@@ -87,14 +86,14 @@
                         </div>
 
                         <div class="row">
-                           @*  Teléfono *@
+                            @*  Teléfono *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Teléfono:</strong>
                                     <p class="d-block">@deudore?.Telefono</p>
                                 </div>
                             </div>
-                         @*    Ciudad *@
+                            @*    Ciudad *@
                             <div class="col-md-6 mb-4">
                                 <div class="info-block">
                                     <strong>Ciudad:</strong>
@@ -168,7 +167,7 @@
     private string mensajeError;
     private List<Prestamos> ListaPrestamos = new();
     private List<Cobradores> ListaCobradores = new();
- 
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -196,12 +195,12 @@
         {
             return;
         }
-            if (await cobroService.Eliminar(CobroId))
-            {
-                Volver();
-            }
+        if (await cobroService.Eliminar(CobroId))
+        {
+            Volver();
+        }
     }
-    private async Task Volver()
+    public async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
     }

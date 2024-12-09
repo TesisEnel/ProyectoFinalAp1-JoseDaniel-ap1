@@ -39,8 +39,6 @@
     font-size: 16px;
 }
 
-
-
 /* Foto Cedula */
 .img-thumbnail {
     max-width: 200px;
@@ -50,7 +48,6 @@
 .text-muted em {
     font-style: italic;
 }
-
 
 .footer-bar {
     background: linear-gradient(45deg, #008DD9, #4A667F);

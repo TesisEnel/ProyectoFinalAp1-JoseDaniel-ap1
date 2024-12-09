@@ -86,7 +86,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="card-footer d-flex justify-content-between">
             <p class="mb-0">Total de cobros: @listacobro.Count</p>
         </div>
@@ -139,7 +138,7 @@
         }
     }
 
-    private async Task Volver()
+    public async Task Volver()
     {
         navigationManager.NavigateTo("/menu");
     }

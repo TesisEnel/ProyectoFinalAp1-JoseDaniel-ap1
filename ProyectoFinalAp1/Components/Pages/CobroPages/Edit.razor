@@ -1,5 +1,4 @@
-﻿@page "/Cobro/Edit"
-@page "/Cobro/Edit/{CobroId:int}"
+﻿@page "/Cobro/Edit/{CobroId:int}"
 @inject DeudorService deudorService
 @inject PrestamoService prestamoService
 @inject CobroService cobroService
@@ -10,7 +9,6 @@
 <PageTitle>Modificar Cobro</PageTitle>
 <EditForm Model="cobro" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="container mt-5 pt-3">
         <div class="card shadow-lg border-0">
             <div class="card-header text-center justify-content-center py-5">
@@ -196,9 +194,12 @@
     }
     private async Task RedirigirABuscarDeudor() => navigationManager.NavigateTo("/Cobros/SeleccionarCliente");
 
-    private async Task Volver() => navigationManager.NavigateTo("/Cobro/Index");
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Cobro/Index");
+    }
 
-    private async Task Nuevo()
+    public async Task Nuevo()
     {
         cobro = new();
         cobrodetalle = new();
