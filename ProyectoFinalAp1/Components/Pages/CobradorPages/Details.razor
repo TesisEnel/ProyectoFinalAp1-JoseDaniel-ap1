@@ -106,7 +106,7 @@
     public List<Cobradores> listacobradores = new List<Cobradores>();
     private bool existe = false;
     private bool Estado = false;
-
+   
     protected override async Task OnInitializedAsync()
     {
         if (CobradorId > 0)
@@ -117,7 +117,7 @@
     }
     public async Task Volver()
     {
-        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+      
         navigationManager.NavigateTo("/Cobrador/Index");
     }
 } 
