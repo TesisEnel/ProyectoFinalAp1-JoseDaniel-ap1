@@ -3,6 +3,7 @@
 @inject DeudorService deudorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Eliminar Sucursal</PageTitle>
 <div class="container mt-5 pt-3">
@@ -10,7 +11,7 @@
         <div class="card-header text-center py-5">
             <h2>Eliminar Sucursal</h2>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
             <div class="row">
                 @* Foto Sucursal *@
@@ -88,7 +89,7 @@
             <button class="btn btn-lg" @onclick="Volver">
                 <i class="bi bi-arrow-left-circle-fill mt-3"></i> Volver
             </button>
-            <button class="btn btn-lg delete-btn" @onclick="EliminarCobrador">
+            <button class="btn btn-lg delete-btn" @onclick="EliminarSucursal">
                 <i class="bi bi-trash-fill mt-3"></i> Eliminar
             </button>
         </div>
@@ -102,6 +103,7 @@
     public List<Deudores> listadeudore = new List<Deudores>();
     private bool existe = false;
     private bool Estado = false;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -110,20 +112,61 @@
             sucursal = await sucursalService.Buscar(SucursalId);
         }
     }
-    public async Task EliminarCobrador()
+    public async Task EliminarSucursal()
     {
         if (sucursal == null)
         {
+            toastService.Notify(new ToastMessage(
+             ToastType.Danger,
+              iconName: IconName.None,
+             title: "Error",
+             message: "La sucursal no fue encontrado."));
+            await Task.Delay(3000);
             return;
         }
         if (await sucursalService.Eliminar(SucursalId))
         {
+            toastService.Notify(new ToastMessage(
+                ToastType.Danger,
+                iconName: IconName.None,
+                title: "EliminarSucursal",
+                helpText: "",
+                message: "La Sucursal ya elimino correctamente."));
+            await Task.Delay(3000);
             Volver();
         }
     }
 
     public async Task Volver()
     {
+        toastService.Notify(new ToastMessage(
+               ToastType.Primary,
+               iconName: IconName.None,
+               title: "Volver",
+               helpText: "",
+               message: "La sucursal ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/sucursal/Index");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "La sucursal se ha guardado correctamente.",
+            ToastType.Primary => "La sucursal ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar la sucursal.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
