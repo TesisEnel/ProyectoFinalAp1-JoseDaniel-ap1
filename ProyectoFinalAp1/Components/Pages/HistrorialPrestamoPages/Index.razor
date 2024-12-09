@@ -73,17 +73,51 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var cobro in listaCobros.OrderBy(c => c.FechaCobro))
+                        @if (listaCobros != null && listaPrestamos != null)
                         {
-                            // Obtén el préstamo asociado al cobro actual.
-                            var prestamoAsociado = listaPrestamos.FirstOrDefault(p => p.PrestamoId == cobro.PrestamoId);
-                            decimal saldoRestante = prestamoAsociado?.Saldo ?? 0;
+                            @foreach (var cobro in listaCobros.OrderBy(c => c.FechaCobro))
+                            {
+                                // Verifica si el cobro y sus datos asociados son válidos.
+                                if (cobro != null)
+                                {
+                                    // Obtén el préstamo asociado al cobro actual.
+                                    var prestamoAsociado = listaPrestamos.FirstOrDefault(p => p?.PrestamoId == cobro.PrestamoId);
 
+                                    // Inicializa el saldo restante con el monto total a pagar del préstamo.
+                                    decimal saldoRestante = prestamoAsociado?.MontoTotalPagar ?? 0;
+
+                                    // Calcula el saldo restante acumulativamente para cada cobro asociado al préstamo.
+                                    if (prestamoAsociado != null)
+                                    {
+                                        foreach (var cobroAnterior in listaCobros
+                                        .Where(c => c.PrestamoId == prestamoAsociado.PrestamoId)
+                                        .OrderBy(c => c.FechaCobro))
+                                        {
+                                            if (cobroAnterior != null)
+                                            {
+                                                saldoRestante -= cobroAnterior.ImporteAPagar;
+
+                                                if (cobroAnterior.CobroId == cobro.CobroId)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    <tr>
+                                        <td>@cobro.CobroId</td>
+                                        <td>@cobro.ImporteAPagar.ToString("C")</td>
+                                        <td>@cobro.FechaCobro.ToShortDateString()</td>
+                                        <td><span class="text-success fw-bold">@saldoRestante.ToString("C")</span></td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
                             <tr>
-                                <td>@cobro.CobroId</td>
-                                <td>@cobro.ImporteAPagar.ToString("C")</td>
-                                <td>@cobro.FechaCobro.ToShortDateString()</td>
-                                <td><span class="text-success fw-bold">@saldoRestante.ToString("C")</span></td>
+                                <td colspan="4" class="text-center">No hay datos disponibles.</td>
                             </tr>
                         }
                     </tbody>
