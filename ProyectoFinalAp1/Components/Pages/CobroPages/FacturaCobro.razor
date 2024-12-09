@@ -5,50 +5,40 @@
 @inject CobradorService cobradorService
 @inject PrestamoService prestamoService
 @rendermode InteractiveServer
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Factura de Cobro</PageTitle>
 <div class="factura-container">
-    <div class="header">
-        <img src="/Rectangle 101.png" alt="Ícono de casa" class="icono-header">
-        <h2>Prestamos SRL</h2>
-        <p>RNC: 132-40961-2</p>
-        <p>Tel: +8092993745 / +18297641456</p>
-        <p>CALLE PRINCIPAL LOS RIVERAS,SFM #51</p>
-    </div>
+    <body onload="window.print()">
+        <div class="header">
+            <img src="/Rectangle 101.png" alt="Ícono de casa" class="icono-header">
+            <h2>Prestamos SRL</h2>
+            <p>RNC: 132-40961-2</p>
+            <p>Tel: +8092993745 / +18297641456</p>
+            <p>CALLE PRINCIPAL LOS RIVERAS,SFM #51</p>
+        </div>
 
-    <body class="body">
-        <h3 class="text-center">RECIBO DE COBRO</h3>
-        <p><strong>Recibo No:</strong> @cobro?.CobroId</p>
-        <p><strong>Fecha Cobro:</strong> @cobro?.FechaCobro</p>
-        <p><strong>Número de Cédula:</strong> @deudor?.NumeroCedula</p>
-        <p><strong>Deudor:</strong> @deudor?.Nombres @deudor?.Apellidos</p>
-        <p><strong>ImporteAPagar:</strong> RD$@cobro.ImporteAPagar</p>
-        <p><strong>FORMA DE PAGO:</strong> Efectivo</p>
-        <p><strong>COBRADOR:</strong> @cobrador?.Nombres @cobrador?.Apellidos</p>
-        <p class="mora"><strong>MORA:</strong> RD$0</p>
-        <p><strong>Número de Préstamo:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.PrestamoId</p>
-        <p><strong>Valor Cobrado:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.ValorCobrado</p>
-        <p><strong>Concepto:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.Prestamo?.Concepto</p>
-        
+        <body class="body">
+            <h3 class="text-center">RECIBO DE COBRO</h3>
+            <p><strong>Recibo No:</strong> @cobro?.CobroId</p>
+            <p><strong>Fecha Cobro:</strong> @cobro?.FechaCobro</p>
+            <p><strong>Número de Cédula:</strong> @deudor?.NumeroCedula</p>
+            <p><strong>Deudor:</strong> @deudor?.Nombres @deudor?.Apellidos</p>
+            <p><strong>ImporteAPagar:</strong> RD$@cobro.ImporteAPagar</p>
+            <p><strong>FORMA DE PAGO:</strong> Efectivo</p>
+            <p><strong>COBRADOR:</strong> @cobrador?.Nombres @cobrador?.Apellidos</p>
+            <p class="mora"><strong>MORA:</strong> RD$0</p>
+            <p><strong>Número de Préstamo:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.PrestamoId</p>
+            <p><strong>Valor Cobrado:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.ValorCobrado</p>
+            <p><strong>Concepto:</strong> @cobro?.CobrosDetalles.FirstOrDefault()?.Prestamo?.Concepto</p>
+
+        </body>
+
+        <div class="footer">
+            <hr class="linea-firma">
+            <p class="firma">FIRMA</p>
+        </div>
     </body>
-
-    <div class="footer">
-        <hr class="linea-firma"> 
-        <p class="firma">FIRMA</p>
-    </div>
-
-    <div class="footer text-center">
-        <button class="btn btn-lg btn-outline-primary" @onclick="Volver">
-            <i class="bi bi-arrow-left-circle-fill"></i> Volver
-        </button>
-        <button class="btn btn-lg btn-success ms-3" @onclick="Imprimir">
-            <i class="bi bi-printer"></i> Imprimir
-        </button>
-    </div>
-
 </div>
-
 @code {
     [Parameter] public int CobroId { get; set; }
     private Deudores deudor;
@@ -86,10 +76,5 @@
     public async Task Volver()
     {
         NavigationManager.NavigateTo($"/Cobro/Details/{CobroId}");
-    }
-
-    private async Task Imprimir()
-    {
-        await JSRuntime.InvokeVoidAsync("generarPDF", ".factura-container");
     }
 }
