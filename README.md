@@ -68,3 +68,9 @@ José Daniel Rivera Ortega:
 
 
 ![image](https://github.com/user-attachments/assets/79a026ad-12ca-4374-a007-4a801b81bd98)
+
+
+Link Azure
+
+
+https://proyectofinal-c8f3a8e8cdgzgtdn.eastus2-01.azurewebsites.net/?authuser=0
