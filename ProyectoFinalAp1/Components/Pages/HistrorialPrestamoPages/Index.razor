@@ -77,16 +77,16 @@
                         {
                             @foreach (var cobro in listaCobros.OrderBy(c => c.FechaCobro))
                             {
-                                // Verifica si el cobro y sus datos asociados son válidos.
+                               
                                 if (cobro != null)
                                 {
-                                    // Obtén el préstamo asociado al cobro actual.
+                                   
                                     var prestamoAsociado = listaPrestamos.FirstOrDefault(p => p?.PrestamoId == cobro.PrestamoId);
 
-                                    // Inicializa el saldo restante con el monto total a pagar del préstamo.
+                                    
                                     decimal saldoRestante = prestamoAsociado?.MontoTotalPagar ?? 0;
 
-                                    // Calcula el saldo restante acumulativamente para cada cobro asociado al préstamo.
+                                   
                                     if (prestamoAsociado != null)
                                     {
                                         foreach (var cobroAnterior in listaCobros
