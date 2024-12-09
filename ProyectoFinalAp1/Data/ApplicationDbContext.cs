@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Garantias> garantias { get; set; }
     public DbSet<GarantiasDetalle> garantiasDetalle { get; set; }
     public DbSet<CobrosDetalle> cobrosDetalles { get; set; }
+    public DbSet<Sucursales> sucursales { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
