@@ -2,6 +2,7 @@
 @inject DeudorService deudorService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Seleccionar Deudor</PageTitle>
 <div class="container-fluid vh-100 d-flex flex-column justify-content-center">
@@ -9,7 +10,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title text-center w-100">Selecciona el Deudor para ver su Historial</h3>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body overflow-auto">
             @* Filtro de búsqueda *@
             <div class="row mb-4 align-items-end">
@@ -82,6 +83,7 @@
     private List<Deudores> deudore = new();
     private string filtro = "0";
     private string valorFiltro = "";
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,11 +115,39 @@
 
     private async Task NavegarADeudorHistorial(int DeudorId)
     {
+        toastService.Notify(new ToastMessage(
+             ToastType.Success,
+             iconName: IconName.None,
+             title: "Deudor Seleccionado",
+             message: "El historial del deudor ha sido cargado exitosamente."
+         ));
+        await Task.Delay(3000);
         navigationManager.NavigateTo($"/Deudor/Historial/{DeudorId}");
     }
 
     private async Task Volver()
     {
         navigationManager.NavigateTo("/menu");
+    }
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "La garantia se ha guardado correctamente.",
+            ToastType.Primary => "La garantia ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar la garantia.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
