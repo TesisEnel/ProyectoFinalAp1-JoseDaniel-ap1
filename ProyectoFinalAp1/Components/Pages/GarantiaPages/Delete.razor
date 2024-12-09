@@ -12,7 +12,7 @@
         <div class="card-header text-center py-5">
             <h2>Eliminar Garantia</h2>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
            
             <div class="row">
@@ -113,6 +113,7 @@
     public Prestamos? prestamo = new Prestamos();
     public Deudores? deudor = new Deudores();
     private List<GarantiasDetalle> listagarantiadetalle = new();
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -132,16 +133,34 @@
     {
         if (garantia== null)
         {
+            toastService.Notify(new ToastMessage(
+           ToastType.Danger,
+            iconName: IconName.None,
+            title: "Error",
+            message: "No se encontró la garantia a eliminar."));
+            await Task.Delay(3000);
             return;
         }
         if (await garantiaService.Eliminar(GarantiaId))
         {
+            toastService.Notify(new ToastMessage(
+       ToastType.Danger,
+       iconName: IconName.None,
+       title: "¡Éxito!",
+       message: "La garantia fue eliminado correctamente."));
+            await Task.Delay(3000);
             Volver();
         }
     }
     public async Task Volver()
     {
-        toastService.Notify(new(ToastType.Primary, "Éxito", "Volvió correctamente"));
+        toastService.Notify(new ToastMessage(
+           ToastType.Primary,
+           iconName: IconName.None,
+           title: "Volver",
+           helpText: "",
+           message: "La garantia ya volvio correctamente."));
+        await Task.Delay(3000);
         navigationManager.NavigateTo("/garantia/Index");
     }
 }
