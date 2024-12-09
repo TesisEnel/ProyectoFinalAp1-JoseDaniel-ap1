@@ -4,7 +4,9 @@
 @inject CobroService cobroService
 @inject CobradorService CobradorService
 @inject NavigationManager navigationManager
+@inject IJSRuntime IJS
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Detalles del cobro</PageTitle>
 <div class="container mt-5 pt-3">
@@ -12,7 +14,7 @@
         <div class="card-header text-center py-5">
             <h2>Detalles del cobro</h2>
         </div>
-
+        <Toasts class="p-3" Messages="Mensaje" AutoHide="true" StackLength="3" Placement="ToastsPlacement.TopRight" />
         <div class="card-body">
             @if (!string.IsNullOrEmpty(mensajeError))
             {
@@ -171,6 +173,7 @@
     public List<Cobradores> listacobradores = new List<Cobradores>();
     private Cobros cobro = new();
     private string mensajeError;
+    List<ToastMessage> Mensaje = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -204,7 +207,13 @@
     }
     private async Task GenerarFactura()
     {
-        navigationManager.NavigateTo($"/Cobro/FacturaCobro/{CobroId}");
+        await IJS.InvokeAsync<object>("open", new object[] { $"/Cobro/FacturaCobro/{CobroId}" });
+        toastService.Notify(new ToastMessage(
+            ToastType.Success,
+            iconName: IconName.None,
+            title: "Factura Generada",
+            message: "La factura ha sido generada con éxito."));
+        await Task.Delay(3000);
     }
 
     private string ObtenerUrlWhatsApp()
@@ -228,5 +237,27 @@
     private async Task Volver()
     {
         navigationManager.NavigateTo("/Cobro/Index");
+    }
+
+    private void ShowToast(ToastType type)
+    {
+        string title = type switch
+        {
+            ToastType.Success => "¡Éxito!",
+            ToastType.Primary => "Advertencia",
+            ToastType.Danger => "Error",
+            _ => "Información"
+        };
+
+        string message = type switch
+        {
+            ToastType.Success => "El Cobro se ha guardado correctamente.",
+            ToastType.Primary => "El Cobro ya volvio correctamente.",
+            ToastType.Danger => "Hubo un error al guardar el cobro.",
+            _ => "Información general."
+        };
+
+        Mensaje.Add(new ToastMessage { Type = type, Title = title, Message = message });
+        StateHasChanged();
     }
 }
