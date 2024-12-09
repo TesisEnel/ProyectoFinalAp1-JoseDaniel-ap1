@@ -492,10 +492,12 @@ namespace ProyectoFinalAp1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamoId"));
 
                     b.Property<string>("Concepto")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<int?>("Cuotas")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("DeudorId")
@@ -509,6 +511,7 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaPrestamo")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FormaPago")

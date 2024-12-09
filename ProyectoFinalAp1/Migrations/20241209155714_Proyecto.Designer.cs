@@ -12,8 +12,8 @@ using ProyectoFinalAp1.Data;
 namespace ProyectoFinalAp1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209004614_Usuarios")]
-    partial class Usuarios
+    [Migration("20241209155714_Proyecto")]
+    partial class Proyecto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -495,10 +495,12 @@ namespace ProyectoFinalAp1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrestamoId"));
 
                     b.Property<string>("Concepto")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<int?>("Cuotas")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("DeudorId")
@@ -512,6 +514,7 @@ namespace ProyectoFinalAp1.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaPrestamo")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FormaPago")
