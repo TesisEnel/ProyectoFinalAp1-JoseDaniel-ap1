@@ -6,7 +6,7 @@ public class Cobradores
     [Key]
     public int CobradorId { get; set; }
 
-    [Required(ErrorMessage = "El nombre es obligatorio.")]
+    [Required(ErrorMessage = "El nombre es obligatorio Manin.")]
     [StringLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres.")]
     public string? Nombres { get; set; }
     [Required(ErrorMessage = "Favor colocar los apellidos.")]
