@@ -3,6 +3,7 @@
 namespace ProyectoFinalAp1.Models;
 public class Cobradores
 {
+    //llave foreanea
     [Key]
     public int CobradorId { get; set; }
 
